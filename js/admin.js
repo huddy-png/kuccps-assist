@@ -113,6 +113,48 @@ function fmtDate(d) {
   }
 }
 
+// ---------- FIX FOR VIEW DOCS ----------
+function normalizeStoragePath(path = "") {
+  let p = String(path || "").trim();
+  if (!p) return "";
+
+  p = p.replace(
+    /^https?:\/\/[^/]+\/storage\/v1\/object\/(?:public|sign)\/booking-docs\//i,
+    "",
+  );
+  p = p.replace(
+    /^\/?storage\/v1\/object\/(?:public|sign)\/booking-docs\//i,
+    "",
+  );
+  p = p.replace(/^booking-docs\//i, "");
+  p = p.replace(/^\/+/, "");
+
+  return p;
+}
+
+async function createWorkingSignedUrl(filePath) {
+  const candidates = [
+    normalizeStoragePath(filePath),
+    String(filePath || "").trim(),
+  ].filter(Boolean);
+
+  let lastError = null;
+
+  for (const candidate of [...new Set(candidates)]) {
+    const { data, error } = await window.supabaseClient.storage
+      .from("booking-docs")
+      .createSignedUrl(candidate, 60 * 10);
+
+    if (!error && data?.signedUrl) {
+      return { signedUrl: data.signedUrl, usedPath: candidate, error: null };
+    }
+
+    lastError = error;
+  }
+
+  return { signedUrl: null, usedPath: null, error: lastError };
+}
+
 // ---------- Email helper ----------
 async function sendBookingStatusEmail({
   to,
@@ -419,11 +461,9 @@ async function handleAction(action, bookingId) {
       }
 
       const items = [];
+
       for (const f of files) {
-        const { data: signed, error: sErr } =
-          await window.supabaseClient.storage
-            .from("booking-docs")
-            .createSignedUrl(f.file_path, 60 * 10);
+        const result = await createWorkingSignedUrl(f.file_path);
 
         const meta = [
           f.mime_type ? esc(f.mime_type) : null,
@@ -434,18 +474,19 @@ async function handleAction(action, bookingId) {
           .filter(Boolean)
           .join(" • ");
 
-        if (sErr) {
+        if (!result.signedUrl) {
           items.push(
             `<li>
               <div><strong>${esc(f.file_name)}</strong></div>
               <div class="muted">${meta || ""}</div>
-              <div class="muted">(cannot open: ${esc(sErr.message)})</div>
+              <div class="muted">(cannot open: ${esc(result.error?.message || "Object not found")})</div>
+              <div class="muted" style="font-size:12px;">Saved path: ${esc(f.file_path || "")}</div>
             </li>`,
           );
         } else {
           items.push(
             `<li>
-              <div><a href="${signed.signedUrl}" target="_blank"><strong>${esc(f.file_name)}</strong></a></div>
+              <div><a href="${result.signedUrl}" target="_blank" rel="noopener"><strong>${esc(f.file_name)}</strong></a></div>
               <div class="muted">${meta || ""}</div>
             </li>`,
           );
@@ -477,7 +518,6 @@ async function handleAction(action, bookingId) {
       return;
     }
 
-    // Load booking email + ticket + phone before status update
     const { data: bookingRow, error: bookingRowErr } =
       await window.supabaseClient
         .from("bookings")
@@ -495,7 +535,6 @@ async function handleAction(action, bookingId) {
       return;
     }
 
-    // Needs Info
     if (action === "needs_info") {
       const msg = prompt(
         "What information/documents are missing? (This will be shown to the student)",
@@ -540,7 +579,6 @@ async function handleAction(action, bookingId) {
       return;
     }
 
-    // Approve / Decline
     const nextStatus = STATUS_MAP[action] || action;
 
     rowMsg.textContent = "Updating status...";
