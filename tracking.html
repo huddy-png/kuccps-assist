@@ -9,7 +9,6 @@
 
   <body>
     <div class="container">
-      <!-- Header -->
       <header
         style="
           display: flex;
@@ -34,11 +33,9 @@
       </header>
 
       <main style="margin-top: 16px">
-        <!-- Two-column layout: form + result -->
         <section
           style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 14px"
         >
-          <!-- Form Card -->
           <div class="card">
             <h2 style="margin: 0; font-size: 18px">Track Ticket</h2>
             <p class="muted" style="margin: 6px 0 0">
@@ -81,7 +78,6 @@
             </div>
           </div>
 
-          <!-- Result Card -->
           <div class="card">
             <h2 style="margin: 0; font-size: 18px">Status Result</h2>
             <p class="muted" style="margin: 6px 0 0">
@@ -105,7 +101,6 @@
                 <strong>Current Status:</strong> <span id="rStatus"></span>
               </p>
 
-              <!-- Admin request box -->
               <div id="needInfoBox" style="display: none; margin-top: 12px">
                 <strong>Message from Admin:</strong>
                 <div
@@ -115,7 +110,6 @@
                 ></div>
               </div>
 
-              <!-- Upload section (only for need_more_info) -->
               <div
                 id="uploadSection"
                 style="
@@ -147,7 +141,6 @@
               </p>
             </div>
 
-            <!-- Empty state -->
             <div class="req" style="margin-top: 12px">
               <h3>What this page does</h3>
               <ul>
@@ -168,9 +161,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="js/supabase.js"></script>
+    <script src="js/email.js"></script>
     <script src="js/tracking.js"></script>
 
-    <!-- Responsive for 2-column layout -->
     <style>
       @media (max-width: 900px) {
         main section[style*="grid-template-columns"] {
