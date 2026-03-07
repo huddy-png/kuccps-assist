@@ -5,19 +5,25 @@ window.sendEmailViaEdge = async function ({ to, subject, html }) {
   if (!subject) throw new Error("Missing subject");
   if (!html) throw new Error("Missing html");
 
-  const { data, error } = await window.supabaseClient.functions.invoke(
-    "send-email",
-    {
-      body: { to, subject, html },
-    },
-  );
+  try {
+    const { data, error } = await window.supabaseClient.functions.invoke(
+      "send-email",
+      {
+        body: { to, subject, html },
+      },
+    );
 
-  if (error) {
-    console.error("Email error:", error);
-    throw error;
+    if (error) {
+      console.error("Email error:", error);
+      throw error;
+    }
+
+    console.log("Email sent successfully:", data);
+    return data;
+  } catch (err) {
+    console.error("Edge function failed:", err);
+    throw err;
   }
-
-  return data;
 };
 
 window.emailTemplate = function ({
@@ -30,7 +36,9 @@ window.emailTemplate = function ({
   const safeTicket = String(ticket || "");
   const safePhone = String(phone || "").trim();
 
-  let trackUrl = `${window.location.origin}/tracking.html?ticket=${encodeURIComponent(
+  const baseUrl = "https://kuccps-assist.netlify.app";
+
+  let trackUrl = `${baseUrl}/tracking.html?ticket=${encodeURIComponent(
     safeTicket,
   )}`;
 
