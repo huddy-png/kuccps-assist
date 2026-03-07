@@ -85,7 +85,6 @@ function setRowBusy(bookingId, busy) {
     .forEach((b) => (b.disabled = busy));
 }
 
-// DB-safe statuses
 const STATUS_MAP = {
   approve: "approved",
   decline: "declined",
@@ -132,27 +131,66 @@ function normalizeStoragePath(path = "") {
   return p;
 }
 
-async function createWorkingSignedUrl(filePath) {
-  const candidates = [
-    normalizeStoragePath(filePath),
-    String(filePath || "").trim(),
-  ].filter(Boolean);
+function buildPathCandidates(filePath, booking = {}, file = {}) {
+  const raw = normalizeStoragePath(filePath);
+  const userId = String(booking.user_id || "").trim();
+  const ticket = String(booking.ticket || "").trim();
+  const fileName = String(file.file_name || "").trim();
 
+  const candidates = new Set();
+
+  if (raw) candidates.add(raw);
+
+  if (raw && userId && !raw.startsWith(userId + "/")) {
+    candidates.add(`${userId}/${raw}`);
+  }
+
+  if (ticket && fileName) {
+    candidates.add(`${ticket}/${fileName}`);
+  }
+
+  if (userId && ticket && fileName) {
+    candidates.add(`${userId}/${ticket}/${fileName}`);
+  }
+
+  if (raw && ticket && raw.startsWith(ticket + "/") && userId) {
+    candidates.add(`${userId}/${raw}`);
+  }
+
+  if (raw && fileName && ticket && !raw.includes("/")) {
+    candidates.add(`${ticket}/${raw}`);
+    if (userId) candidates.add(`${userId}/${ticket}/${raw}`);
+  }
+
+  return [...candidates].filter(Boolean);
+}
+
+async function createWorkingSignedUrl(filePath, booking = {}, file = {}) {
+  const candidates = buildPathCandidates(filePath, booking, file);
   let lastError = null;
 
-  for (const candidate of [...new Set(candidates)]) {
+  for (const candidate of candidates) {
     const { data, error } = await window.supabaseClient.storage
       .from("booking-docs")
       .createSignedUrl(candidate, 60 * 10);
 
     if (!error && data?.signedUrl) {
-      return { signedUrl: data.signedUrl, usedPath: candidate, error: null };
+      return {
+        signedUrl: data.signedUrl,
+        usedPath: candidate,
+        error: null,
+      };
     }
 
     lastError = error;
   }
 
-  return { signedUrl: null, usedPath: null, error: lastError };
+  return {
+    signedUrl: null,
+    usedPath: null,
+    error: lastError,
+    tried: candidates,
+  };
 }
 
 // ---------- Email helper ----------
@@ -429,6 +467,18 @@ async function handleAction(action, bookingId) {
     if (action === "docs") {
       rowMsg.textContent = "Loading documents...";
 
+      const { data: bookingRow, error: bookingErr } =
+        await window.supabaseClient
+          .from("bookings")
+          .select("id,ticket,user_id")
+          .eq("id", bookingId)
+          .maybeSingle();
+
+      if (bookingErr || !bookingRow) {
+        rowMsg.textContent = `Docs error: ${bookingErr?.message || "Booking not found"}`;
+        return;
+      }
+
       let files = null;
 
       const primary = await window.supabaseClient
@@ -463,7 +513,7 @@ async function handleAction(action, bookingId) {
       const items = [];
 
       for (const f of files) {
-        const result = await createWorkingSignedUrl(f.file_path);
+        const result = await createWorkingSignedUrl(f.file_path, bookingRow, f);
 
         const meta = [
           f.mime_type ? esc(f.mime_type) : null,
@@ -481,6 +531,7 @@ async function handleAction(action, bookingId) {
               <div class="muted">${meta || ""}</div>
               <div class="muted">(cannot open: ${esc(result.error?.message || "Object not found")})</div>
               <div class="muted" style="font-size:12px;">Saved path: ${esc(f.file_path || "")}</div>
+              <div class="muted" style="font-size:12px;">Tried: ${esc((result.tried || []).join(" | "))}</div>
             </li>`,
           );
         } else {
