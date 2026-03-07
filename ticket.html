@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticket | KUCCPS Assist</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Your Ticket</h1>
+      <p class="muted">Keep this ticket to track your request.</p>
+
+      <div class="req" style="margin-top: 12px">
+        <h3>Ticket Number</h3>
+        <p
+          id="ticketText"
+          style="font-size: 18px; font-weight: 700; margin: 0"
+        ></p>
+      </div>
+
+      <p class="muted" id="ticketMsg" style="margin-top: 12px"></p>
+
+      <div class="actions" style="margin-top: 12px">
+        <a href="services.html"><button>Back to Services</button></a>
+        <a href="index.html"><button>Home</button></a>
+      </div>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const ticket = params.get("ticket");
+      document.getElementById("ticketText").textContent =
+        ticket || "Missing ticket";
+      document.getElementById("ticketMsg").textContent = ticket
+        ? "Status: Pending approval. You will be updated after admin review."
+        : "No ticket provided.";
+    </script>
+  </body>
+</html>

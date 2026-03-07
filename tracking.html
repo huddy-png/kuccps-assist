@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Track Application | KUCCPS Assist</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 12px;
+          flex-wrap: wrap;
+        "
+      >
+        <div style="min-width: 260px">
+          <h1 style="margin: 0">Track Your Application</h1>
+          <p class="muted" style="margin: 6px 0 0; max-width: 620px">
+            Enter your ticket number and the phone number you used during
+            submission.
+          </p>
+        </div>
+
+        <nav class="actions">
+          <a href="services.html"><button type="button">Services</button></a>
+          <a href="index.html"><button type="button">Home</button></a>
+        </nav>
+      </header>
+
+      <main style="margin-top: 16px">
+        <!-- Two-column layout: form + result -->
+        <section
+          style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 14px"
+        >
+          <!-- Form Card -->
+          <div class="card">
+            <h2 style="margin: 0; font-size: 18px">Track Ticket</h2>
+            <p class="muted" style="margin: 6px 0 0">
+              Use the exact phone number used during submission.
+            </p>
+
+            <form id="trackForm" style="margin-top: 12px">
+              <div>
+                <label>Ticket Number</label>
+                <input
+                  id="ticket"
+                  type="text"
+                  placeholder="e.g. KAS-20260227-3QJQLH"
+                />
+              </div>
+
+              <div style="margin-top: 12px">
+                <label>Phone Number</label>
+                <input id="phone" type="tel" placeholder="e.g. 07xx xxx xxx" />
+              </div>
+
+              <div style="margin-top: 14px">
+                <button id="trackBtn" type="submit">Track</button>
+              </div>
+
+              <p id="msg" class="muted" style="margin-top: 10px"></p>
+            </form>
+
+            <div class="req" style="margin-top: 12px">
+              <h3>Tip</h3>
+              <ul>
+                <li>
+                  If you can’t find your record, re-check the ticket format.
+                </li>
+                <li>VIP tickets are handled first.</li>
+                <li>
+                  When “Needs Info” appears, upload requested documents below.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Result Card -->
+          <div class="card">
+            <h2 style="margin: 0; font-size: 18px">Status Result</h2>
+            <p class="muted" style="margin: 6px 0 0">
+              Your latest status will appear here after tracking.
+            </p>
+
+            <div
+              id="result"
+              class="req"
+              style="margin-top: 12px; display: none"
+            >
+              <h3>Status</h3>
+
+              <p style="margin: 6px 0 0">
+                <strong>Ticket:</strong> <span id="rTicket"></span>
+              </p>
+              <p style="margin: 6px 0 0">
+                <strong>Tier:</strong> <span id="rTier"></span>
+              </p>
+              <p style="margin: 6px 0 0">
+                <strong>Current Status:</strong> <span id="rStatus"></span>
+              </p>
+
+              <!-- Admin request box -->
+              <div id="needInfoBox" style="display: none; margin-top: 12px">
+                <strong>Message from Admin:</strong>
+                <div
+                  id="rNeedInfoMsg"
+                  style="margin-top: 8px; white-space: pre-wrap"
+                  class="muted"
+                ></div>
+              </div>
+
+              <!-- Upload section (only for need_more_info) -->
+              <div
+                id="uploadSection"
+                style="
+                  display: none;
+                  margin-top: 12px;
+                  padding-top: 12px;
+                  border-top: 1px solid rgba(2, 6, 23, 0.1);
+                "
+              >
+                <h3 style="margin: 0 0 8px">Upload requested documents</h3>
+                <p class="muted" style="margin: 0 0 10px">
+                  Select the documents requested above and upload them below.
+                </p>
+
+                <input id="moreFiles" type="file" multiple />
+
+                <div style="margin-top: 10px">
+                  <button id="uploadMoreBtn" type="button">
+                    Upload Documents
+                  </button>
+                </div>
+
+                <p id="uploadMsg" class="muted" style="margin-top: 10px"></p>
+              </div>
+
+              <p class="muted" style="margin: 10px 0 0">
+                Submitted: <span id="rCreated"></span><br />
+                Updated: <span id="rUpdated"></span>
+              </p>
+            </div>
+
+            <!-- Empty state -->
+            <div class="req" style="margin-top: 12px">
+              <h3>What this page does</h3>
+              <ul>
+                <li>
+                  Shows ticket status: pending / approved / declined / needs
+                  info.
+                </li>
+                <li>
+                  Shows any admin message requesting additional documents.
+                </li>
+                <li>Allows uploading documents only when requested.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/tracking.js"></script>
+
+    <!-- Responsive for 2-column layout -->
+    <style>
+      @media (max-width: 900px) {
+        main section[style*="grid-template-columns"] {
+          grid-template-columns: 1fr !important;
+        }
+      }
+    </style>
+  </body>
+</html>

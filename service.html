@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Start Application | KUCCPS Assist</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+        "
+      >
+        <div>
+          <h1 id="serviceName" style="margin: 0">Loading...</h1>
+          <p id="serviceDesc" class="muted" style="margin: 6px 0 0"></p>
+        </div>
+        <nav class="actions">
+          <a href="services.html"
+            ><button type="button">Back to Services</button></a
+          >
+          <a href="index.html"><button type="button">Home</button></a>
+        </nav>
+      </header>
+
+      <section class="req" style="margin-top: 16px">
+        <h3>Requirements</h3>
+        <div id="requirementsBox" class="muted">Loading requirements...</div>
+      </section>
+
+      <section style="margin-top: 16px">
+        <h2 style="margin: 0 0 10px">Submit your details</h2>
+        <p class="muted" style="margin: 0 0 14px">
+          Fill the details below and upload documents. After submission you’ll
+          get a ticket and your request will be pending approval.
+        </p>
+
+        <form id="bookingForm">
+          <label for="phone"><strong>Phone number</strong></label>
+          <input id="phone" type="tel" placeholder="e.g. 07xx xxx xxx" />
+
+          <div style="margin-top: 12px">
+            <strong>Service tier</strong>
+            <div
+              style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap"
+            >
+              <label style="display: flex; gap: 8px; align-items: center">
+                <input type="radio" name="tier" value="regular" checked />
+                Regular
+              </label>
+              <label style="display: flex; gap: 8px; align-items: center">
+                <input type="radio" name="tier" value="vip" />
+                VIP (priority + 30% deposit)
+              </label>
+            </div>
+            <p class="muted" style="margin: 8px 0 0">
+              VIP requests are prioritized. VIP requires a 30% deposit before
+              processing starts.
+            </p>
+          </div>
+
+          <div
+            id="depositBox"
+            class="req"
+            style="margin-top: 12px; display: none"
+          >
+            <h3>VIP Deposit</h3>
+            <label
+              style="
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                margin-top: 6px;
+              "
+            >
+              <input id="depositPaid" type="checkbox" />
+              I have paid the 30% deposit
+            </label>
+            <input
+              id="depositRef"
+              type="text"
+              placeholder="Payment reference (Mpesa code) - optional"
+              style="margin-top: 10px"
+            />
+          </div>
+
+          <div style="margin-top: 12px">
+            <label for="details"
+              ><strong>Details (paste all required info)</strong></label
+            >
+            <textarea
+              id="details"
+              rows="6"
+              placeholder="Type/paste all details required for this service..."
+            ></textarea>
+          </div>
+
+          <div style="margin-top: 12px">
+            <label for="docs"><strong>Upload documents</strong></label>
+            <input id="docs" type="file" multiple />
+            <p class="muted" style="margin: 6px 0 0">
+              You can upload multiple files (ID, result slip, screenshots, etc.)
+            </p>
+          </div>
+
+          <div
+            style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap"
+          >
+            <button id="submitBtn" type="submit">Submit Application</button>
+            <button id="logoutBtn" type="button">Logout</button>
+          </div>
+
+          <p id="msg" class="muted" style="margin-top: 10px"></p>
+        </form>
+      </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="js/supabase.js"></script>
+
+    <!-- ✅ ADD THIS (email helper) -->
+    <script src="js/email.js"></script>
+
+    <script src="js/service.js"></script>
+  </body>
+</html>

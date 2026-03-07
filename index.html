@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KUCCPS Assist</title>
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <header
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+        "
+      >
+        <div>
+          <h1 style="margin: 0">KUCCPS Assist</h1>
+          <p class="muted" style="margin: 6px 0 0">
+            University, TVET, KMTC, HELB & HEF application assistance.
+          </p>
+        </div>
+      </header>
+
+      <section style="margin-top: 18px">
+        <p id="status">Checking login status...</p>
+
+        <div
+          class="actions"
+          style="margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap"
+        >
+          <a href="services.html">
+            <button type="button">
+              <i class="fa-solid fa-list"></i> View Services
+            </button>
+          </a>
+
+          <a href="tracking.html">
+            <button type="button">
+              <i class="fa-solid fa-magnifying-glass"></i> Track Application
+            </button>
+          </a>
+
+          <!-- Admin button (hidden unless user is admin) -->
+          <a href="admin.html" id="adminLink" style="display: none">
+            <button type="button">
+              <i class="fa-solid fa-shield-halved"></i> Admin Panel
+            </button>
+          </a>
+
+          <a href="login.html" id="loginLink">
+            <button type="button">
+              <i class="fa-solid fa-right-to-bracket"></i> Login
+            </button>
+          </a>
+
+          <button id="logoutBtn" type="button" style="display: none">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </div>
+      </section>
+
+      <!-- ✅ SUPPORT / CONTACT CARD -->
+      <section style="margin-top: 22px">
+        <div
+          style="
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            background: #fff;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div style="min-width: 260px">
+              <h2 style="margin: 0; font-size: 18px">
+                <i class="fa-solid fa-headset"></i> Support – Verny
+              </h2>
+              <p class="muted" style="margin: 6px 0 0; max-width: 620px">
+                Need quick assistance with KUCCPS, HELB, KMTC or related
+                applications? Reach out directly using the contact options
+                below.
+              </p>
+            </div>
+
+            <div class="actions" style="gap: 10px; flex-wrap: wrap">
+              <a href="tel:0722847842">
+                <button type="button">
+                  <i class="fa-solid fa-phone"></i> Call 0722847842
+                </button>
+              </a>
+
+              <a
+                href="https://wa.me/254722847842?text=Hello%2C%20I%20would%20like%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
+                target="_blank"
+                rel="noopener"
+              >
+                <button
+                  type="button"
+                  style="background: #25d366; color: white; border: none"
+                >
+                  <i class="fa-brands fa-whatsapp"></i> WhatsApp Support
+                </button>
+              </a>
+
+              <a
+                href="mailto:emilliojohnverny@gmail.com?subject=KUCCPS%20Assist%20Support&body=Hello%2C%20I%20would%20like%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
+              >
+                <button type="button">
+                  <i class="fa-solid fa-envelope"></i> Email Support
+                </button>
+              </a>
+            </div>
+          </div>
+
+          <div
+            style="
+              margin-top: 14px;
+              display: grid;
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 12px;
+            "
+          >
+            <div class="req" style="margin-top: 0">
+              <h3><i class="fa-solid fa-phone"></i> Primary Phone</h3>
+              <p style="margin: 0">0722847842</p>
+            </div>
+
+            <div class="req" style="margin-top: 0">
+              <h3>
+                <i class="fa-solid fa-mobile-screen"></i> Alternative Phone
+              </h3>
+              <p style="margin: 0">0753893862</p>
+            </div>
+
+            <div class="req" style="margin-top: 0">
+              <h3><i class="fa-solid fa-envelope"></i> Email</h3>
+              <p style="margin: 0">emilliojohnverny@gmail.com</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ✅ ANNOUNCEMENTS / UPDATES -->
+      <section style="margin-top: 22px">
+        <div
+          style="
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            background: #fff;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin: 0; font-size: 18px">
+                <i class="fa-solid fa-bullhorn"></i> Latest Updates
+              </h2>
+              <p class="muted" style="margin: 6px 0 0">
+                Deadlines, requirements, and important notices will appear here.
+              </p>
+            </div>
+
+            <button
+              id="refreshAnnouncementsBtn"
+              type="button"
+              style="padding: 10px 14px"
+            >
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
+
+          <div id="announcementsMsg" class="muted" style="margin-top: 12px">
+            Loading updates...
+          </div>
+
+          <div id="announcementsList" style="margin-top: 12px"></div>
+        </div>
+      </section>
+
+      <footer style="margin-top: 24px">
+        <p class="muted" style="text-align: center; margin: 0; font-size: 13px">
+          KUCCPS Assist • Student Application Support Platform
+          <br />
+          Support – Verny
+        </p>
+      </footer>
+    </div>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="js/supabase.js"></script>
+
+    <!-- Page logic -->
+    <script src="js/index.js"></script>
+
+    <!-- ✅ Announcements logic -->
+    <script>
+      const announcementsMsg = document.getElementById("announcementsMsg");
+      const announcementsList = document.getElementById("announcementsList");
+      const refreshAnnouncementsBtn = document.getElementById(
+        "refreshAnnouncementsBtn",
+      );
+
+      function escapeHtml(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function fmtTime(ts) {
+        try {
+          return new Date(ts).toLocaleString();
+        } catch {
+          return String(ts || "");
+        }
+      }
+
+      function renderAnnouncements(rows) {
+        if (!rows || rows.length === 0) {
+          announcementsMsg.textContent =
+            "No updates yet. Please check back later.";
+          announcementsList.innerHTML = "";
+          return;
+        }
+
+        announcementsMsg.textContent = "";
+
+        announcementsList.innerHTML = rows
+          .map((a) => {
+            const title = escapeHtml(a.title);
+            const content = escapeHtml(a.content);
+            const created = fmtTime(a.created_at);
+            const highlight = !!a.is_highlight;
+
+            return `
+              <div style="
+                padding: 12px;
+                border-radius: 12px;
+                border: 1px solid rgba(0,0,0,0.08);
+                margin-bottom: 10px;
+                background: ${highlight ? "rgba(30, 91, 255, 0.06)" : "#fff"};
+              ">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    ${
+                      highlight
+                        ? `<span style="
+                            font-size: 12px;
+                            padding: 4px 8px;
+                            border-radius: 999px;
+                            background: rgba(30, 91, 255, 0.12);
+                            color: #1e5bff;
+                            font-weight: 600;
+                          ">Highlighted</span>`
+                        : ""
+                    }
+                    <strong style="font-size: 15px;">${title}</strong>
+                  </div>
+                  <span class="muted" style="font-size: 12px;">${created}</span>
+                </div>
+
+                <p style="margin: 10px 0 0; line-height: 1.5;">
+                  ${content}
+                </p>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      async function loadAnnouncements() {
+        announcementsMsg.textContent = "Loading updates...";
+        announcementsList.innerHTML = "";
+
+        try {
+          const { data, error } = await window.supabaseClient
+            .from("announcements")
+            .select("id, title, content, is_highlight, is_active, created_at")
+            .eq("is_active", true)
+            .order("is_highlight", { ascending: false })
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+          if (error) throw error;
+          renderAnnouncements(data);
+        } catch (e) {
+          console.error(e);
+          announcementsMsg.textContent =
+            "Failed to load updates. Please refresh the page.";
+        }
+      }
+
+      refreshAnnouncementsBtn.addEventListener("click", loadAnnouncements);
+      loadAnnouncements();
+    </script>
+
+    <!-- Responsive tweak for contact cards -->
+    <style>
+      @media (max-width: 900px) {
+        section div[style*="grid-template-columns: repeat(3"] {
+          grid-template-columns: 1fr !important;
+        }
+      }
+    </style>
+  </body>
+</html>

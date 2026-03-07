@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services | KUCCPS Assist</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 12px;
+          flex-wrap: wrap;
+        "
+      >
+        <div style="min-width: 240px">
+          <h1 style="margin: 0">Services</h1>
+          <p class="muted" style="margin: 6px 0 0">
+            Select a service to view requirements and start an application.
+          </p>
+        </div>
+
+        <nav class="actions" style="align-items: center">
+          <a href="index.html"><button type="button">Home</button></a>
+          <a href="login.html"><button type="button">Login</button></a>
+        </nav>
+      </header>
+
+      <main style="margin-top: 18px">
+        <!-- Nice wrapper card -->
+        <section class="card">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin: 0; font-size: 18px">Available Services</h2>
+              <p class="muted" style="margin: 6px 0 0">
+                Choose the one you need — requirements will appear inside each
+                card.
+              </p>
+            </div>
+
+            <a href="tracking.html">
+              <button type="button">Track Application</button>
+            </a>
+          </div>
+
+          <div id="servicesList" class="grid" aria-live="polite"></div>
+          <p id="servicesMsg" class="muted" style="margin-top: 10px"></p>
+        </section>
+
+        <section style="margin-top: 14px">
+          <div class="req">
+            <h3>Tip</h3>
+            <ul>
+              <li>VIP requests are handled first.</li>
+              <li>Prepare your required documents before starting.</li>
+              <li>After submission, you’ll get a ticket to track progress.</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+
+      <footer style="margin-top: 18px">
+        <div class="actions">
+          <a href="index.html"><button type="button">Back Home</button></a>
+          <a href="services.html"
+            ><button type="button">Refresh Services</button></a
+          >
+        </div>
+      </footer>
+    </div>
+
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+    <!-- Connection -->
+    <script src="js/supabase.js"></script>
+
+    <!-- Services Logic -->
+    <script src="js/services.js"></script>
+  </body>
+</html>
