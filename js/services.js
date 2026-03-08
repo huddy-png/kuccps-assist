@@ -100,6 +100,12 @@ function getHelperText(serviceName = "", slug = "") {
   return "Best for students who need guided application support.";
 }
 
+function formatPrice(price) {
+  const n = Number(price || 0);
+  if (!n) return "Price available on request";
+  return `KES ${n.toLocaleString()}`;
+}
+
 function renderCard(service) {
   const badge = getBadge(service.name, service.slug);
   const helper = getHelperText(service.name, service.slug);
@@ -122,6 +128,32 @@ function renderCard(service) {
       <p class="muted" style="margin:0;">${escapeHtml(
         service.description || "",
       )}</p>
+
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:10px;
+          flex-wrap:wrap;
+          padding:10px 12px;
+          border-radius:12px;
+          background:linear-gradient(180deg, #fbfdff, #f7f9ff);
+          border:1px solid rgba(30, 91, 255, 0.12);
+        "
+      >
+        <div>
+          <div style="font-size:12px; color:#64748b; font-weight:700;">
+            Service Fee
+          </div>
+          <div style="font-size:18px; font-weight:900; color:#1e5bff;">
+            ${escapeHtml(formatPrice(service.price))}
+          </div>
+        </div>
+        <div class="muted" style="font-size:12px;">
+          Regular & VIP available
+        </div>
+      </div>
 
       <div
         style="
@@ -184,7 +216,7 @@ async function loadServices() {
   const { data, error } = await window.supabaseClient
     .from("services")
     .select(
-      "id,name,slug,description,requirements,is_active,sort_order,created_at",
+      "id,name,slug,description,requirements,is_active,sort_order,created_at,price",
     )
     .eq("is_active", true)
     .order("sort_order", { ascending: true })
