@@ -4,6 +4,9 @@ const requirementsBox = document.getElementById("requirementsBox");
 
 const serviceMetaCard = document.getElementById("serviceMetaCard");
 const servicePriceEl = document.getElementById("servicePrice");
+const serviceProcessingTimeEl = document.getElementById(
+  "serviceProcessingTime",
+);
 const serviceTierInfoEl = document.getElementById("serviceTierInfo");
 const serviceVipInfoEl = document.getElementById("serviceVipInfo");
 
@@ -65,6 +68,11 @@ function formatPrice(price) {
   return `KES ${n.toLocaleString()}`;
 }
 
+function formatProcessingTime(value = "") {
+  const t = String(value || "").trim();
+  return t || "Varies";
+}
+
 // ---------- Draft (to avoid retyping after login) ----------
 function getSlug() {
   return new URLSearchParams(window.location.search).get("slug") || "service";
@@ -108,7 +116,7 @@ function clearDraft(slug) {
   localStorage.removeItem(draftKey(slug));
 }
 
-// Auto-save draft as user types/selects (no files, just text inputs)
+// Auto-save draft as user types/selects
 ["input", "change", "keyup"].forEach((evt) => {
   phoneEl?.addEventListener(evt, () => saveDraft(getSlug()));
   detailsEl?.addEventListener(evt, () => saveDraft(getSlug()));
@@ -151,7 +159,9 @@ async function loadServiceBySlug(slug) {
 
   const { data, error } = await window.supabaseClient
     .from("services")
-    .select("id,name,description,requirements,is_active,slug,created_at,price")
+    .select(
+      "id,name,description,requirements,is_active,slug,created_at,price,processing_time",
+    )
     .eq("slug", slug)
     .eq("is_active", true)
     .maybeSingle();
@@ -176,11 +186,22 @@ async function loadServiceBySlug(slug) {
   serviceDescEl.textContent = data.description || "";
   requirementsBox.innerHTML = renderRequirements(data.requirements || "");
 
-  if (serviceMetaCard && servicePriceEl) {
+  if (serviceMetaCard) {
     serviceMetaCard.style.display = "block";
-    servicePriceEl.textContent = formatPrice(data.price);
-    if (serviceTierInfoEl) serviceTierInfoEl.textContent = "Regular / VIP";
-    if (serviceVipInfoEl) serviceVipInfoEl.textContent = "30% required";
+    if (servicePriceEl) {
+      servicePriceEl.textContent = formatPrice(data.price);
+    }
+    if (serviceProcessingTimeEl) {
+      serviceProcessingTimeEl.textContent = formatProcessingTime(
+        data.processing_time,
+      );
+    }
+    if (serviceTierInfoEl) {
+      serviceTierInfoEl.textContent = "Regular / VIP";
+    }
+    if (serviceVipInfoEl) {
+      serviceVipInfoEl.textContent = "30% required";
+    }
   }
 
   msgEl.textContent = "";
@@ -290,7 +311,6 @@ form.addEventListener("submit", async (e) => {
     }
   }
 
-  // EMAIL: application received (non-blocking)
   try {
     const sendFn = window.sendEmailViaEdge;
     const tplFn = window.emailTemplate;

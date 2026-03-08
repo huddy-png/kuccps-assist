@@ -39,7 +39,7 @@
         <div
           style="
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 12px;
           "
         >
@@ -49,6 +49,13 @@
               id="servicePrice"
               style="margin: 0; font-weight: 900; color: #1e5bff"
             >
+              —
+            </p>
+          </div>
+
+          <div>
+            <p class="muted" style="margin: 0 0 4px">Processing Time</p>
+            <p id="serviceProcessingTime" style="margin: 0; font-weight: 700">
               —
             </p>
           </div>
@@ -168,7 +175,7 @@
 
     <style>
       @media (max-width: 900px) {
-        #serviceMetaCard > div[style*="grid-template-columns: repeat(3"] {
+        #serviceMetaCard > div[style*="grid-template-columns: repeat(4"] {
           grid-template-columns: 1fr !important;
         }
       }
