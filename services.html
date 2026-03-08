@@ -20,19 +20,22 @@
       >
         <div style="min-width: 240px">
           <h1 style="margin: 0">Services</h1>
-          <p class="muted" style="margin: 6px 0 0">
-            Select a service to view requirements and start an application.
+          <p class="muted" style="margin: 6px 0 0; max-width: 680px">
+            Choose the service you need, review the requirements, then start
+            your application.
           </p>
         </div>
 
         <nav class="actions" style="align-items: center">
           <a href="index.html"><button type="button">Home</button></a>
+          <a href="tracking.html"
+            ><button type="button">Track Application</button></a
+          >
           <a href="login.html"><button type="button">Login</button></a>
         </nav>
       </header>
 
       <main style="margin-top: 18px">
-        <!-- Nice wrapper card -->
         <section class="card">
           <div
             style="
@@ -46,27 +49,63 @@
             <div>
               <h2 style="margin: 0; font-size: 18px">Available Services</h2>
               <p class="muted" style="margin: 6px 0 0">
-                Choose the one you need — requirements will appear inside each
-                card.
+                Services are grouped below to make selection easier.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="req"
+            style="
+              margin-top: 14px;
+              display: grid;
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 12px;
+            "
+          >
+            <div style="margin: 0">
+              <h3>How it works</h3>
+              <p class="muted" style="margin: 0">
+                Choose a service, submit your details, upload documents, and get
+                a ticket number.
               </p>
             </div>
 
-            <a href="tracking.html">
-              <button type="button">Track Application</button>
-            </a>
+            <div style="margin: 0">
+              <h3>VIP Support</h3>
+              <p class="muted" style="margin: 0">
+                VIP requests are prioritized and may require a 30% deposit.
+              </p>
+            </div>
+
+            <div style="margin: 0">
+              <h3>Tracking</h3>
+              <p class="muted" style="margin: 0">
+                After submission, track progress using your ticket and phone
+                number.
+              </p>
+            </div>
           </div>
 
-          <div id="servicesList" class="grid" aria-live="polite"></div>
-          <p id="servicesMsg" class="muted" style="margin-top: 10px"></p>
+          <div id="servicesMsg" class="muted" style="margin-top: 14px">
+            Loading services...
+          </div>
+
+          <div id="servicesContent" style="margin-top: 14px"></div>
         </section>
 
         <section style="margin-top: 14px">
           <div class="req">
-            <h3>Tip</h3>
+            <h3>Before you begin</h3>
             <ul>
-              <li>VIP requests are handled first.</li>
-              <li>Prepare your required documents before starting.</li>
-              <li>After submission, you’ll get a ticket to track progress.</li>
+              <li>
+                Use the correct phone number because it is used for tracking.
+              </li>
+              <li>Prepare required documents before opening the form.</li>
+              <li>
+                For services with course choices, prepare at least 3 options if
+                possible.
+              </li>
             </ul>
           </div>
         </section>
@@ -82,13 +121,16 @@
       </footer>
     </div>
 
-    <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-    <!-- Connection -->
     <script src="js/supabase.js"></script>
-
-    <!-- Services Logic -->
     <script src="js/services.js"></script>
+
+    <style>
+      @media (max-width: 900px) {
+        .req[style*="grid-template-columns: repeat(3"] {
+          grid-template-columns: 1fr !important;
+        }
+      }
+    </style>
   </body>
 </html>
