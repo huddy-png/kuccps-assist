@@ -2,6 +2,11 @@ const serviceNameEl = document.getElementById("serviceName");
 const serviceDescEl = document.getElementById("serviceDesc");
 const requirementsBox = document.getElementById("requirementsBox");
 
+const serviceMetaCard = document.getElementById("serviceMetaCard");
+const servicePriceEl = document.getElementById("servicePrice");
+const serviceTierInfoEl = document.getElementById("serviceTierInfo");
+const serviceVipInfoEl = document.getElementById("serviceVipInfo");
+
 const form = document.getElementById("bookingForm");
 const phoneEl = document.getElementById("phone");
 const detailsEl = document.getElementById("details");
@@ -52,6 +57,12 @@ function makeTicket() {
   const day = String(d.getDate()).padStart(2, "0");
   const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
   return `KAS-${y}${m}${day}-${rand}`;
+}
+
+function formatPrice(price) {
+  const n = Number(price || 0);
+  if (!n) return "Price available on request";
+  return `KES ${n.toLocaleString()}`;
 }
 
 // ---------- Draft (to avoid retyping after login) ----------
@@ -140,7 +151,7 @@ async function loadServiceBySlug(slug) {
 
   const { data, error } = await window.supabaseClient
     .from("services")
-    .select("id,name,description,requirements,is_active,slug,created_at")
+    .select("id,name,description,requirements,is_active,slug,created_at,price")
     .eq("slug", slug)
     .eq("is_active", true)
     .maybeSingle();
@@ -157,12 +168,21 @@ async function loadServiceBySlug(slug) {
     requirementsBox.innerHTML =
       "<p class='muted'>This service may have been removed/deactivated, or the link is wrong.</p>";
     msgEl.textContent = "";
+    if (serviceMetaCard) serviceMetaCard.style.display = "none";
     return null;
   }
 
   serviceNameEl.textContent = data.name;
   serviceDescEl.textContent = data.description || "";
   requirementsBox.innerHTML = renderRequirements(data.requirements || "");
+
+  if (serviceMetaCard && servicePriceEl) {
+    serviceMetaCard.style.display = "block";
+    servicePriceEl.textContent = formatPrice(data.price);
+    if (serviceTierInfoEl) serviceTierInfoEl.textContent = "Regular / VIP";
+    if (serviceVipInfoEl) serviceVipInfoEl.textContent = "30% required";
+  }
+
   msgEl.textContent = "";
   return data;
 }
@@ -270,7 +290,7 @@ form.addEventListener("submit", async (e) => {
     }
   }
 
-  // ✅ EMAIL: application received (non-blocking)
+  // EMAIL: application received (non-blocking)
   try {
     const sendFn = window.sendEmailViaEdge;
     const tplFn = window.emailTemplate;
