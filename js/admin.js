@@ -112,6 +112,17 @@ function fmtDate(d) {
   }
 }
 
+function formatPrice(price) {
+  const n = Number(price || 0);
+  if (!n) return "Not set";
+  return `KES ${n.toLocaleString()}`;
+}
+
+function formatProcessingTime(value = "") {
+  const t = String(value || "").trim();
+  return t || "Not set";
+}
+
 // ---------- FIX FOR VIEW DOCS ----------
 function normalizeStoragePath(path = "") {
   let p = String(path || "").trim();
@@ -296,7 +307,7 @@ async function fetchBookings() {
       updated_at,
       user_id,
       service_id,
-      services:services ( name )
+      services:services ( name, price, processing_time )
     `,
     )
     .order("created_at", { ascending: false });
@@ -376,6 +387,8 @@ function renderBookings(rows) {
     .map((b) => {
       const serviceName =
         b.services?.name || "(Service ID: " + esc(b.service_id || "-") + ")";
+      const servicePrice = b.services?.price ?? null;
+      const serviceProcessingTime = b.services?.processing_time ?? "";
       const created = fmtDate(b.created_at);
       const updated = fmtDate(b.updated_at);
 
@@ -404,6 +417,27 @@ function renderBookings(rows) {
             </div>`
           : "";
 
+      const serviceMeta = `
+        <div
+          style="
+            margin-top:10px;
+            display:grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap:12px;
+          "
+        >
+          <div class="req" style="margin-top:0;">
+            <h3>Service Fee</h3>
+            <p style="margin:0; font-weight:900; color:#1e5bff;">${esc(formatPrice(servicePrice))}</p>
+          </div>
+
+          <div class="req" style="margin-top:0;">
+            <h3>Processing Time</h3>
+            <p style="margin:0; font-weight:700;">${esc(formatProcessingTime(serviceProcessingTime))}</p>
+          </div>
+        </div>
+      `;
+
       return `
         <div class="card" data-booking-card="${b.id}">
           <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
@@ -423,6 +457,7 @@ function renderBookings(rows) {
             </div>
           </div>
 
+          ${serviceMeta}
           ${dep}
           ${needInfoMsg}
 
