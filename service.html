@@ -89,8 +89,19 @@
         </p>
 
         <form id="bookingForm">
-          <label for="phone"><strong>Phone number</strong></label>
-          <input id="phone" type="tel" placeholder="e.g. 07xx xxx xxx" />
+          <div
+            id="dynamicFields"
+            style="
+              display: grid;
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              gap: 12px;
+            "
+          ></div>
+
+          <div style="margin-top: 14px">
+            <label for="phone"><strong>Phone number</strong></label>
+            <input id="phone" type="tel" placeholder="e.g. 07xx xxx xxx" />
+          </div>
 
           <div style="margin-top: 12px">
             <strong>Service tier</strong>
@@ -138,17 +149,6 @@
           </div>
 
           <div style="margin-top: 12px">
-            <label for="details"
-              ><strong>Details (paste all required info)</strong></label
-            >
-            <textarea
-              id="details"
-              rows="6"
-              placeholder="Type/paste all details required for this service..."
-            ></textarea>
-          </div>
-
-          <div style="margin-top: 12px">
             <label for="docs"><strong>Upload documents</strong></label>
             <input id="docs" type="file" multiple />
             <p class="muted" style="margin: 6px 0 0">
@@ -176,6 +176,11 @@
     <style>
       @media (max-width: 900px) {
         #serviceMetaCard > div[style*="grid-template-columns: repeat(4"] {
+          grid-template-columns: 1fr !important;
+        }
+
+        #dynamicFields[style],
+        #dynamicFields {
           grid-template-columns: 1fr !important;
         }
       }

@@ -1,6 +1,7 @@
 const serviceNameEl = document.getElementById("serviceName");
 const serviceDescEl = document.getElementById("serviceDesc");
 const requirementsBox = document.getElementById("requirementsBox");
+const dynamicFieldsEl = document.getElementById("dynamicFields");
 
 const serviceMetaCard = document.getElementById("serviceMetaCard");
 const servicePriceEl = document.getElementById("servicePrice");
@@ -12,7 +13,6 @@ const serviceVipInfoEl = document.getElementById("serviceVipInfo");
 
 const form = document.getElementById("bookingForm");
 const phoneEl = document.getElementById("phone");
-const detailsEl = document.getElementById("details");
 const docsEl = document.getElementById("docs");
 const msgEl = document.getElementById("msg");
 const submitBtn = document.getElementById("submitBtn");
@@ -48,6 +48,130 @@ function renderRequirements(reqText = "") {
   return `<ul>${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>`;
 }
 
+function getRequirementLines(reqText = "") {
+  return String(reqText)
+    .replace(/\\n/g, "\n")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+}
+
+function toFieldId(label, index) {
+  return `field_${index}_${String(label)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")}`;
+}
+
+function buildFieldPlaceholder(label = "") {
+  const t = String(label).toLowerCase();
+
+  if (t.includes("email")) return "Enter email address";
+  if (t.includes("phone")) return "Enter phone number";
+  if (t.includes("id")) return "Enter ID number";
+  if (t.includes("index")) return "Enter KCSE index number";
+  if (t.includes("year")) return "Enter year";
+  if (t.includes("course")) return "Enter course";
+  if (t.includes("university")) return "Enter university";
+  if (t.includes("campus")) return "Enter campus";
+  if (t.includes("issue")) return "Describe the issue";
+  if (t.includes("grades")) return "Enter the grades";
+  return "Enter details";
+}
+
+function buildFieldType(label = "") {
+  const t = String(label).toLowerCase();
+
+  if (t.includes("email")) return "email";
+  if (t.includes("phone")) return "tel";
+  if (t.includes("year")) return "text";
+  return "text";
+}
+
+function buildDynamicFields(reqText = "") {
+  const lines = getRequirementLines(reqText);
+
+  if (!lines.length) {
+    dynamicFieldsEl.innerHTML = `
+      <div class="req" style="margin-top:0; grid-column:1 / -1;">
+        <h3>Info</h3>
+        <p class="muted" style="margin:0;">No custom fields found for this service yet.</p>
+      </div>
+    `;
+    return;
+  }
+
+  dynamicFieldsEl.innerHTML = lines
+    .map((label, index) => {
+      const fieldId = toFieldId(label, index);
+      const type = buildFieldType(label);
+      const placeholder = buildFieldPlaceholder(label);
+      const isLongField =
+        /course|university|issue|grades|details|preferences|message/i.test(
+          label,
+        );
+
+      if (isLongField) {
+        return `
+          <div style="grid-column: 1 / -1;">
+            <label for="${fieldId}"><strong>${escapeHtml(label)}</strong></label>
+            <textarea
+              id="${fieldId}"
+              data-field-label="${escapeHtml(label)}"
+              rows="3"
+              placeholder="${escapeHtml(placeholder)}"
+            ></textarea>
+          </div>
+        `;
+      }
+
+      return `
+        <div>
+          <label for="${fieldId}"><strong>${escapeHtml(label)}</strong></label>
+          <input
+            id="${fieldId}"
+            type="${type}"
+            data-field-label="${escapeHtml(label)}"
+            placeholder="${escapeHtml(placeholder)}"
+          />
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function collectStructuredDetails() {
+  const fields = dynamicFieldsEl.querySelectorAll("[data-field-label]");
+  const lines = [];
+
+  fields.forEach((field) => {
+    const label = field.getAttribute("data-field-label") || "";
+    const value = String(field.value || "").trim();
+    lines.push(`${label}: ${value}`);
+  });
+
+  return {
+    detailsText: lines.join("\n"),
+    formData: Array.from(fields).map((field) => ({
+      label: field.getAttribute("data-field-label") || "",
+      value: String(field.value || "").trim(),
+    })),
+  };
+}
+
+function validateDynamicFields() {
+  const fields = dynamicFieldsEl.querySelectorAll("[data-field-label]");
+  for (const field of fields) {
+    if (!String(field.value || "").trim()) {
+      const label = field.getAttribute("data-field-label") || "This field";
+      msgEl.textContent = `${label} is required.`;
+      field.focus();
+      return false;
+    }
+  }
+  return true;
+}
+
 function getTier() {
   const checked = document.querySelector('input[name="tier"]:checked');
   return checked ? checked.value : "regular";
@@ -73,32 +197,41 @@ function formatProcessingTime(value = "") {
   return t || "Varies";
 }
 
-// ---------- Draft (to avoid retyping after login) ----------
+// ---------- Draft ----------
 function getSlug() {
   return new URLSearchParams(window.location.search).get("slug") || "service";
 }
+
 function draftKey(slug) {
   return `kas_draft_${slug}`;
 }
+
 function saveDraft(slug) {
+  const dynamicValues = {};
+  dynamicFieldsEl.querySelectorAll("[data-field-label]").forEach((field) => {
+    dynamicValues[field.id] = field.value || "";
+  });
+
   const draft = {
     phone: phoneEl?.value || "",
-    details: detailsEl?.value || "",
     tier: getTier(),
     depositPaid: !!depositPaidEl?.checked,
     depositRef: depositRefEl?.value || "",
+    dynamicValues,
     savedAt: Date.now(),
   };
+
   localStorage.setItem(draftKey(slug), JSON.stringify(draft));
 }
+
 function loadDraft(slug) {
   const raw = localStorage.getItem(draftKey(slug));
   if (!raw) return;
 
   try {
     const d = JSON.parse(raw);
+
     if (phoneEl) phoneEl.value = d.phone || "";
-    if (detailsEl) detailsEl.value = d.details || "";
 
     const tier = d.tier || "regular";
     const radio = document.querySelector(`input[name="tier"][value="${tier}"]`);
@@ -108,28 +241,39 @@ function loadDraft(slug) {
       depositBox.style.display = tier === "vip" ? "block" : "none";
     if (depositPaidEl) depositPaidEl.checked = !!d.depositPaid;
     if (depositRefEl) depositRefEl.value = d.depositRef || "";
+
+    if (d.dynamicValues && typeof d.dynamicValues === "object") {
+      Object.entries(d.dynamicValues).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = value || "";
+      });
+    }
   } catch (e) {
     console.warn("Draft parse failed:", e);
   }
 }
+
 function clearDraft(slug) {
   localStorage.removeItem(draftKey(slug));
 }
 
-// Auto-save draft as user types/selects
-["input", "change", "keyup"].forEach((evt) => {
-  phoneEl?.addEventListener(evt, () => saveDraft(getSlug()));
-  detailsEl?.addEventListener(evt, () => saveDraft(getSlug()));
-  depositPaidEl?.addEventListener(evt, () => saveDraft(getSlug()));
-  depositRefEl?.addEventListener(evt, () => saveDraft(getSlug()));
-});
-document.querySelectorAll('input[name="tier"]').forEach((r) => {
-  r.addEventListener("change", () => {
-    if (depositBox)
-      depositBox.style.display = getTier() === "vip" ? "block" : "none";
-    saveDraft(getSlug());
+function bindDraftAutoSave() {
+  ["input", "change", "keyup"].forEach((evt) => {
+    phoneEl?.addEventListener(evt, () => saveDraft(getSlug()));
+    depositPaidEl?.addEventListener(evt, () => saveDraft(getSlug()));
+    depositRefEl?.addEventListener(evt, () => saveDraft(getSlug()));
+
+    dynamicFieldsEl?.addEventListener(evt, () => saveDraft(getSlug()));
   });
-});
+
+  document.querySelectorAll('input[name="tier"]').forEach((r) => {
+    r.addEventListener("change", () => {
+      if (depositBox)
+        depositBox.style.display = getTier() === "vip" ? "block" : "none";
+      saveDraft(getSlug());
+    });
+  });
+}
 
 // ---------- Auth ----------
 async function requireSessionOrRedirect() {
@@ -185,6 +329,7 @@ async function loadServiceBySlug(slug) {
   serviceNameEl.textContent = data.name;
   serviceDescEl.textContent = data.description || "";
   requirementsBox.innerHTML = renderRequirements(data.requirements || "");
+  buildDynamicFields(data.requirements || "");
 
   if (serviceMetaCard) {
     serviceMetaCard.style.display = "block";
@@ -204,6 +349,7 @@ async function loadServiceBySlug(slug) {
     }
   }
 
+  loadDraft(getSlug());
   msgEl.textContent = "";
   return data;
 }
@@ -213,9 +359,10 @@ logoutBtn?.addEventListener("click", async () => {
   window.location.href = "index.html";
 });
 
+bindDraftAutoSave();
+
 (async function init() {
   const slug = getSlug();
-  loadDraft(slug);
   window._service = await loadServiceBySlug(slug);
 })();
 
@@ -230,6 +377,8 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
+  if (!validateDynamicFields()) return;
+
   const session = await requireSessionOrRedirect();
   if (!session) return;
 
@@ -238,12 +387,20 @@ form.addEventListener("submit", async (e) => {
   const ticket = makeTicket();
   const phoneValue = phoneEl.value.trim() || null;
 
+  if (!phoneValue) {
+    msgEl.textContent = "Phone number is required.";
+    phoneEl.focus();
+    return;
+  }
+
+  const { detailsText } = collectStructuredDetails();
+
   const bookingPayload = {
     user_id: session.user.id,
     service_id: service.id,
     tier,
     phone: phoneValue,
-    details: detailsEl.value.trim() || null,
+    details: detailsText || null,
     ticket,
     status: "pending",
     email: userEmail,
