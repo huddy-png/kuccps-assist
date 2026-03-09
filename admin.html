@@ -9,7 +9,6 @@
 
   <body>
     <div class="container">
-      <!-- Topbar -->
       <div
         class="topbar"
         style="
@@ -24,7 +23,8 @@
           <h1 style="margin: 0">Admin Dashboard</h1>
 
           <p class="muted" style="margin: 6px 0 0; max-width: 650px">
-            Manage homepage updates, resources, and review student bookings.
+            Manage homepage updates, resources, testimonials, and review student
+            bookings.
           </p>
 
           <div
@@ -32,6 +32,7 @@
           >
             <span class="badge">Announcements</span>
             <span class="badge">Resources</span>
+            <span class="badge">Testimonials</span>
             <span class="badge">Bookings</span>
             <span class="badge">Documents</span>
           </div>
@@ -156,10 +157,8 @@
             <li>Use <strong>Highlight</strong> for urgent deadlines.</li>
             <li>Set <strong>Active</strong> off to hide without deleting.</li>
             <li>Use <strong>Resources</strong> for PDFs and guides.</li>
+            <li>Approve only genuine testimonials.</li>
             <li>Ask for missing docs using <strong>Needs Info</strong>.</li>
-            <li>
-              Documents expire when signed links expire — refresh to reopen.
-            </li>
           </ul>
         </div>
       </section>
@@ -254,6 +253,41 @@
         </div>
       </section>
 
+      <!-- TESTIMONIALS -->
+      <section style="margin-top: 14px">
+        <div class="card">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin: 0; font-size: 18px">Testimonials</h2>
+              <p class="muted" style="margin: 6px 0 0">
+                Review, approve, hide or delete testimonials submitted by
+                visitors.
+              </p>
+            </div>
+
+            <div class="actions">
+              <button id="tesRefreshBtn" type="button">
+                Refresh Testimonials
+              </button>
+            </div>
+          </div>
+
+          <div id="tesMsg" class="muted" style="margin-top: 10px">
+            Loading testimonials...
+          </div>
+
+          <div id="tesList" style="margin-top: 14px"></div>
+        </div>
+      </section>
+
       <!-- BOOKINGS -->
       <section style="margin-top: 14px">
         <div class="card">
@@ -336,6 +370,7 @@
     <script src="js/admin.js"></script>
     <script src="js/admin-announcements.js"></script>
     <script src="js/admin-resources.js"></script>
+    <script src="js/admin-testimonials.js"></script>
 
     <style>
       @media (max-width: 980px) {

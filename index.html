@@ -219,6 +219,104 @@
           >
             <div>
               <h2 style="margin: 0; font-size: 18px">
+                <i class="fa-solid fa-star"></i> Student Testimonials
+              </h2>
+              <p class="muted" style="margin: 6px 0 0">
+                Real feedback from students we have helped.
+              </p>
+            </div>
+
+            <button
+              id="refreshTestimonialsBtn"
+              type="button"
+              style="padding: 10px 14px"
+            >
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
+
+          <div id="testimonialsMsg" class="muted" style="margin-top: 12px">
+            Loading testimonials...
+          </div>
+
+          <div
+            id="testimonialsList"
+            class="grid"
+            style="margin-top: 12px"
+          ></div>
+
+          <div class="req" style="margin-top: 16px">
+            <h3>Leave a testimonial</h3>
+
+            <div
+              style="
+                margin-top: 10px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+              "
+            >
+              <div>
+                <label>Your Name</label>
+                <input id="tesName" placeholder="e.g. Brian O." />
+              </div>
+
+              <div>
+                <label>Service / Course (optional)</label>
+                <input
+                  id="tesService"
+                  placeholder="e.g. KUCCPS Revision / Nursing"
+                />
+              </div>
+
+              <div style="grid-column: 1 / -1">
+                <label>Your Message</label>
+                <textarea
+                  id="tesMessage"
+                  rows="4"
+                  placeholder="Tell others how KUCCPS Assist helped you..."
+                ></textarea>
+              </div>
+
+              <div
+                style="
+                  grid-column: 1 / -1;
+                  display: flex;
+                  gap: 10px;
+                  align-items: center;
+                  flex-wrap: wrap;
+                "
+              >
+                <button id="tesSubmitBtn" type="button">
+                  Submit Testimonial
+                </button>
+                <p id="tesSubmitMsg" class="muted" style="margin: 0"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top: 22px">
+        <div
+          style="
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            background: #fff;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin: 0; font-size: 18px">
                 <i class="fa-solid fa-bullhorn"></i> Latest Updates
               </h2>
               <p class="muted" style="margin: 6px 0 0">
@@ -257,6 +355,7 @@
     <script src="js/email.js"></script>
     <script src="js/index.js"></script>
     <script src="js/index-resources.js"></script>
+    <script src="js/index-testimonials.js"></script>
 
     <script>
       const announcementsMsg = document.getElementById("announcementsMsg");
@@ -364,6 +463,11 @@
     <style>
       @media (max-width: 900px) {
         section div[style*="grid-template-columns: repeat(3"] {
+          grid-template-columns: 1fr !important;
+        }
+
+        #testimonialsList,
+        #resourcesList {
           grid-template-columns: 1fr !important;
         }
       }
