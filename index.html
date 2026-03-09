@@ -14,69 +14,229 @@
 
   <body>
     <div class="container">
+      <!-- HERO / HEADER -->
       <header
         style="
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 12px;
+          align-items: flex-start;
+          gap: 16px;
           flex-wrap: wrap;
         "
       >
-        <div>
-          <h1 style="margin: 0">KUCCPS Assist</h1>
-          <p class="muted" style="margin: 6px 0 0">
-            University, TVET, KMTC, HELB & HEF application assistance.
+        <div style="min-width: 260px; flex: 1">
+          <div
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 6px 10px;
+              border-radius: 999px;
+              background: rgba(30, 91, 255, 0.08);
+              color: #1e5bff;
+              font-size: 12px;
+              font-weight: 800;
+              margin-bottom: 10px;
+            "
+          >
+            <i class="fa-solid fa-graduation-cap"></i>
+            Trusted Student Support
+          </div>
+
+          <h1 style="margin: 0; font-size: 34px; line-height: 1.1">
+            KUCCPS Assist
+          </h1>
+
+          <p
+            class="muted"
+            style="margin: 10px 0 0; max-width: 760px; font-size: 15px"
+          >
+            Professional support for KUCCPS, TVET, KMTC, HELB / HEF, KRA PIN,
+            SHA registration and other student application services.
           </p>
+
+          <div
+            style="margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap"
+          >
+            <a href="services.html">
+              <button type="button">
+                <i class="fa-solid fa-list-check"></i> Get Started
+              </button>
+            </a>
+
+            <a href="tracking.html">
+              <button type="button">
+                <i class="fa-solid fa-magnifying-glass"></i> Track Application
+              </button>
+            </a>
+          </div>
+
+          <div
+            style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap"
+          >
+            <span class="badge">Fast Support</span>
+            <span class="badge">Trusted Guidance</span>
+            <span class="badge">Ticket Tracking</span>
+          </div>
+        </div>
+
+        <div
+          class="card"
+          style="
+            min-width: 280px;
+            max-width: 360px;
+            flex: 0.9;
+            padding: 18px;
+            gap: 12px;
+          "
+        >
+          <h2 style="margin: 0; font-size: 18px">
+            <i class="fa-solid fa-user-shield"></i> Account Status
+          </h2>
+
+          <p id="status" class="muted" style="margin: 0">
+            Checking login status...
+          </p>
+
+          <div class="actions" style="margin-top: 4px">
+            <a href="services.html">
+              <button type="button">
+                <i class="fa-solid fa-briefcase"></i> Services
+              </button>
+            </a>
+
+            <a href="tracking.html">
+              <button type="button">
+                <i class="fa-solid fa-ticket"></i> Track Ticket
+              </button>
+            </a>
+
+            <a href="admin.html" id="adminLink" style="display: none">
+              <button type="button">
+                <i class="fa-solid fa-shield-halved"></i> Admin Panel
+              </button>
+            </a>
+
+            <a href="login.html" id="loginLink">
+              <button type="button">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+              </button>
+            </a>
+
+            <button id="logoutBtn" type="button" style="display: none">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+          </div>
         </div>
       </header>
 
+      <!-- QUICK STATS -->
       <section style="margin-top: 18px">
-        <p id="status">Checking login status...</p>
-
         <div
-          class="actions"
-          style="margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap"
+          style="
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+          "
         >
-          <a href="services.html">
-            <button type="button">
-              <i class="fa-solid fa-list"></i> View Services
-            </button>
-          </a>
+          <div class="card" style="padding: 16px">
+            <div class="muted" style="font-size: 12px">Support Areas</div>
+            <div style="font-size: 24px; font-weight: 900">11+</div>
+            <div class="muted" style="font-size: 13px">Services available</div>
+          </div>
 
-          <a href="tracking.html">
-            <button type="button">
-              <i class="fa-solid fa-magnifying-glass"></i> Track Application
-            </button>
-          </a>
+          <div class="card" style="padding: 16px">
+            <div class="muted" style="font-size: 12px">Application Flow</div>
+            <div style="font-size: 24px; font-weight: 900">Simple</div>
+            <div class="muted" style="font-size: 13px">
+              Submit, track, follow up
+            </div>
+          </div>
 
-          <a href="admin.html" id="adminLink" style="display: none">
-            <button type="button">
-              <i class="fa-solid fa-shield-halved"></i> Admin Panel
-            </button>
-          </a>
+          <div class="card" style="padding: 16px">
+            <div class="muted" style="font-size: 12px">Student Support</div>
+            <div style="font-size: 24px; font-weight: 900">Live</div>
+            <div class="muted" style="font-size: 13px">
+              Resources and updates available
+            </div>
+          </div>
 
-          <a href="login.html" id="loginLink">
-            <button type="button">
-              <i class="fa-solid fa-right-to-bracket"></i> Login
-            </button>
-          </a>
-
-          <button id="logoutBtn" type="button" style="display: none">
-            <i class="fa-solid fa-right-from-bracket"></i> Logout
-          </button>
+          <div class="card" style="padding: 16px">
+            <div class="muted" style="font-size: 12px">Tracking</div>
+            <div style="font-size: 24px; font-weight: 900">24/7</div>
+            <div class="muted" style="font-size: 13px">
+              Ticket and status checking
+            </div>
+          </div>
         </div>
       </section>
 
+      <!-- FEATURED SERVICES -->
       <section style="margin-top: 22px">
-        <div
-          style="
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 12px;
-            padding: 16px;
-            background: #fff;
-          "
-        >
+        <div class="card">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin: 0; font-size: 20px">
+                <i class="fa-solid fa-layer-group"></i> Featured Services
+              </h2>
+              <p class="muted" style="margin: 6px 0 0">
+                Choose a service and submit your application professionally.
+              </p>
+            </div>
+
+            <a href="services.html">
+              <button type="button">
+                <i class="fa-solid fa-arrow-right"></i> View All Services
+              </button>
+            </a>
+          </div>
+
+          <div
+            style="
+              margin-top: 14px;
+              display: grid;
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 12px;
+            "
+          >
+            <div class="req" style="margin-top: 0">
+              <h3><i class="fa-solid fa-school"></i> KUCCPS Services</h3>
+              <p class="muted" style="margin: 0">
+                Degree applications, TVET applications, course revision and
+                inter-institution transfer.
+              </p>
+            </div>
+
+            <div class="req" style="margin-top: 0">
+              <h3><i class="fa-solid fa-stethoscope"></i> KMTC Support</h3>
+              <p class="muted" style="margin: 0">
+                KMTC via KUCCPS and direct KMTC application support.
+              </p>
+            </div>
+
+            <div class="req" style="margin-top: 0">
+              <h3>
+                <i class="fa-solid fa-file-signature"></i> Student Services
+              </h3>
+              <p class="muted" style="margin: 0">
+                HELB / HEF, HELB appeal, KRA PIN, SHA registration and more.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUPPORT -->
+      <section style="margin-top: 22px">
+        <div class="card">
           <div
             style="
               display: flex;
@@ -87,7 +247,7 @@
             "
           >
             <div style="min-width: 260px">
-              <h2 style="margin: 0; font-size: 18px">
+              <h2 style="margin: 0; font-size: 20px">
                 <i class="fa-solid fa-headset"></i> Support – Verny
               </h2>
               <p class="muted" style="margin: 6px 0 0; max-width: 620px">
@@ -155,15 +315,9 @@
         </div>
       </section>
 
+      <!-- RESOURCES -->
       <section style="margin-top: 22px">
-        <div
-          style="
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 12px;
-            padding: 16px;
-            background: #fff;
-          "
-        >
+        <div class="card">
           <div
             style="
               display: flex;
@@ -174,7 +328,7 @@
             "
           >
             <div>
-              <h2 style="margin: 0; font-size: 18px">
+              <h2 style="margin: 0; font-size: 20px">
                 <i class="fa-solid fa-folder-open"></i> Useful Resources
               </h2>
               <p class="muted" style="margin: 6px 0 0">
@@ -199,15 +353,9 @@
         </div>
       </section>
 
+      <!-- TESTIMONIALS -->
       <section style="margin-top: 22px">
-        <div
-          style="
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 12px;
-            padding: 16px;
-            background: #fff;
-          "
-        >
+        <div class="card">
           <div
             style="
               display: flex;
@@ -218,7 +366,7 @@
             "
           >
             <div>
-              <h2 style="margin: 0; font-size: 18px">
+              <h2 style="margin: 0; font-size: 20px">
                 <i class="fa-solid fa-star"></i> Student Testimonials
               </h2>
               <p class="muted" style="margin: 6px 0 0">
@@ -297,15 +445,9 @@
         </div>
       </section>
 
+      <!-- UPDATES -->
       <section style="margin-top: 22px">
-        <div
-          style="
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 12px;
-            padding: 16px;
-            background: #fff;
-          "
-        >
+        <div class="card">
           <div
             style="
               display: flex;
@@ -316,7 +458,7 @@
             "
           >
             <div>
-              <h2 style="margin: 0; font-size: 18px">
+              <h2 style="margin: 0; font-size: 20px">
                 <i class="fa-solid fa-bullhorn"></i> Latest Updates
               </h2>
               <p class="muted" style="margin: 6px 0 0">
@@ -341,11 +483,51 @@
         </div>
       </section>
 
-      <footer style="margin-top: 24px">
-        <p class="muted" style="text-align: center; margin: 0; font-size: 13px">
+      <!-- FOOTER -->
+      <footer
+        style="
+          margin-top: 26px;
+          padding-top: 18px;
+          border-top: 1px solid rgba(2, 6, 23, 0.08);
+        "
+      >
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 0.8fr;
+            gap: 16px;
+          "
+        >
+          <div>
+            <h3 style="margin: 0 0 8px">KUCCPS Assist</h3>
+            <p class="muted" style="margin: 0; line-height: 1.6">
+              Student application support platform for KUCCPS, TVET, KMTC, HELB
+              / HEF, KRA PIN, SHA registration and more.
+            </p>
+          </div>
+
+          <div>
+            <h3 style="margin: 0 0 8px">Quick Links</h3>
+            <p style="margin: 0 0 6px"><a href="services.html">Services</a></p>
+            <p style="margin: 0 0 6px">
+              <a href="tracking.html">Track Application</a>
+            </p>
+            <p style="margin: 0"><a href="login.html">Login</a></p>
+          </div>
+
+          <div>
+            <h3 style="margin: 0 0 8px">Contact</h3>
+            <p style="margin: 0 0 6px">0722847842</p>
+            <p style="margin: 0 0 6px">0753893862</p>
+            <p style="margin: 0">emilliojohnverny@gmail.com</p>
+          </div>
+        </div>
+
+        <p
+          class="muted"
+          style="text-align: center; margin: 18px 0 0; font-size: 13px"
+        >
           KUCCPS Assist • Student Application Support Platform
-          <br />
-          Support – Verny
         </p>
       </footer>
     </div>
@@ -461,13 +643,29 @@
     </script>
 
     <style>
+      @media (max-width: 980px) {
+        footer div[style*="grid-template-columns: 1.2fr 0.8fr 0.8fr"] {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
       @media (max-width: 900px) {
+        section div[style*="grid-template-columns: repeat(4"] {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+
         section div[style*="grid-template-columns: repeat(3"] {
           grid-template-columns: 1fr !important;
         }
 
         #testimonialsList,
         #resourcesList {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
+      @media (max-width: 700px) {
+        section div[style*="grid-template-columns: repeat(4"] {
           grid-template-columns: 1fr !important;
         }
       }
