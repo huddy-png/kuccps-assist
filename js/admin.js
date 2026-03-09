@@ -123,6 +123,79 @@ function formatProcessingTime(value = "") {
   return t || "Not set";
 }
 
+function parseDetails(detailsText = "") {
+  const raw = String(detailsText || "").trim();
+  if (!raw) return [];
+
+  return raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const idx = line.indexOf(":");
+      if (idx === -1) {
+        return { label: "Detail", value: line };
+      }
+
+      const label = line.slice(0, idx).trim();
+      const value = line.slice(idx + 1).trim();
+
+      return {
+        label: label || "Detail",
+        value: value || "-",
+      };
+    });
+}
+
+function renderDetailsGrid(detailsText = "") {
+  const pairs = parseDetails(detailsText);
+
+  if (!pairs.length) {
+    return `
+      <div class="req" style="margin-top:10px;">
+        <h3>Submitted Details</h3>
+        <p class="muted" style="margin:0;">No details submitted.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="req" style="margin-top:10px;">
+      <h3>Submitted Details</h3>
+      <div
+        style="
+          display:grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap:10px;
+          margin-top:8px;
+        "
+      >
+        ${pairs
+          .map(
+            (item) => `
+          <div
+            style="
+              padding:10px 12px;
+              border-radius:12px;
+              background:#fff;
+              border:1px solid rgba(2,6,23,0.08);
+            "
+          >
+            <div class="muted" style="font-size:12px; margin-bottom:4px;">
+              ${esc(item.label)}
+            </div>
+            <div style="font-weight:700; word-break:break-word;">
+              ${esc(item.value)}
+            </div>
+          </div>
+        `,
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
 // ---------- FIX FOR VIEW DOCS ----------
 function normalizeStoragePath(path = "") {
   let p = String(path || "").trim();
@@ -438,6 +511,8 @@ function renderBookings(rows) {
         </div>
       `;
 
+      const visibleDetails = renderDetailsGrid(b.details || "");
+
       return `
         <div class="card" data-booking-card="${b.id}">
           <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
@@ -460,9 +535,10 @@ function renderBookings(rows) {
           ${serviceMeta}
           ${dep}
           ${needInfoMsg}
+          ${visibleDetails}
 
           <details style="margin-top:10px;">
-            <summary><strong>Student details</strong></summary>
+            <summary><strong>Raw details text</strong></summary>
             <pre style="white-space:pre-wrap; background:#f6f7fb; padding:10px; border-radius:10px; margin-top:10px;">${esc(b.details || "")}</pre>
           </details>
 
