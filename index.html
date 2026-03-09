@@ -175,6 +175,50 @@
           >
             <div>
               <h2 style="margin: 0; font-size: 18px">
+                <i class="fa-solid fa-folder-open"></i> Useful Resources
+              </h2>
+              <p class="muted" style="margin: 6px 0 0">
+                Download helpful guides, forms and support documents.
+              </p>
+            </div>
+
+            <button
+              id="refreshResourcesBtn"
+              type="button"
+              style="padding: 10px 14px"
+            >
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
+
+          <div id="resourcesMsg" class="muted" style="margin-top: 12px">
+            Loading resources...
+          </div>
+
+          <div id="resourcesList" class="grid" style="margin-top: 12px"></div>
+        </div>
+      </section>
+
+      <section style="margin-top: 22px">
+        <div
+          style="
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            background: #fff;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin: 0; font-size: 18px">
                 <i class="fa-solid fa-bullhorn"></i> Latest Updates
               </h2>
               <p class="muted" style="margin: 6px 0 0">
@@ -212,6 +256,7 @@
     <script src="js/supabase.js"></script>
     <script src="js/email.js"></script>
     <script src="js/index.js"></script>
+    <script src="js/index-resources.js"></script>
 
     <script>
       const announcementsMsg = document.getElementById("announcementsMsg");
