@@ -95,11 +95,41 @@
                 <strong>Ticket:</strong> <span id="rTicket"></span>
               </p>
               <p style="margin: 6px 0 0">
+                <strong>Service:</strong> <span id="rService"></span>
+              </p>
+              <p style="margin: 6px 0 0">
                 <strong>Tier:</strong> <span id="rTier"></span>
               </p>
               <p style="margin: 6px 0 0">
                 <strong>Current Status:</strong> <span id="rStatus"></span>
               </p>
+
+              <div
+                id="serviceMetaCard"
+                style="
+                  margin-top: 12px;
+                  display: none;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 12px;
+                "
+              >
+                <div class="card" style="padding: 12px; gap: 6px">
+                  <div class="muted" style="font-size: 12px">Service Fee</div>
+                  <div
+                    id="rPrice"
+                    style="font-size: 18px; font-weight: 900; color: #1e5bff"
+                  >
+                    —
+                  </div>
+                </div>
+
+                <div class="card" style="padding: 12px; gap: 6px">
+                  <div class="muted" style="font-size: 12px">
+                    Processing Time
+                  </div>
+                  <div id="rProcessingTime" style="font-weight: 800">—</div>
+                </div>
+              </div>
 
               <div id="needInfoBox" style="display: none; margin-top: 12px">
                 <strong>Message from Admin:</strong>
@@ -167,6 +197,12 @@
     <style>
       @media (max-width: 900px) {
         main section[style*="grid-template-columns"] {
+          grid-template-columns: 1fr !important;
+        }
+      }
+
+      @media (max-width: 700px) {
+        #serviceMetaCard[style*="grid-template-columns: repeat(2"] {
           grid-template-columns: 1fr !important;
         }
       }

@@ -1,5 +1,3 @@
-// tracking.js
-
 const form = document.getElementById("trackForm");
 const ticketEl = document.getElementById("ticket");
 const phoneEl = document.getElementById("phone");
@@ -8,10 +6,15 @@ const btn = document.getElementById("trackBtn");
 
 const resultBox = document.getElementById("result");
 const rTicket = document.getElementById("rTicket");
+const rService = document.getElementById("rService");
 const rTier = document.getElementById("rTier");
 const rStatus = document.getElementById("rStatus");
 const rCreated = document.getElementById("rCreated");
 const rUpdated = document.getElementById("rUpdated");
+
+const serviceMetaCard = document.getElementById("serviceMetaCard");
+const rPrice = document.getElementById("rPrice");
+const rProcessingTime = document.getElementById("rProcessingTime");
 
 // Admin message
 const needInfoBox = document.getElementById("needInfoBox");
@@ -34,7 +37,6 @@ function normalizeTicket(t) {
   return (t || "").trim().toUpperCase();
 }
 
-// Convert "needs info" -> "needs_info", etc.
 function normalizeStatus(s) {
   return String(s || "")
     .trim()
@@ -82,6 +84,17 @@ function isNeedsInfoStatus(status) {
   );
 }
 
+function formatPrice(price) {
+  const n = Number(price || 0);
+  if (!n) return "Not set";
+  return `KES ${n.toLocaleString()}`;
+}
+
+function formatProcessingTime(value = "") {
+  const t = String(value || "").trim();
+  return t || "Not set";
+}
+
 async function trackBooking(ticket, phone) {
   const { data, error } = await window.supabaseClient.rpc("track_booking", {
     ticket_in: ticket,
@@ -91,7 +104,25 @@ async function trackBooking(ticket, phone) {
   return data && data.length ? data[0] : null;
 }
 
-function renderTrackingRow(row) {
+async function fetchServiceInfoByBookingRow(row) {
+  const serviceId = row?.service_id;
+  if (!serviceId) return null;
+
+  const { data, error } = await window.supabaseClient
+    .from("services")
+    .select("id,name,price,processing_time")
+    .eq("id", serviceId)
+    .maybeSingle();
+
+  if (error) {
+    console.warn("Failed to fetch service info:", error);
+    return null;
+  }
+
+  return data || null;
+}
+
+async function renderTrackingRow(row) {
   rTicket.textContent = row.ticket || "-";
   rTier.textContent = row.tier || "-";
   rStatus.textContent = prettyStatus(row.status);
@@ -104,6 +135,20 @@ function renderTrackingRow(row) {
   uploadSection.style.display = "none";
   uploadMsg.textContent = "";
   moreFilesEl.value = "";
+  serviceMetaCard.style.display = "none";
+  rPrice.textContent = "—";
+  rProcessingTime.textContent = "—";
+  rService.textContent = "-";
+
+  const serviceInfo = await fetchServiceInfoByBookingRow(row);
+  if (serviceInfo) {
+    rService.textContent = serviceInfo.name || "-";
+    rPrice.textContent = formatPrice(serviceInfo.price);
+    rProcessingTime.textContent = formatProcessingTime(
+      serviceInfo.processing_time,
+    );
+    serviceMetaCard.style.display = "grid";
+  }
 
   const adminMsg = (row.need_more_info_message || "").trim();
 
@@ -157,12 +202,10 @@ async function uploadRequestedDocs() {
 
     uploadMsg.textContent = "Uploading...";
 
-    // Upload each file then insert metadata through RPC
     for (const file of files) {
       const cleanName = safeFilename(file.name);
       const path = `${ticket}/${Date.now()}_${cleanName}`;
 
-      // 1) Upload file to Storage
       const { error: upErr } = await window.supabaseClient.storage
         .from("booking-docs")
         .upload(path, file, {
@@ -172,7 +215,6 @@ async function uploadRequestedDocs() {
 
       if (upErr) throw upErr;
 
-      // 2) Insert metadata via SECURITY DEFINER RPC
       const { error: rpcErr } = await window.supabaseClient.rpc(
         "student_add_booking_file",
         {
@@ -189,7 +231,6 @@ async function uploadRequestedDocs() {
       if (rpcErr) throw rpcErr;
     }
 
-    // 3) Mark booking as info_submitted via RPC
     const { error: markErr } = await window.supabaseClient.rpc(
       "student_mark_info_submitted",
       {
@@ -205,11 +246,10 @@ async function uploadRequestedDocs() {
       return;
     }
 
-    // Re-track and refresh UI immediately so student sees updated status
     const freshRow = await trackBooking(ticket, phone);
     if (freshRow) {
       LAST_TRACK_ROW = freshRow;
-      renderTrackingRow(freshRow);
+      await renderTrackingRow(freshRow);
     }
 
     uploadMsg.textContent =
@@ -229,13 +269,16 @@ form.addEventListener("submit", async (e) => {
   msgEl.textContent = "";
   resultBox.style.display = "none";
 
-  // Reset sections
   needInfoBox.style.display = "none";
   rNeedInfoMsg.textContent = "";
   uploadSection.style.display = "none";
   uploadMsg.textContent = "";
   moreFilesEl.value = "";
   LAST_TRACK_ROW = null;
+  serviceMetaCard.style.display = "none";
+  rPrice.textContent = "—";
+  rProcessingTime.textContent = "—";
+  rService.textContent = "-";
 
   const ticket = normalizeTicket(ticketEl.value);
   const phone = normalizePhone(phoneEl.value);
@@ -258,7 +301,7 @@ form.addEventListener("submit", async (e) => {
     }
 
     LAST_TRACK_ROW = row;
-    renderTrackingRow(row);
+    await renderTrackingRow(row);
 
     msgEl.textContent = "";
   } catch (err) {
@@ -268,7 +311,6 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// ✅ Autofill ticket + phone from email link and auto-submit
 (function autofillFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const ticketFromUrl = normalizeTicket(params.get("ticket") || "");
@@ -277,7 +319,6 @@ form.addEventListener("submit", async (e) => {
   if (ticketFromUrl) ticketEl.value = ticketFromUrl;
   if (phoneFromUrl) phoneEl.value = phoneFromUrl;
 
-  // Auto-submit only if both are present
   if (ticketFromUrl && phoneFromUrl) {
     setTimeout(() => {
       form.requestSubmit();
