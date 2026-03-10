@@ -12,29 +12,18 @@ export async function onRequestPost(context) {
 
     if (!bookingId || !ticket || !amount) {
       return Response.json(
-        {
-          error: "bookingId, ticket and amount required",
-        },
+        { error: "bookingId, ticket and amount required" },
         { status: 400 },
       );
     }
 
     const INTASEND_SECRET_KEY = env.INTASEND_SECRET_KEY;
     const INTASEND_PUBLISHABLE_KEY = env.INTASEND_PUBLISHABLE_KEY;
-    const SUPABASE_URL = env.SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
     const SITE_URL = env.SITE_URL || "https://kuccpsassist.online";
 
-    if (
-      !INTASEND_SECRET_KEY ||
-      !INTASEND_PUBLISHABLE_KEY ||
-      !SUPABASE_URL ||
-      !SUPABASE_SERVICE_ROLE_KEY
-    ) {
+    if (!INTASEND_SECRET_KEY || !INTASEND_PUBLISHABLE_KEY) {
       return Response.json(
-        {
-          error: "Missing required environment variables",
-        },
+        { error: "Missing IntaSend environment variables" },
         { status: 500 },
       );
     }
@@ -66,7 +55,10 @@ export async function onRequestPost(context) {
       return Response.json(
         {
           error:
-            result?.detail || result?.message || "Failed to create checkout",
+            result?.detail ||
+            result?.message ||
+            result?.error ||
+            "Failed to create checkout",
           raw: result,
         },
         { status: 400 },
@@ -75,9 +67,6 @@ export async function onRequestPost(context) {
 
     const paymentUrl =
       result.url || result.checkout_url || result.hosted_url || null;
-
-    const invoiceId =
-      result.invoice_id || result.id || result.invoice?.invoice_id || null;
 
     if (!paymentUrl) {
       return Response.json(
@@ -89,62 +78,9 @@ export async function onRequestPost(context) {
       );
     }
 
-    const bookingUpdateRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}`,
-      {
-        method: "PATCH",
-        headers: {
-          apikey: SUPABASE_SERVICE_ROLE_KEY,
-          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify({
-          payment_status: "pending",
-          payment_provider: "intasend",
-          payment_invoice_id: invoiceId,
-          payment_amount: amount,
-          payment_currency: "KES",
-          vip_payment_url: paymentUrl,
-        }),
-      },
-    );
-
-    if (!bookingUpdateRes.ok) {
-      const text = await bookingUpdateRes.text();
-      return Response.json(
-        {
-          error: "Checkout created, but failed to update booking",
-          details: text,
-        },
-        { status: 500 },
-      );
-    }
-
-    await fetch(`${SUPABASE_URL}/rest/v1/booking_payments`, {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE_SERVICE_ROLE_KEY,
-        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal",
-      },
-      body: JSON.stringify({
-        booking_id: bookingId,
-        provider: "intasend",
-        invoice_id: invoiceId,
-        api_ref: ticket,
-        amount,
-        currency: "KES",
-        status: "pending",
-        raw_payload: result,
-      }),
-    });
-
     return Response.json({
       ok: true,
       paymentUrl,
-      invoiceId,
     });
   } catch (err) {
     return Response.json(
@@ -156,6 +92,6 @@ export async function onRequestPost(context) {
   }
 }
 
-export async function onRequest(context) {
+export async function onRequest() {
   return Response.json({ error: "Method not allowed" }, { status: 405 });
 }
