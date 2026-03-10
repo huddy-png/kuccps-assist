@@ -6,8 +6,8 @@ export async function onRequestPost(context) {
     const bookingId = data.bookingId;
     const ticket = data.ticket;
     const amount = Number(data.amount || 0);
-    const email = data.email || "";
-    const phone = data.phone || "";
+    const email = (data.email || "").trim();
+    const phone = (data.phone || "").trim();
     const serviceName = data.serviceName || "VIP Booking";
 
     if (!bookingId || !ticket || !amount) {
@@ -21,28 +21,40 @@ export async function onRequestPost(context) {
     const INTASEND_PUBLISHABLE_KEY = env.INTASEND_PUBLISHABLE_KEY;
     const SITE_URL = env.SITE_URL || "https://kuccpsassist.online";
 
+    if (!INTASEND_SECRET_KEY || !INTASEND_PUBLISHABLE_KEY) {
+      return Response.json(
+        { error: "Missing IntaSend environment variables" },
+        { status: 500 },
+      );
+    }
+
+    const payload = {
+      public_key: INTASEND_PUBLISHABLE_KEY,
+      amount,
+      currency: "KES",
+      api_ref: ticket,
+      email: email || undefined,
+      phone_number: phone || undefined,
+      host: SITE_URL,
+      redirect_url: `${SITE_URL}/ticket.html?ticket=${encodeURIComponent(ticket)}`,
+      comment: `VIP deposit for ${serviceName}`,
+      method: "M-PESA",
+      mobile_tarrif: "CUSTOMER-PAYS",
+    };
+
     const intasendRes = await fetch(
-      "https://payment.intasend.com/api/v1/checkout/",
+      "https://api.intasend.com/api/v1/checkout/",
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${INTASEND_SECRET_KEY}`,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
-        body: JSON.stringify({
-          public_key: INTASEND_PUBLISHABLE_KEY,
-          amount,
-          currency: "KES",
-          api_ref: ticket,
-          email,
-          phone_number: phone,
-          redirect_url: `${SITE_URL}/ticket.html?ticket=${encodeURIComponent(ticket)}`,
-          comment: `VIP deposit for ${serviceName}`,
-        }),
+        body: JSON.stringify(payload),
       },
     );
 
-    // READ RESPONSE SAFELY
     const text = await intasendRes.text();
 
     let result;
@@ -59,7 +71,9 @@ export async function onRequestPost(context) {
             result?.detail ||
             result?.message ||
             result?.raw ||
-            "IntaSend error",
+            "IntaSend checkout failed",
+          raw: result,
+          sent_payload: payload,
         },
         { status: 400 },
       );
@@ -70,7 +84,10 @@ export async function onRequestPost(context) {
 
     if (!paymentUrl) {
       return Response.json(
-        { error: "Payment link was not returned by IntaSend", raw: result },
+        {
+          error: "Payment link was not returned by IntaSend",
+          raw: result,
+        },
         { status: 500 },
       );
     }
@@ -78,6 +95,7 @@ export async function onRequestPost(context) {
     return Response.json({
       ok: true,
       paymentUrl,
+      raw: result,
     });
   } catch (err) {
     return Response.json(
