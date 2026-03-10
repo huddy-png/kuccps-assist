@@ -1,3 +1,4 @@
+//SERVICE.JS
 const serviceNameEl = document.getElementById("serviceName");
 const serviceDescEl = document.getElementById("serviceDesc");
 const requirementsBox = document.getElementById("requirementsBox");
