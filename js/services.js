@@ -106,9 +106,15 @@ function formatPrice(price) {
   return `KES ${n.toLocaleString()}`;
 }
 
+function buildStartApplicationUrl(slug = "") {
+  const next = `service.html?slug=${encodeURIComponent(slug)}`;
+  return `login.html?next=${encodeURIComponent(next)}`;
+}
+
 function renderCard(service) {
   const badge = getBadge(service.name, service.slug);
   const helper = getHelperText(service.name, service.slug);
+  const startUrl = buildStartApplicationUrl(service.slug);
 
   return `
     <div class="card" style="height:100%;">
@@ -173,7 +179,7 @@ function renderCard(service) {
       </div>
 
       <div style="margin-top:auto;">
-        <a href="service.html?slug=${encodeURIComponent(service.slug)}">
+        <a href="${startUrl}">
           <button type="button">Start Application</button>
         </a>
       </div>

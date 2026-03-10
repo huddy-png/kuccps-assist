@@ -34,8 +34,8 @@ function renderResources(rows) {
   resourcesMsg.textContent = "";
 
   resourcesList.innerHTML = rows
-    .map((r) => {
-      return `
+    .map(
+      (r) => `
         <div class="card">
           <h2 style="margin:0; font-size:16px;">${escIndexRes(r.title)}</h2>
           <p class="muted" style="margin:6px 0 0;">
@@ -54,8 +54,8 @@ function renderResources(rows) {
             </a>
           </div>
         </div>
-      `;
-    })
+      `,
+    )
     .join("");
 }
 
@@ -66,9 +66,10 @@ async function loadResourcesHome() {
   try {
     const { data, error } = await window.supabaseClient
       .from("resources")
-      .select("id,title,description,file_url,is_active,created_at")
+      .select("id,title,description,file_url,created_at")
       .eq("is_active", true)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(4);
 
     if (error) throw error;
     renderResources(data || []);

@@ -32,6 +32,15 @@ function fmtIndexTesDate(ts) {
   }
 }
 
+async function logTestimonialActivity(message) {
+  try {
+    if (!message) return;
+    await window.supabaseClient.from("activity_feed").insert({ message });
+  } catch (e) {
+    console.warn("Testimonial activity log failed:", e);
+  }
+}
+
 function renderTestimonials(rows) {
   if (!rows || rows.length === 0) {
     testimonialsMsg.textContent =
@@ -47,6 +56,7 @@ function renderTestimonials(rows) {
       (t) => `
       <div class="card">
         <div style="font-size:18px; color:#f59e0b;">★★★★★</div>
+
         <p style="margin:10px 0 0; line-height:1.6; white-space:pre-wrap;">
           “${escIndexTes(t.message)}”
         </p>
@@ -77,13 +87,14 @@ async function loadTestimonialsHome() {
   try {
     const { data, error } = await window.supabaseClient
       .from("testimonials")
-      .select("id,name,message,service_name,created_at,is_approved,is_active")
+      .select("id,name,message,service_name,created_at")
       .eq("is_approved", true)
       .eq("is_active", true)
       .order("created_at", { ascending: false })
-      .limit(12);
+      .limit(3);
 
     if (error) throw error;
+
     renderTestimonials(data || []);
   } catch (e) {
     console.error(e);
@@ -117,6 +128,10 @@ tesSubmitBtn?.addEventListener("click", async () => {
     });
 
     if (error) throw error;
+
+    await logTestimonialActivity(
+      `${name} submitted a testimonial${service ? ` for ${service}` : ""}.`,
+    );
 
     tesName.value = "";
     tesService.value = "";

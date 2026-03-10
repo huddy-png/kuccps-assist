@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login | KUCCPS Assist</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
   </head>
 
   <body>
@@ -14,24 +18,46 @@
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          gap: 12px;
+          gap: 14px;
           flex-wrap: wrap;
         "
       >
-        <div>
+        <div style="min-width: 260px; flex: 1">
+          <div
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 6px 10px;
+              border-radius: 999px;
+              background: rgba(30, 91, 255, 0.08);
+              color: #1e5bff;
+              font-size: 12px;
+              font-weight: 800;
+              margin-bottom: 10px;
+            "
+          >
+            <i class="fa-solid fa-user-lock"></i>
+            Secure Member Access
+          </div>
+
           <h1 style="margin: 0">Member Login</h1>
-          <p class="muted" style="margin: 6px 0 0; max-width: 650px">
+          <p class="muted" style="margin: 8px 0 0; max-width: 680px">
             Enter your email and we’ll send you a magic link. After logging in,
-            you’ll be returned automatically.
+            you’ll be returned automatically to continue your application.
           </p>
         </div>
 
         <div class="actions">
-          <a href="index.html"><button type="button">Back Home</button></a>
+          <a href="index.html">
+            <button type="button">
+              <i class="fa-solid fa-house"></i> Back Home
+            </button>
+          </a>
         </div>
       </header>
 
-      <main style="margin-top: 16px">
+      <main style="margin-top: 18px">
         <section
           style="
             display: grid;
@@ -42,24 +68,59 @@
         >
           <!-- Login card -->
           <div class="card">
-            <h2 style="margin: 0; font-size: 18px">Sign in with Magic Link</h2>
-            <p class="muted" style="margin: 6px 0 0">
-              We’ll email you a link. Open it to complete login.
-            </p>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 12px;
+                flex-wrap: wrap;
+              "
+            >
+              <div>
+                <h2 style="margin: 0; font-size: 20px">
+                  <i class="fa-solid fa-envelope-open-text"></i>
+                  Sign in with Magic Link
+                </h2>
+                <p class="muted" style="margin: 6px 0 0">
+                  We’ll email you a secure sign-in link. Open it to complete
+                  login.
+                </p>
+              </div>
 
-            <div class="login-box" style="margin-top: 12px">
-              <label>Email</label>
-              <input type="email" id="email" placeholder="Enter your email" />
+              <div
+                class="badge"
+                style="
+                  background: rgba(30, 91, 255, 0.08);
+                  color: #1e5bff;
+                  border: 1px solid rgba(30, 91, 255, 0.14);
+                "
+              >
+                <i class="fa-solid fa-shield-halved"></i>
+                Magic link login
+              </div>
+            </div>
+
+            <div class="login-box" style="margin-top: 14px">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+              />
 
               <div style="margin-top: 12px">
-                <button id="loginBtn" type="button">Send Magic Link</button>
+                <button id="loginBtn" type="button">
+                  <i class="fa-solid fa-paper-plane"></i> Send Magic Link
+                </button>
               </div>
 
               <p id="message" class="muted" style="margin-top: 10px"></p>
             </div>
 
-            <div class="req" style="margin-top: 12px">
-              <h3>Important</h3>
+            <div class="req" style="margin-top: 14px">
+              <h3><i class="fa-solid fa-circle-info"></i> Important</h3>
               <ul>
                 <li>Click <strong>Send Magic Link</strong> once.</li>
                 <li>
@@ -69,23 +130,44 @@
                   If you see <strong>rate exceeded</strong>, wait a bit and try
                   again later.
                 </li>
+                <li>Use the same email you want linked to your bookings.</li>
               </ul>
             </div>
           </div>
 
           <!-- Info card -->
           <div class="req" style="margin-top: 0">
-            <h3>Why Login?</h3>
+            <h3><i class="fa-solid fa-circle-question"></i> Why Login?</h3>
             <ul>
               <li>Helps us manage your booking securely.</li>
               <li>Allows access to member-only actions.</li>
+              <li>
+                Lets the system return you to the exact service you chose.
+              </li>
               <li>Admins can access the dashboard after login.</li>
             </ul>
 
-            <div style="margin-top: 12px">
-              <a href="services.html"
-                ><button type="button">View Services</button></a
-              >
+            <div
+              class="card"
+              style="
+                margin-top: 12px;
+                padding: 14px;
+                background: linear-gradient(180deg, #ffffff, #fbfdff);
+              "
+            >
+              <h3 style="margin: 0 0 8px">Quick Access</h3>
+              <p class="muted" style="margin: 0">
+                Browse services first, then log in only when you are ready to
+                start the application process.
+              </p>
+
+              <div style="margin-top: 12px">
+                <a href="services.html">
+                  <button type="button">
+                    <i class="fa-solid fa-briefcase"></i> View Services
+                  </button>
+                </a>
+              </div>
             </div>
           </div>
         </section>

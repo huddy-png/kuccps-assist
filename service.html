@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Start Application | KUCCPS Assist</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
   </head>
 
   <body>
@@ -13,20 +17,45 @@
         style="
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          gap: 12px;
+          align-items: flex-start;
+          gap: 14px;
           flex-wrap: wrap;
         "
       >
-        <div>
-          <h1 id="serviceName" style="margin: 0">Loading...</h1>
-          <p id="serviceDesc" class="muted" style="margin: 6px 0 0"></p>
-        </div>
-        <nav class="actions">
-          <a href="services.html"
-            ><button type="button">Back to Services</button></a
+        <div style="min-width: 260px; flex: 1">
+          <div
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 6px 10px;
+              border-radius: 999px;
+              background: rgba(30, 91, 255, 0.08);
+              color: #1e5bff;
+              font-size: 12px;
+              font-weight: 800;
+              margin-bottom: 10px;
+            "
           >
-          <a href="index.html"><button type="button">Home</button></a>
+            <i class="fa-solid fa-file-circle-check"></i>
+            Start Application
+          </div>
+
+          <h1 id="serviceName" style="margin: 0">Loading...</h1>
+          <p id="serviceDesc" class="muted" style="margin: 8px 0 0"></p>
+        </div>
+
+        <nav class="actions">
+          <a href="services.html">
+            <button type="button">
+              <i class="fa-solid fa-arrow-left"></i> Back to Services
+            </button>
+          </a>
+          <a href="index.html">
+            <button type="button">
+              <i class="fa-solid fa-house"></i> Home
+            </button>
+          </a>
         </nav>
       </header>
 
@@ -43,7 +72,7 @@
             gap: 12px;
           "
         >
-          <div>
+          <div class="card" style="padding: 14px">
             <p class="muted" style="margin: 0 0 4px">Service Fee</p>
             <p
               id="servicePrice"
@@ -53,21 +82,21 @@
             </p>
           </div>
 
-          <div>
+          <div class="card" style="padding: 14px">
             <p class="muted" style="margin: 0 0 4px">Processing Time</p>
             <p id="serviceProcessingTime" style="margin: 0; font-weight: 700">
               —
             </p>
           </div>
 
-          <div>
+          <div class="card" style="padding: 14px">
             <p class="muted" style="margin: 0 0 4px">Tier Options</p>
             <p id="serviceTierInfo" style="margin: 0; font-weight: 700">
               Regular / VIP
             </p>
           </div>
 
-          <div>
+          <div class="card" style="padding: 14px">
             <p class="muted" style="margin: 0 0 4px">VIP Deposit</p>
             <p id="serviceVipInfo" style="margin: 0; font-weight: 700">
               30% required
@@ -77,16 +106,40 @@
       </section>
 
       <section class="req" style="margin-top: 16px">
-        <h3>Requirements</h3>
+        <h3><i class="fa-solid fa-list-check"></i> Requirements</h3>
         <div id="requirementsBox" class="muted">Loading requirements...</div>
       </section>
 
       <section style="margin-top: 16px">
-        <h2 style="margin: 0 0 10px">Submit your details</h2>
-        <p class="muted" style="margin: 0 0 14px">
-          Fill the details below and upload documents. After submission you’ll
-          get a ticket and your request will be pending approval.
-        </p>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+          "
+        >
+          <div>
+            <h2 style="margin: 0 0 10px">Submit your details</h2>
+            <p class="muted" style="margin: 0 0 14px">
+              Fill the details below and upload documents. After submission
+              you’ll get a ticket and your request will be pending approval.
+            </p>
+          </div>
+
+          <div
+            class="badge"
+            style="
+              background: rgba(30, 91, 255, 0.08);
+              color: #1e5bff;
+              border: 1px solid rgba(30, 91, 255, 0.14);
+            "
+          >
+            <i class="fa-solid fa-shield-halved"></i>
+            Secure submission
+          </div>
+        </div>
 
         <form id="bookingForm">
           <div
@@ -103,64 +156,100 @@
             <input id="phone" type="tel" placeholder="e.g. 07xx xxx xxx" />
           </div>
 
-          <div style="margin-top: 12px">
-            <strong>Service tier</strong>
+          <div class="req" style="margin-top: 14px">
+            <h3><i class="fa-solid fa-layer-group"></i> Service Tier</h3>
+
             <div
-              style="display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap"
+              style="
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+                margin-top: 10px;
+              "
             >
-              <label style="display: flex; gap: 8px; align-items: center">
-                <input type="radio" name="tier" value="regular" checked />
-                Regular
+              <label
+                class="card"
+                style="
+                  padding: 14px;
+                  cursor: pointer;
+                  gap: 8px;
+                  border: 1px solid rgba(2, 6, 23, 0.1);
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-weight: 800;
+                  "
+                >
+                  <input type="radio" name="tier" value="regular" checked />
+                  Regular
+                </div>
+                <p class="muted" style="margin: 0">
+                  Standard application review and support.
+                </p>
               </label>
-              <label style="display: flex; gap: 8px; align-items: center">
-                <input type="radio" name="tier" value="vip" />
-                VIP (priority + 30% deposit)
+
+              <label
+                class="card"
+                style="
+                  padding: 14px;
+                  cursor: pointer;
+                  gap: 8px;
+                  border: 1px solid rgba(30, 91, 255, 0.16);
+                  background: linear-gradient(
+                    180deg,
+                    rgba(30, 91, 255, 0.04),
+                    #fff
+                  );
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-weight: 800;
+                  "
+                >
+                  <input type="radio" name="tier" value="vip" />
+                  VIP
+                </div>
+                <p class="muted" style="margin: 0">
+                  Priority processing with a required 30% deposit after
+                  submission.
+                </p>
               </label>
             </div>
-            <p class="muted" style="margin: 8px 0 0">
-              VIP requests are prioritized. VIP requires a 30% deposit before
-              processing starts.
+
+            <p class="muted" style="margin: 10px 0 0">
+              VIP requests are prioritized. If you choose VIP, the payment step
+              starts after your booking is saved.
             </p>
           </div>
 
-          <div
-            id="depositBox"
-            class="req"
-            style="margin-top: 12px; display: none"
-          >
-            <h3>VIP Deposit</h3>
-            <label
-              style="
-                display: flex;
-                gap: 8px;
-                align-items: center;
-                margin-top: 6px;
-              "
-            >
-              <input id="depositPaid" type="checkbox" />
-              I have paid the 30% deposit
-            </label>
-            <input
-              id="depositRef"
-              type="text"
-              placeholder="Payment reference (Mpesa code) - optional"
-              style="margin-top: 10px"
-            />
-          </div>
+          <div id="depositBox" style="display: none"></div>
 
           <div style="margin-top: 12px">
             <label for="docs"><strong>Upload documents</strong></label>
             <input id="docs" type="file" multiple />
             <p class="muted" style="margin: 6px 0 0">
-              You can upload multiple files (ID, result slip, screenshots, etc.)
+              You can upload multiple files such as ID, result slip,
+              screenshots, or any supporting documents.
             </p>
           </div>
 
           <div
             style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap"
           >
-            <button id="submitBtn" type="submit">Submit Application</button>
-            <button id="logoutBtn" type="button">Logout</button>
+            <button id="submitBtn" type="submit">
+              <i class="fa-solid fa-paper-plane"></i> Submit Application
+            </button>
+            <button id="logoutBtn" type="button">
+              <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
           </div>
 
           <p id="msg" class="muted" style="margin-top: 10px"></p>
@@ -181,6 +270,10 @@
 
         #dynamicFields[style],
         #dynamicFields {
+          grid-template-columns: 1fr !important;
+        }
+
+        form .req div[style*="grid-template-columns: repeat(2"] {
           grid-template-columns: 1fr !important;
         }
       }

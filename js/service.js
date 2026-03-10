@@ -23,6 +23,8 @@ const depositRefEl = document.getElementById("depositRef");
 
 const logoutBtn = document.getElementById("logoutBtn");
 
+const VIP_DEPOSIT_PERCENT = 30;
+
 function escapeHtml(str = "") {
   return String(str).replace(
     /[&<>"']/g,
@@ -34,6 +36,20 @@ function escapeHtml(str = "") {
         '"': "&quot;",
         "'": "&#039;",
       })[m],
+  );
+}
+
+function normalizeLabel(label = "") {
+  return String(label).toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+function isDuplicateFixedField(label = "") {
+  const t = normalizeLabel(label);
+  return (
+    t === "phone" ||
+    t === "phone number" ||
+    t === "email" ||
+    t === "email address"
   );
 }
 
@@ -53,7 +69,8 @@ function getRequirementLines(reqText = "") {
     .replace(/\\n/g, "\n")
     .split("\n")
     .map((l) => l.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter((label) => !isDuplicateFixedField(label));
 }
 
 function toFieldId(label, index) {
@@ -92,12 +109,7 @@ function buildDynamicFields(reqText = "") {
   const lines = getRequirementLines(reqText);
 
   if (!lines.length) {
-    dynamicFieldsEl.innerHTML = `
-      <div class="req" style="margin-top:0; grid-column:1 / -1;">
-        <h3>Info</h3>
-        <p class="muted" style="margin:0;">No custom fields found for this service yet.</p>
-      </div>
-    `;
+    dynamicFieldsEl.innerHTML = "";
     return;
   }
 
@@ -197,7 +209,21 @@ function formatProcessingTime(value = "") {
   return t || "Varies";
 }
 
-// ---------- Draft ----------
+function computeVipDepositAmount(servicePrice) {
+  const price = Number(servicePrice || 0);
+  if (!price) return 0;
+  return Math.ceil((price * VIP_DEPOSIT_PERCENT) / 100);
+}
+
+async function logActivity(message) {
+  try {
+    if (!message) return;
+    await window.supabaseClient.from("activity_feed").insert({ message });
+  } catch (e) {
+    console.warn("Activity log failed:", e);
+  }
+}
+
 function getSlug() {
   return new URLSearchParams(window.location.search).get("slug") || "service";
 }
@@ -215,8 +241,6 @@ function saveDraft(slug) {
   const draft = {
     phone: phoneEl?.value || "",
     tier: getTier(),
-    depositPaid: !!depositPaidEl?.checked,
-    depositRef: depositRefEl?.value || "",
     dynamicValues,
     savedAt: Date.now(),
   };
@@ -237,10 +261,11 @@ function loadDraft(slug) {
     const radio = document.querySelector(`input[name="tier"][value="${tier}"]`);
     if (radio) radio.checked = true;
 
-    if (depositBox)
-      depositBox.style.display = tier === "vip" ? "block" : "none";
-    if (depositPaidEl) depositPaidEl.checked = !!d.depositPaid;
-    if (depositRefEl) depositRefEl.value = d.depositRef || "";
+    if (depositBox) {
+      depositBox.style.display = "none";
+    }
+    if (depositPaidEl) depositPaidEl.checked = false;
+    if (depositRefEl) depositRefEl.value = "";
 
     if (d.dynamicValues && typeof d.dynamicValues === "object") {
       Object.entries(d.dynamicValues).forEach(([id, value]) => {
@@ -260,22 +285,19 @@ function clearDraft(slug) {
 function bindDraftAutoSave() {
   ["input", "change", "keyup"].forEach((evt) => {
     phoneEl?.addEventListener(evt, () => saveDraft(getSlug()));
-    depositPaidEl?.addEventListener(evt, () => saveDraft(getSlug()));
-    depositRefEl?.addEventListener(evt, () => saveDraft(getSlug()));
-
     dynamicFieldsEl?.addEventListener(evt, () => saveDraft(getSlug()));
   });
 
   document.querySelectorAll('input[name="tier"]').forEach((r) => {
     r.addEventListener("change", () => {
-      if (depositBox)
-        depositBox.style.display = getTier() === "vip" ? "block" : "none";
+      if (depositBox) {
+        depositBox.style.display = "none";
+      }
       saveDraft(getSlug());
     });
   });
 }
 
-// ---------- Auth ----------
 async function requireSessionOrRedirect() {
   const { data, error } = await window.supabaseClient.auth.getSession();
   if (error) console.error("getSession error:", error);
@@ -345,13 +367,65 @@ async function loadServiceBySlug(slug) {
       serviceTierInfoEl.textContent = "Regular / VIP";
     }
     if (serviceVipInfoEl) {
-      serviceVipInfoEl.textContent = "30% required";
+      const vipAmount = computeVipDepositAmount(data.price);
+      serviceVipInfoEl.textContent = vipAmount
+        ? `VIP requires a 30% deposit (KES ${vipAmount.toLocaleString()}) after submission.`
+        : "VIP requires a 30% deposit after submission.";
     }
+  }
+
+  if (depositBox) {
+    depositBox.style.display = "none";
   }
 
   loadDraft(getSlug());
   msgEl.textContent = "";
   return data;
+}
+
+async function startVipCheckout({
+  bookingId,
+  ticket,
+  amount,
+  email,
+  phone,
+  serviceName,
+}) {
+  const response = await fetch("/.netlify/functions/create-vip-checkout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      bookingId,
+      ticket,
+      amount,
+      email,
+      phone,
+      serviceName,
+    }),
+  });
+
+  let result = {};
+  try {
+    result = await response.json();
+  } catch {
+    result = {};
+  }
+
+  if (!response.ok) {
+    const errMsg =
+      result?.error ||
+      result?.message ||
+      "Unable to start VIP payment right now.";
+    throw new Error(errMsg);
+  }
+
+  if (!result.paymentUrl) {
+    throw new Error("Payment link was not returned.");
+  }
+
+  return result;
 }
 
 logoutBtn?.addEventListener("click", async () => {
@@ -366,7 +440,6 @@ bindDraftAutoSave();
   window._service = await loadServiceBySlug(slug);
 })();
 
-// ---------- Submit booking ----------
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   msgEl.textContent = "";
@@ -394,6 +467,8 @@ form.addEventListener("submit", async (e) => {
   }
 
   const { detailsText } = collectStructuredDetails();
+  const vipDepositAmount =
+    tier === "vip" ? computeVipDepositAmount(service.price) : 0;
 
   const bookingPayload = {
     user_id: session.user.id,
@@ -404,14 +479,18 @@ form.addEventListener("submit", async (e) => {
     ticket,
     status: "pending",
     email: userEmail,
-    deposit_required_percent: tier === "vip" ? 30 : 0,
-    deposit_paid: tier === "vip" ? !!depositPaidEl.checked : false,
-    deposit_reference:
-      tier === "vip" ? depositRefEl.value.trim() || null : null,
+    deposit_required_percent: tier === "vip" ? VIP_DEPOSIT_PERCENT : 0,
+    deposit_paid: false,
+    deposit_reference: null,
+    payment_status: tier === "vip" ? "not_started" : null,
+    payment_provider: tier === "vip" ? "intasend" : null,
+    payment_amount: tier === "vip" ? vipDepositAmount : 0,
+    payment_currency: tier === "vip" ? "KES" : null,
   };
 
   submitBtn.disabled = true;
-  msgEl.textContent = "Submitting booking...";
+  msgEl.textContent =
+    tier === "vip" ? "Saving VIP booking..." : "Submitting booking...";
 
   const { data: booking, error: bookingErr } = await window.supabaseClient
     .from("bookings")
@@ -469,6 +548,12 @@ form.addEventListener("submit", async (e) => {
   }
 
   try {
+    await logActivity(`A student submitted a ${service.name} request.`);
+  } catch (e) {
+    console.warn("Booking activity log failed:", e);
+  }
+
+  try {
     const sendFn = window.sendEmailViaEdge;
     const tplFn = window.emailTemplate;
 
@@ -477,14 +562,21 @@ form.addEventListener("submit", async (e) => {
         "email.js not loaded: sendEmailViaEdge/emailTemplate missing",
       );
     } else if (booking.email) {
-      const subject = `KUCCPS Assist: Application received (${booking.ticket})`;
+      const isVip = tier === "vip";
+      const subject = isVip
+        ? `KUCCPS Assist: VIP booking received (${booking.ticket})`
+        : `KUCCPS Assist: Application received (${booking.ticket})`;
+
       const html = tplFn({
-        title: "Application received ✅",
+        title: isVip ? "VIP booking received ✅" : "Application received ✅",
         ticket: booking.ticket,
         phone: booking.phone || phoneValue || "",
-        statusLine:
-          "We have received your application. Our admin will review it and update you shortly.",
-        extraHtml: `<p style="margin:12px 0 0">You can track your request anytime using your ticket number.</p>`,
+        statusLine: isVip
+          ? `We have received your VIP booking. Complete the required deposit to activate VIP processing.`
+          : "We have received your application. Our admin will review it and update you shortly.",
+        extraHtml: isVip
+          ? `<p style="margin:12px 0 0">Required VIP deposit: <strong>KES ${vipDepositAmount.toLocaleString()}</strong>.</p><p style="margin:12px 0 0">You can track your request anytime using your ticket number.</p>`
+          : `<p style="margin:12px 0 0">You can track your request anytime using your ticket number.</p>`,
       });
 
       await sendFn({ to: booking.email, subject, html });
@@ -499,6 +591,40 @@ form.addEventListener("submit", async (e) => {
 
   clearDraft(getSlug());
 
-  msgEl.textContent = "✅ Submitted! Redirecting to your ticket...";
-  window.location.href = `ticket.html?ticket=${encodeURIComponent(booking.ticket)}`;
+  if (tier !== "vip") {
+    msgEl.textContent = "✅ Submitted! Redirecting to your ticket...";
+    window.location.href = `ticket.html?ticket=${encodeURIComponent(booking.ticket)}`;
+    return;
+  }
+
+  try {
+    msgEl.textContent = "Starting VIP payment...";
+
+    const checkout = await startVipCheckout({
+      bookingId: booking.id,
+      ticket: booking.ticket,
+      amount: vipDepositAmount,
+      email: booking.email || userEmail || "",
+      phone: booking.phone || phoneValue || "",
+      serviceName: service.name || "VIP Booking",
+    });
+
+    try {
+      await logActivity(`A student started VIP payment for ${service.name}.`);
+    } catch (e) {
+      console.warn("VIP payment activity log failed:", e);
+    }
+
+    msgEl.textContent = "Redirecting to payment...";
+    window.location.href = checkout.paymentUrl;
+  } catch (vipErr) {
+    console.error("VIP payment start error:", vipErr);
+
+    msgEl.textContent =
+      "✅ VIP booking saved, but payment could not start right now. You can still track your ticket while payment setup is completed.";
+
+    setTimeout(() => {
+      window.location.href = `ticket.html?ticket=${encodeURIComponent(booking.ticket)}`;
+    }, 1800);
+  }
 });

@@ -1,17 +1,22 @@
 /* ============================
-   KUCCPS Assist — Premium UI
-   Replace the whole style.css
-   (No functionality changes)
+   KUCCPS Assist — Premium UI v2
+   Full replacement
    ============================ */
 
 /* --- Base Reset --- */
 * {
   box-sizing: border-box;
 }
+
 html,
 body {
   height: 100%;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family:
@@ -25,7 +30,7 @@ body {
     "Apple Color Emoji",
     "Segoe UI Emoji";
   color: #0f172a;
-  line-height: 1.45;
+  line-height: 1.5;
   background:
     radial-gradient(
       900px 500px at 8% -10%,
@@ -37,7 +42,7 @@ body {
       rgba(79, 134, 255, 0.18),
       transparent 60%
     ),
-    #f5f7fb;
+    linear-gradient(180deg, #f6f8fc 0%, #eef3fb 100%);
 }
 
 /* --- Theme Tokens --- */
@@ -49,39 +54,53 @@ body {
   --text: #0f172a;
   --muted: #64748b;
 
-  --border: rgba(2, 6, 23, 0.1);
+  --border: rgba(2, 6, 23, 0.08);
   --border-strong: rgba(2, 6, 23, 0.14);
 
   --brand: #1e5bff;
   --brand2: #4f86ff;
+  --brand-soft: rgba(30, 91, 255, 0.08);
 
   --ok: #059669;
   --warn: #d97706;
   --bad: #dc2626;
 
-  --radius: 16px;
+  --radius: 18px;
   --radius-sm: 12px;
 
-  --shadow: 0 12px 34px rgba(2, 6, 23, 0.1);
-  --shadow-soft: 0 10px 22px rgba(2, 6, 23, 0.08);
-  --shadow-tiny: 0 8px 16px rgba(2, 6, 23, 0.06);
+  --shadow: 0 16px 38px rgba(2, 6, 23, 0.1);
+  --shadow-soft: 0 12px 24px rgba(2, 6, 23, 0.08);
+  --shadow-tiny: 0 8px 16px rgba(2, 6, 23, 0.05);
 }
 
 /* --- Layout --- */
 .container {
-  max-width: 980px;
-  margin: 36px auto;
-  padding: 22px;
+  max-width: 1120px;
+  margin: 34px auto;
+  padding: 24px;
   background: linear-gradient(180deg, var(--card), var(--card-solid));
   border: 1px solid rgba(2, 6, 23, 0.06);
-  border-radius: calc(var(--radius) + 4px);
+  border-radius: 24px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
 }
 
-@media (max-width: 700px) {
+section {
+  scroll-margin-top: 90px;
+}
+
+@media (max-width: 900px) {
   .container {
-    margin: 16px auto;
+    max-width: 100%;
+    margin: 18px 12px;
+    padding: 16px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    margin: 10px 8px;
     padding: 14px;
     border-radius: 18px;
   }
@@ -90,28 +109,40 @@ body {
 /* --- Typography --- */
 h1 {
   margin: 0;
-  font-size: 28px;
-  letter-spacing: -0.02em;
+  font-size: 32px;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
 }
+
 h2 {
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
+
 h3 {
   margin: 0;
   letter-spacing: -0.01em;
 }
+
 p {
   margin: 0;
 }
+
 .muted {
   color: var(--muted);
 }
 
-/* --- Topbar / Header polish --- */
-header {
-  padding: 6px 2px 0;
+@media (max-width: 700px) {
+  h1 {
+    font-size: 28px;
+  }
 }
+
+/* --- Header / topbar polish --- */
+header {
+  padding: 4px 2px 0;
+}
+
 .topbar {
   display: flex;
   justify-content: space-between;
@@ -120,6 +151,7 @@ header {
   flex-wrap: wrap;
   padding: 8px 2px 0;
 }
+
 .topbar h1 {
   font-size: 24px;
 }
@@ -129,15 +161,17 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
 a:hover {
   text-decoration: none;
 }
 
-/* --- Actions row --- */
+/* --- Action rows --- */
 .actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 /* --- Buttons --- */
@@ -147,25 +181,27 @@ button {
   cursor: pointer;
   font-weight: 800;
   font-size: 14px;
-  padding: 10px 14px;
+  padding: 11px 15px;
   border-radius: 14px;
   color: #fff;
   background: linear-gradient(135deg, var(--brand), var(--brand2));
   box-shadow: 0 14px 26px rgba(30, 91, 255, 0.22);
   transition:
-    transform 0.12s ease,
-    box-shadow 0.12s ease,
-    filter 0.12s ease;
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    filter 0.14s ease,
+    opacity 0.14s ease;
   user-select: none;
 }
 
 button:hover {
   transform: translateY(-1px);
   box-shadow: 0 18px 32px rgba(30, 91, 255, 0.28);
-  filter: saturate(1.04);
+  filter: saturate(1.05);
 }
+
 button:active {
-  transform: translateY(0px);
+  transform: translateY(0);
   box-shadow: 0 14px 26px rgba(30, 91, 255, 0.22);
 }
 
@@ -177,23 +213,11 @@ button:disabled {
   filter: none;
 }
 
-/* Make link-wrapped buttons not weird */
 a > button {
   width: 100%;
 }
 
-/* On mobile, buttons become full width for a cleaner look */
-@media (max-width: 640px) {
-  .actions > a,
-  .actions > button {
-    width: 100%;
-  }
-  button {
-    width: 100%;
-  }
-}
-
-/* --- Form Controls --- */
+/* --- Forms --- */
 label {
   display: block;
   margin: 0 0 6px;
@@ -205,10 +229,10 @@ input,
 textarea,
 select {
   width: 100%;
-  padding: 12px 12px;
+  padding: 12px 13px;
   border-radius: 14px;
   border: 1px solid var(--border-strong);
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.94);
   color: var(--text);
   outline: none;
   font-size: 14px;
@@ -224,23 +248,23 @@ textarea {
 
 input::placeholder,
 textarea::placeholder {
-  color: rgba(100, 116, 139, 0.8);
+  color: rgba(100, 116, 139, 0.82);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: rgba(30, 91, 255, 0.6);
-  box-shadow: 0 0 0 5px rgba(30, 91, 255, 0.12);
-  background: #ffffff;
+  border-color: rgba(30, 91, 255, 0.55);
+  box-shadow: 0 0 0 5px rgba(30, 91, 255, 0.11);
+  background: #fff;
 }
 
-/* --- Grid & Cards --- */
+/* --- Cards / grids --- */
 .grid {
   display: grid;
   gap: 14px;
   margin-top: 18px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 @media (max-width: 800px) {
@@ -250,36 +274,40 @@ select:focus {
 }
 
 .card {
-  border: 1px solid rgba(2, 6, 23, 0.1);
+  border: 1px solid rgba(2, 6, 23, 0.08);
   border-radius: var(--radius);
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff, #fcfdff);
   box-shadow: var(--shadow-tiny);
-  padding: 16px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition:
+    box-shadow 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.16s ease;
 }
 
 .card:hover {
   box-shadow: var(--shadow-soft);
-  border-color: rgba(30, 91, 255, 0.18);
+  border-color: rgba(30, 91, 255, 0.16);
+  transform: translateY(-1px);
 }
 
-/* Headings inside cards */
 .card h2 {
   margin: 0;
   font-size: 18px;
 }
 
-/* --- Request / Result Box --- */
+/* --- Info/request/result boxes --- */
 .req,
 #result {
   margin-top: 12px;
-  background: linear-gradient(180deg, #fbfdff, #f7f9ff);
-  border: 1px solid rgba(30, 91, 255, 0.12);
+  background: linear-gradient(180deg, #fbfdff, #f6f9ff);
+  border: 1px solid rgba(30, 91, 255, 0.1);
   border-radius: var(--radius);
   padding: 14px;
-  box-shadow: 0 10px 18px rgba(2, 6, 23, 0.05);
+  box-shadow: 0 10px 18px rgba(2, 6, 23, 0.04);
 }
 
 .req h3 {
@@ -293,65 +321,71 @@ select:focus {
   margin: 0;
   padding-left: 18px;
 }
+
 .req li {
   margin: 6px 0;
 }
 
-/* --- Details / Pre (Admin student details) --- */
+/* --- Details / pre --- */
 details {
   border-radius: var(--radius-sm);
 }
+
 details summary {
   cursor: pointer;
   user-select: none;
   font-weight: 800;
   color: #0f172a;
 }
+
 pre {
   margin: 0;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(2, 6, 23, 0.08);
+  background: #f8fafc;
 }
 
-/* --- Badges (Admin statuses) --- */
+/* --- Badges --- */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
+  padding: 5px 10px;
   border-radius: 999px;
   font-weight: 900;
   font-size: 12px;
   background: rgba(30, 91, 255, 0.1);
-  border: 1px solid rgba(30, 91, 255, 0.18);
+  border: 1px solid rgba(30, 91, 255, 0.16);
   color: var(--brand);
+  white-space: nowrap;
 }
 
-/* Optional: auto-color if you add these classes in future (not required) */
 .badge.ok {
   background: rgba(5, 150, 105, 0.12);
   border-color: rgba(5, 150, 105, 0.22);
   color: var(--ok);
 }
+
 .badge.warn {
   background: rgba(217, 119, 6, 0.12);
   border-color: rgba(217, 119, 6, 0.22);
   color: var(--warn);
 }
+
 .badge.bad {
   background: rgba(220, 38, 38, 0.12);
   border-color: rgba(220, 38, 38, 0.22);
   color: var(--bad);
 }
 
-/* --- Small helper for subtle separators --- */
+/* --- Horizontal rules --- */
 hr {
   border: none;
   border-top: 1px solid rgba(2, 6, 23, 0.08);
   margin: 14px 0;
 }
 
-/* --- Improve focus for accessibility --- */
+/* --- Accessibility / focus --- */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
@@ -361,33 +395,129 @@ select:focus-visible {
   box-shadow: 0 0 0 5px rgba(30, 91, 255, 0.16);
 }
 
-/* --- Smooth scroll and selection feel --- */
-html {
-  scroll-behavior: smooth;
-}
+/* --- Selection --- */
 ::selection {
   background: rgba(30, 91, 255, 0.2);
 }
 
-/* --- Make inline style blocks look consistent (your pages use inline often) --- */
+/* --- Inline-style helper target ids --- */
 #status,
 #adminMsg,
 #msg,
 #announcementsMsg,
-#uploadMsg {
+#uploadMsg,
+#resourcesMsg,
+#testimonialsMsg,
+#questionsMsg,
+#tesSubmitMsg,
+#qSubmitMsg {
   color: var(--muted);
 }
 
-/* --- Reduce harshness on very large screens --- */
-@media (min-width: 1100px) {
-  .container {
-    margin-top: 44px;
-    margin-bottom: 44px;
-  }
-}
-/* Login box polish */
+/* --- Login box --- */
 .login-box {
   margin-top: 12px;
   display: grid;
   gap: 10px;
+}
+
+/* --- Premium polish for first-view sections --- */
+nav {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hero/account card balance */
+@media (min-width: 901px) {
+  header[id="home"] > div:first-child {
+    padding-right: 6px;
+  }
+
+  header[id="home"] > div:last-child {
+    align-self: stretch;
+  }
+}
+
+/* Stats cards look stronger */
+[id^="stat"] {
+  color: #0f172a;
+  line-height: 1;
+}
+
+/* Activity and announcement content feel tighter */
+#activityFeed > div:last-child {
+  border-bottom: none !important;
+}
+
+#announcementsList > div:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Footer links cleaner */
+footer a {
+  color: #334155;
+  transition: color 0.12s ease;
+}
+
+footer a:hover {
+  color: var(--brand);
+}
+
+/* --- Mobile improvements --- */
+@media (max-width: 900px) {
+  button {
+    width: 100%;
+  }
+
+  .actions > a,
+  .actions > button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  body {
+    background:
+      radial-gradient(
+        700px 380px at 8% -10%,
+        rgba(30, 91, 255, 0.18),
+        transparent 62%
+      ),
+      radial-gradient(
+        700px 420px at 100% 0%,
+        rgba(79, 134, 255, 0.14),
+        transparent 60%
+      ),
+      linear-gradient(180deg, #f6f8fc 0%, #eef3fb 100%);
+  }
+
+  h1 {
+    font-size: 26px;
+    line-height: 1.12;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .req,
+  #result {
+    padding: 13px;
+  }
+
+  .badge {
+    font-size: 11px;
+  }
+}
+
+/* --- Large screen breathing room --- */
+@media (min-width: 1180px) {
+  .container {
+    margin-top: 42px;
+    margin-bottom: 42px;
+  }
 }

@@ -14,8 +14,92 @@
 
   <body>
     <div class="container">
-      <!-- HERO / HEADER -->
+      <!-- TOP NAV -->
+      <nav
+        style="
+          position: sticky;
+          top: 0;
+          z-index: 20;
+          margin-bottom: 18px;
+          background: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          border-radius: 16px;
+          padding: 12px 14px;
+          box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+        "
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 10px">
+            <div
+              style="
+                width: 38px;
+                height: 38px;
+                border-radius: 12px;
+                display: grid;
+                place-items: center;
+                background: linear-gradient(135deg, #1e5bff, #4f86ff);
+                color: #fff;
+                font-size: 16px;
+                box-shadow: 0 10px 20px rgba(30, 91, 255, 0.24);
+              "
+            >
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+
+            <div>
+              <div style="font-weight: 900; font-size: 16px">KUCCPS Assist</div>
+              <div class="muted" style="font-size: 12px">
+                Student Application Support
+              </div>
+            </div>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+            "
+          >
+            <a href="#home" class="muted" style="font-weight: 700">Home</a>
+            <a href="services.html" class="muted" style="font-weight: 700"
+              >Services</a
+            >
+            <a href="tracking.html" class="muted" style="font-weight: 700"
+              >Track</a
+            >
+            <a href="#resources" class="muted" style="font-weight: 700"
+              >Resources</a
+            >
+            <a href="#testimonials" class="muted" style="font-weight: 700"
+              >Testimonials</a
+            >
+            <a href="#successSection" class="muted" style="font-weight: 700"
+              >Success</a
+            >
+            <a href="#questions" class="muted" style="font-weight: 700"
+              >Questions</a
+            >
+            <a href="#contact" class="muted" style="font-weight: 700"
+              >Contact</a
+            >
+          </div>
+        </div>
+      </nav>
+
+      <!-- HERO -->
       <header
+        id="home"
         style="
           display: flex;
           justify-content: space-between;
@@ -39,20 +123,20 @@
               margin-bottom: 10px;
             "
           >
-            <i class="fa-solid fa-graduation-cap"></i>
+            <i class="fa-solid fa-circle-check"></i>
             Trusted Student Support
           </div>
 
           <h1 style="margin: 0; font-size: 34px; line-height: 1.1">
-            KUCCPS Assist
+            Professional Help for KUCCPS, KMTC, HELB, TVET and More
           </h1>
 
           <p
             class="muted"
             style="margin: 10px 0 0; max-width: 760px; font-size: 15px"
           >
-            Professional support for KUCCPS, TVET, KMTC, HELB / HEF, KRA PIN,
-            SHA registration and other student application services.
+            Get guided support for applications, revisions, transfers, tracking,
+            resources, and student support services — all in one place.
           </p>
 
           <div
@@ -60,7 +144,7 @@
           >
             <a href="services.html">
               <button type="button">
-                <i class="fa-solid fa-list-check"></i> Get Started
+                <i class="fa-solid fa-list-check"></i> View Services
               </button>
             </a>
 
@@ -75,8 +159,8 @@
             style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap"
           >
             <span class="badge">Fast Support</span>
-            <span class="badge">Trusted Guidance</span>
             <span class="badge">Ticket Tracking</span>
+            <span class="badge">Resources Available</span>
           </div>
         </div>
 
@@ -130,8 +214,49 @@
         </div>
       </header>
 
-      <!-- QUICK STATS -->
+      <!-- TRUST STRIP -->
       <section style="margin-top: 18px">
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            align-items: center;
+            text-align: center;
+          "
+        >
+          <div class="card" style="padding: 12px">
+            <div style="font-size: 20px; color: #1e5bff">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <p class="muted" style="font-size: 13px">Secure Student Support</p>
+          </div>
+
+          <div class="card" style="padding: 12px">
+            <div style="font-size: 20px; color: #1e5bff">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <p class="muted" style="font-size: 13px">Fast Response</p>
+          </div>
+
+          <div class="card" style="padding: 12px">
+            <div style="font-size: 20px; color: #1e5bff">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <p class="muted" style="font-size: 13px">KUCCPS Focused</p>
+          </div>
+
+          <div class="card" style="padding: 12px">
+            <div style="font-size: 20px; color: #1e5bff">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <p class="muted" style="font-size: 13px">Student Community</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIVE STATS -->
+      <section id="stats" style="margin-top: 18px">
         <div
           style="
             display: grid;
@@ -140,32 +265,88 @@
           "
         >
           <div class="card" style="padding: 16px">
-            <div class="muted" style="font-size: 12px">Support Areas</div>
-            <div style="font-size: 24px; font-weight: 900">11+</div>
-            <div class="muted" style="font-size: 13px">Services available</div>
-          </div>
-
-          <div class="card" style="padding: 16px">
-            <div class="muted" style="font-size: 12px">Application Flow</div>
-            <div style="font-size: 24px; font-weight: 900">Simple</div>
-            <div class="muted" style="font-size: 13px">
-              Submit, track, follow up
+            <div class="muted" style="font-size: 12px">Students Assisted</div>
+            <div
+              id="statBookings"
+              style="font-size: 26px; font-weight: 900; margin-top: 4px"
+            >
+              --
             </div>
+            <div class="muted" style="font-size: 13px">Booking requests</div>
           </div>
 
           <div class="card" style="padding: 16px">
-            <div class="muted" style="font-size: 12px">Student Support</div>
-            <div style="font-size: 24px; font-weight: 900">Live</div>
-            <div class="muted" style="font-size: 13px">
-              Resources and updates available
+            <div class="muted" style="font-size: 12px">Testimonials</div>
+            <div
+              id="statTestimonials"
+              style="font-size: 26px; font-weight: 900; margin-top: 4px"
+            >
+              --
             </div>
+            <div class="muted" style="font-size: 13px">Student feedback</div>
           </div>
 
           <div class="card" style="padding: 16px">
-            <div class="muted" style="font-size: 12px">Tracking</div>
-            <div style="font-size: 24px; font-weight: 900">24/7</div>
-            <div class="muted" style="font-size: 13px">
-              Ticket and status checking
+            <div class="muted" style="font-size: 12px">Public Questions</div>
+            <div
+              id="statQuestions"
+              style="font-size: 26px; font-weight: 900; margin-top: 4px"
+            >
+              --
+            </div>
+            <div class="muted" style="font-size: 13px">Community posts</div>
+          </div>
+
+          <div class="card" style="padding: 16px">
+            <div class="muted" style="font-size: 12px">Success Stories</div>
+            <div
+              id="statSuccess"
+              style="font-size: 26px; font-weight: 900; margin-top: 4px"
+            >
+              --
+            </div>
+            <div class="muted" style="font-size: 13px">Verified outcomes</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHY CHOOSE US -->
+      <section style="margin-top: 22px">
+        <div class="card">
+          <h2 style="margin: 0; font-size: 20px">
+            <i class="fa-solid fa-star"></i> Why Students Choose KUCCPS Assist
+          </h2>
+
+          <div
+            style="
+              margin-top: 14px;
+              display: grid;
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 14px;
+            "
+          >
+            <div class="req" style="margin-top: 0">
+              <h3>Guided Applications</h3>
+              <p class="muted">
+                We help students correctly apply for KUCCPS, KMTC and TVET
+                courses without mistakes.
+              </p>
+            </div>
+
+            <div class="req" style="margin-top: 0">
+              <h3>Application Tracking</h3>
+              <p class="muted">
+                Every student receives a ticket to track the progress of their
+                application.
+              </p>
+            </div>
+
+            <div class="req" style="margin-top: 0">
+              <h3>Student Resources</h3>
+              <p class="muted">
+                Access helpful guides, requirements and instructions directly
+                from the homepage.
+              </p>
             </div>
           </div>
         </div>
@@ -211,7 +392,7 @@
               <h3><i class="fa-solid fa-school"></i> KUCCPS Services</h3>
               <p class="muted" style="margin: 0">
                 Degree applications, TVET applications, course revision and
-                inter-institution transfer.
+                transfers.
               </p>
             </div>
 
@@ -227,96 +408,49 @@
                 <i class="fa-solid fa-file-signature"></i> Student Services
               </h3>
               <p class="muted" style="margin: 0">
-                HELB / HEF, HELB appeal, KRA PIN, SHA registration and more.
+                HELB / HEF, KRA PIN, SHA registration and related support.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SUPPORT -->
-      <section style="margin-top: 22px">
+      <!-- LIVE ACTIVITY -->
+      <section id="activity" style="margin-top: 22px">
         <div class="card">
           <div
             style="
               display: flex;
+              align-items: center;
               justify-content: space-between;
-              align-items: flex-start;
               gap: 12px;
               flex-wrap: wrap;
             "
           >
-            <div style="min-width: 260px">
+            <div>
               <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-headset"></i> Support – Verny
+                <i class="fa-solid fa-bolt"></i> Live Platform Activity
               </h2>
-              <p class="muted" style="margin: 6px 0 0; max-width: 620px">
-                Need quick assistance with KUCCPS, HELB, KMTC or related
-                applications? Reach out directly using the contact options
-                below.
+              <p class="muted" style="margin: 6px 0 0">
+                Recent activity from students using KUCCPS Assist.
               </p>
             </div>
 
-            <div class="actions" style="gap: 10px; flex-wrap: wrap">
-              <a href="tel:0722847842">
-                <button type="button">
-                  <i class="fa-solid fa-phone"></i> Call 0722847842
-                </button>
-              </a>
-
-              <a
-                href="https://wa.me/254722847842?text=Hello%2C%20I%20would%20like%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
-                target="_blank"
-                rel="noopener"
-              >
-                <button
-                  type="button"
-                  style="background: #25d366; color: white; border: none"
-                >
-                  <i class="fa-brands fa-whatsapp"></i> WhatsApp Support
-                </button>
-              </a>
-
-              <a
-                href="mailto:emilliojohnverny@gmail.com?subject=KUCCPS%20Assist%20Support&body=Hello%2C%20I%20would%20like%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
-              >
-                <button type="button">
-                  <i class="fa-solid fa-envelope"></i> Email Support
-                </button>
-              </a>
-            </div>
+            <button
+              id="refreshActivityBtn"
+              type="button"
+              style="padding: 10px 14px"
+            >
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
           </div>
 
-          <div
-            style="
-              margin-top: 14px;
-              display: grid;
-              grid-template-columns: repeat(3, minmax(0, 1fr));
-              gap: 12px;
-            "
-          >
-            <div class="req" style="margin-top: 0">
-              <h3><i class="fa-solid fa-phone"></i> Primary Phone</h3>
-              <p style="margin: 0">0722847842</p>
-            </div>
-
-            <div class="req" style="margin-top: 0">
-              <h3>
-                <i class="fa-solid fa-mobile-screen"></i> Alternative Phone
-              </h3>
-              <p style="margin: 0">0753893862</p>
-            </div>
-
-            <div class="req" style="margin-top: 0">
-              <h3><i class="fa-solid fa-envelope"></i> Email</h3>
-              <p style="margin: 0">emilliojohnverny@gmail.com</p>
-            </div>
-          </div>
+          <div id="activityFeed" style="margin-top: 14px"></div>
         </div>
       </section>
 
       <!-- RESOURCES -->
-      <section style="margin-top: 22px">
+      <section id="resources" style="margin-top: 22px">
         <div class="card">
           <div
             style="
@@ -354,7 +488,7 @@
       </section>
 
       <!-- TESTIMONIALS -->
-      <section style="margin-top: 22px">
+      <section id="testimonials" style="margin-top: 22px">
         <div class="card">
           <div
             style="
@@ -445,6 +579,118 @@
         </div>
       </section>
 
+      <!-- SUCCESS WALL -->
+      <section id="successSection" style="margin-top: 22px">
+        <div class="card">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin: 0; font-size: 20px">
+                <i class="fa-solid fa-trophy"></i> Student Success Wall
+              </h2>
+              <p class="muted" style="margin: 6px 0 0">
+                Students successfully assisted through KUCCPS Assist.
+              </p>
+            </div>
+
+            <button
+              id="refreshSuccessBtn"
+              type="button"
+              style="padding: 10px 14px"
+            >
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
+
+          <div id="successWall" class="grid" style="margin-top: 14px"></div>
+        </div>
+      </section>
+
+      <!-- PUBLIC QUESTIONS -->
+      <section id="questions" style="margin-top: 22px">
+        <div class="card">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div>
+              <h2 style="margin: 0; font-size: 20px">
+                <i class="fa-solid fa-comments"></i> Public Questions
+              </h2>
+              <p class="muted" style="margin: 6px 0 0">
+                Visitors can ask public questions and see approved community
+                messages here.
+              </p>
+            </div>
+
+            <button
+              id="refreshQuestionsBtn"
+              type="button"
+              style="padding: 10px 14px"
+            >
+              <i class="fa-solid fa-rotate-right"></i> Refresh
+            </button>
+          </div>
+
+          <div id="questionsMsg" class="muted" style="margin-top: 12px">
+            Loading questions...
+          </div>
+
+          <div id="questionsList" class="grid" style="margin-top: 12px"></div>
+
+          <div class="req" style="margin-top: 16px">
+            <h3>Ask a public question</h3>
+
+            <div
+              style="
+                margin-top: 10px;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+              "
+            >
+              <div>
+                <label>Your Name</label>
+                <input id="qName" placeholder="e.g. Mercy K." />
+              </div>
+
+              <div>
+                <label>Your Message</label>
+                <textarea
+                  id="qMessage"
+                  rows="4"
+                  placeholder="Ask your question or leave a short public message..."
+                ></textarea>
+              </div>
+
+              <div
+                style="
+                  display: flex;
+                  gap: 10px;
+                  align-items: center;
+                  flex-wrap: wrap;
+                "
+              >
+                <button id="qSubmitBtn" type="button">Submit Question</button>
+                <p id="qSubmitMsg" class="muted" style="margin: 0"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- UPDATES -->
       <section style="margin-top: 22px">
         <div class="card">
@@ -483,6 +729,127 @@
         </div>
       </section>
 
+      <!-- CONTACT -->
+      <section id="contact" style="margin-top: 22px">
+        <div class="card">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <div style="min-width: 260px">
+              <h2 style="margin: 0; font-size: 20px">
+                <i class="fa-solid fa-headset"></i> Support – Verny
+              </h2>
+              <p class="muted" style="margin: 6px 0 0; max-width: 620px">
+                Reach out directly for quick help with KUCCPS, KMTC, HELB, TVET
+                and related student applications.
+              </p>
+            </div>
+
+            <div class="actions" style="gap: 10px; flex-wrap: wrap">
+              <a href="tel:0722847842">
+                <button type="button">
+                  <i class="fa-solid fa-phone"></i> Call 0722847842
+                </button>
+              </a>
+
+              <a
+                href="https://wa.me/254722847842?text=Hello%2C%20I%20would%20like%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
+                target="_blank"
+                rel="noopener"
+              >
+                <button
+                  type="button"
+                  style="background: #25d366; color: white; border: none"
+                >
+                  <i class="fa-brands fa-whatsapp"></i> WhatsApp Support
+                </button>
+              </a>
+
+              <a
+                href="mailto:emilliojohnverny@gmail.com?subject=KUCCPS%20Assist%20Support&body=Hello%2C%20I%20would%20like%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
+              >
+                <button type="button">
+                  <i class="fa-solid fa-envelope"></i> Email Support
+                </button>
+              </a>
+            </div>
+          </div>
+
+          <div
+            style="
+              margin-top: 14px;
+              display: grid;
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+              gap: 12px;
+            "
+          >
+            <div class="req" style="margin-top: 0">
+              <h3><i class="fa-solid fa-phone"></i> Primary Phone</h3>
+              <p style="margin: 0">0722847842</p>
+            </div>
+
+            <div class="req" style="margin-top: 0">
+              <h3>
+                <i class="fa-solid fa-mobile-screen"></i> Alternative Phone
+              </h3>
+              <p style="margin: 0">0753893862</p>
+            </div>
+
+            <div class="req" style="margin-top: 0">
+              <h3><i class="fa-solid fa-envelope"></i> Email</h3>
+              <p style="margin: 0">emilliojohnverny@gmail.com</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FINAL CTA -->
+      <section style="margin-top: 26px">
+        <div
+          class="card"
+          style="
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, #1e5bff, #4f86ff);
+            color: white;
+          "
+        >
+          <h2 style="margin: 0">Start Your KUCCPS Application Today</h2>
+
+          <p style="margin-top: 8px; opacity: 0.92">
+            Submit your request and receive professional assistance.
+          </p>
+
+          <div
+            style="
+              margin-top: 16px;
+              display: flex;
+              gap: 12px;
+              justify-content: center;
+              flex-wrap: wrap;
+            "
+          >
+            <a href="services.html">
+              <button type="button" style="background: white; color: #1e5bff">
+                View Services
+              </button>
+            </a>
+
+            <a href="tracking.html">
+              <button type="button" style="background: white; color: #1e5bff">
+                Track Application
+              </button>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <!-- FOOTER -->
       <footer
         style="
@@ -494,7 +861,7 @@
         <div
           style="
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr 0.8fr;
+            grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr;
             gap: 16px;
           "
         >
@@ -508,11 +875,23 @@
 
           <div>
             <h3 style="margin: 0 0 8px">Quick Links</h3>
+            <p style="margin: 0 0 6px"><a href="#home">Home</a></p>
             <p style="margin: 0 0 6px"><a href="services.html">Services</a></p>
-            <p style="margin: 0 0 6px">
+            <p style="margin: 0">
               <a href="tracking.html">Track Application</a>
             </p>
-            <p style="margin: 0"><a href="login.html">Login</a></p>
+          </div>
+
+          <div>
+            <h3 style="margin: 0 0 8px">Explore</h3>
+            <p style="margin: 0 0 6px"><a href="#resources">Resources</a></p>
+            <p style="margin: 0 0 6px">
+              <a href="#testimonials">Testimonials</a>
+            </p>
+            <p style="margin: 0 0 6px">
+              <a href="#successSection">Success Wall</a>
+            </p>
+            <p style="margin: 0"><a href="#questions">Questions</a></p>
           </div>
 
           <div>
@@ -532,12 +911,73 @@
       </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/email.js"></script>
-    <script src="js/index.js"></script>
-    <script src="js/index-resources.js"></script>
-    <script src="js/index-testimonials.js"></script>
+    <!-- Floating WhatsApp Button -->
+    <a
+      href="https://wa.me/254722847842?text=Hello%2C%20I%20need%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
+      target="_blank"
+      rel="noopener"
+      aria-label="Chat on WhatsApp"
+      title="Chat on WhatsApp"
+      style="
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 999;
+        width: 58px;
+        height: 58px;
+        border-radius: 999px;
+        background: #25d366;
+        color: white;
+        display: grid;
+        place-items: center;
+        font-size: 28px;
+        box-shadow: 0 14px 30px rgba(37, 211, 102, 0.35);
+        text-decoration: none;
+      "
+    >
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <button
+      id="backToTopBtn"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+      style="
+        position: fixed;
+        right: 18px;
+        bottom: 88px;
+        z-index: 998;
+        width: 46px;
+        height: 46px;
+        border-radius: 999px;
+        border: none;
+        background: #1e5bff;
+        color: white;
+        display: none;
+        place-items: center;
+        font-size: 18px;
+        box-shadow: 0 12px 24px rgba(30, 91, 255, 0.28);
+        cursor: pointer;
+      "
+    >
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"
+    ></script>
+    <script defer src="js/supabase.js"></script>
+    <script defer src="js/email.js"></script>
+    <script defer src="js/index.js"></script>
+    <script defer src="js/index-resources.js"></script>
+    <script defer src="js/index-testimonials.js"></script>
+    <script defer src="js/index-questions.js"></script>
+    <script defer src="js/index-activity.js"></script>
+    <script defer src="js/index-success.js"></script>
+    <script defer src="js/index-stats.js"></script>
 
     <script>
       const announcementsMsg = document.getElementById("announcementsMsg");
@@ -545,6 +985,7 @@
       const refreshAnnouncementsBtn = document.getElementById(
         "refreshAnnouncementsBtn",
       );
+      const backToTopBtn = document.getElementById("backToTopBtn");
 
       function escapeHtml(str) {
         return String(str || "")
@@ -627,7 +1068,7 @@
             .eq("is_active", true)
             .order("is_highlight", { ascending: false })
             .order("created_at", { ascending: false })
-            .limit(10);
+            .limit(4);
 
           if (error) throw error;
           renderAnnouncements(data);
@@ -640,11 +1081,27 @@
 
       refreshAnnouncementsBtn.addEventListener("click", loadAnnouncements);
       loadAnnouncements();
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 320) {
+          backToTopBtn.style.display = "grid";
+        } else {
+          backToTopBtn.style.display = "none";
+        }
+      });
+
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
     </script>
 
     <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
       @media (max-width: 980px) {
-        footer div[style*="grid-template-columns: 1.2fr 0.8fr 0.8fr"] {
+        footer div[style*="grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr"] {
           grid-template-columns: 1fr !important;
         }
       }
@@ -659,7 +1116,9 @@
         }
 
         #testimonialsList,
-        #resourcesList {
+        #resourcesList,
+        #questionsList,
+        #successWall {
           grid-template-columns: 1fr !important;
         }
       }
@@ -667,6 +1126,10 @@
       @media (max-width: 700px) {
         section div[style*="grid-template-columns: repeat(4"] {
           grid-template-columns: 1fr !important;
+        }
+
+        nav div[style*="justify-content: space-between"] {
+          justify-content: center !important;
         }
       }
     </style>

@@ -8,28 +8,41 @@ const msgEl = document.getElementById("message");
 const params = new URLSearchParams(window.location.search);
 const nextUrl = params.get("next") || "index.html";
 
-function safeNext(url) {
-  // prevent external redirects
-  if (!url) return "index.html";
-  if (url.startsWith("http://") || url.startsWith("https://"))
-    return "index.html";
-
-  // strip leading slash ("/index.html" -> "index.html")
-  if (url.startsWith("/")) return url.slice(1);
-
-  return url; // "service.html?slug=..." or "index.html"
-}
-
-function buildRedirectTo() {
-  // Always return a fully qualified URL (Supabase expects it)
-  const nextSafe = safeNext(nextUrl);
-  return new URL(nextSafe, window.location.origin).toString();
-}
-
 const DEFAULT_BTN_TEXT = "Send Magic Link";
 const COOLDOWN_SECONDS = 60;
 const COOLDOWN_KEY = "kas_magiclink_cooldown_until";
+
 let sending = false;
+
+function safeNext(url) {
+  if (!url) return "index.html";
+
+  const trimmed = String(url).trim();
+
+  // prevent external redirects
+  if (
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("//")
+  ) {
+    return "index.html";
+  }
+
+  // strip leading slash ("/index.html" -> "index.html")
+  if (trimmed.startsWith("/")) return trimmed.slice(1);
+
+  return trimmed;
+}
+
+function buildRedirectTo() {
+  // IMPORTANT:
+  // The magic link should return to login.html first,
+  // so this file can finish auth and then redirect to `next`.
+  const nextSafe = safeNext(nextUrl);
+  const callbackUrl = new URL("login.html", window.location.origin);
+  callbackUrl.searchParams.set("next", nextSafe);
+  return callbackUrl.toString();
+}
 
 function getCooldownUntil() {
   const v = localStorage.getItem(COOLDOWN_KEY);
@@ -55,11 +68,13 @@ function secondsLeft() {
 }
 
 function setBtn(text, disabled) {
+  if (!loginBtn) return;
   loginBtn.textContent = text;
   loginBtn.disabled = disabled;
 }
 
 function setMsg(text) {
+  if (!msgEl) return;
   msgEl.textContent = text || "";
 }
 
@@ -73,18 +88,24 @@ function updateCooldownUI() {
   if (left > 0) {
     setBtn(`Wait ${left}s...`, true);
 
-    // Don’t overwrite real errors; only show the gentle cooldown message if empty
     if (!msgEl.textContent || msgEl.textContent.startsWith("Please wait")) {
       setMsg(`Please wait ${left}s before sending another link...`);
     }
     return true;
   }
 
-  // cooldown ended
   clearCooldown();
   setBtn(DEFAULT_BTN_TEXT, false);
-  if (msgEl.textContent.startsWith("Please wait")) setMsg("");
+
+  if (msgEl.textContent.startsWith("Please wait")) {
+    setMsg("");
+  }
+
   return false;
+}
+
+function redirectToNext() {
+  window.location.href = safeNext(nextUrl);
 }
 
 async function redirectIfLoggedIn() {
@@ -92,26 +113,23 @@ async function redirectIfLoggedIn() {
   if (error) console.error("getSession error:", error);
 
   if (data?.session) {
-    window.location.href = safeNext(nextUrl);
+    redirectToNext();
     return true;
   }
+
   return false;
 }
 
-/**
- * Handles cases where Supabase returns to this page with hash tokens.
- * In some configs, the magic link opens a URL that contains a session in the hash.
- * If a session is established, we redirect to next immediately.
- */
 async function handleMagicLinkCallback() {
-  // If URL contains a hash, Supabase may need to process it
-  // We simply wait a tick and then check session.
-  if (window.location.hash && window.location.hash.length > 1) {
-    // Optional: remove hash from URL after processing (clean URL)
-    // We'll check session first to avoid breaking flow.
+  // Supabase may return tokens in the hash or query string.
+  // We simply check session after page load.
+  const hasHash = window.location.hash && window.location.hash.length > 1;
+  const hasCode = new URLSearchParams(window.location.search).has("code");
+
+  if (hasHash || hasCode) {
     const ok = await redirectIfLoggedIn();
+
     if (ok) {
-      // clean URL after session is confirmed
       history.replaceState(
         null,
         "",
@@ -120,24 +138,25 @@ async function handleMagicLinkCallback() {
       return true;
     }
   }
+
   return false;
 }
 
-// If user already logged in, go back immediately
+// If already logged in, redirect immediately
 redirectIfLoggedIn();
 
 // Run cooldown UI on load + every second
 updateCooldownUI();
 setInterval(updateCooldownUI, 1000);
 
-// React instantly when auth state changes (magic link confirmed)
-window.supabaseClient.auth.onAuthStateChange(async (event, session) => {
+// React instantly when auth state changes
+window.supabaseClient.auth.onAuthStateChange(async (_event, session) => {
   if (session) {
-    window.location.href = safeNext(nextUrl);
+    redirectToNext();
   }
 });
 
-// Try handle hash callback (if link opens this page directly)
+// Try handle callback if user came back from magic link
 handleMagicLinkCallback();
 
 loginBtn.addEventListener("click", async () => {
@@ -158,7 +177,9 @@ loginBtn.addEventListener("click", async () => {
 
   const { error } = await window.supabaseClient.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: redirectTo },
+    options: {
+      emailRedirectTo: redirectTo,
+    },
   });
 
   sending = false;
@@ -166,7 +187,6 @@ loginBtn.addEventListener("click", async () => {
   if (error) {
     const em = String(error.message || "");
 
-    // If rate limited, enforce longer cooldown
     if (
       em.toLowerCase().includes("rate") &&
       em.toLowerCase().includes("limit")
@@ -182,7 +202,6 @@ loginBtn.addEventListener("click", async () => {
     return;
   }
 
-  // Start cooldown after success
   setCooldown(COOLDOWN_SECONDS);
   setMsg("✅ Magic link sent. Check your email and open it to finish login.");
   updateCooldownUI();

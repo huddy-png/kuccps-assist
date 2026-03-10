@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Services | KUCCPS Assist</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
   </head>
 
   <body>
@@ -14,24 +18,54 @@
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          gap: 12px;
+          gap: 14px;
           flex-wrap: wrap;
         "
       >
-        <div style="min-width: 240px">
+        <div style="min-width: 260px; flex: 1">
+          <div
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 6px 10px;
+              border-radius: 999px;
+              background: rgba(30, 91, 255, 0.08);
+              color: #1e5bff;
+              font-size: 12px;
+              font-weight: 800;
+              margin-bottom: 10px;
+            "
+          >
+            <i class="fa-solid fa-briefcase"></i>
+            Service Directory
+          </div>
+
           <h1 style="margin: 0">Services</h1>
-          <p class="muted" style="margin: 6px 0 0; max-width: 680px">
+          <p class="muted" style="margin: 8px 0 0; max-width: 720px">
             Choose the service you need, review the requirements, then start
-            your application.
+            your application securely.
           </p>
         </div>
 
         <nav class="actions" style="align-items: center">
-          <a href="index.html"><button type="button">Home</button></a>
-          <a href="tracking.html"
-            ><button type="button">Track Application</button></a
-          >
-          <a href="login.html"><button type="button">Login</button></a>
+          <a href="index.html">
+            <button type="button">
+              <i class="fa-solid fa-house"></i> Home
+            </button>
+          </a>
+
+          <a href="tracking.html">
+            <button type="button">
+              <i class="fa-solid fa-magnifying-glass"></i> Track Application
+            </button>
+          </a>
+
+          <a href="login.html">
+            <button type="button">
+              <i class="fa-solid fa-right-to-bracket"></i> Login
+            </button>
+          </a>
         </nav>
       </header>
 
@@ -41,16 +75,30 @@
             style="
               display: flex;
               justify-content: space-between;
-              align-items: center;
+              align-items: flex-start;
               gap: 12px;
               flex-wrap: wrap;
             "
           >
             <div>
-              <h2 style="margin: 0; font-size: 18px">Available Services</h2>
+              <h2 style="margin: 0; font-size: 20px">
+                <i class="fa-solid fa-layer-group"></i> Available Services
+              </h2>
               <p class="muted" style="margin: 6px 0 0">
                 Services are grouped below to make selection easier.
               </p>
+            </div>
+
+            <div
+              class="badge"
+              style="
+                background: rgba(30, 91, 255, 0.08);
+                color: #1e5bff;
+                border: 1px solid rgba(30, 91, 255, 0.14);
+              "
+            >
+              <i class="fa-solid fa-shield-halved"></i>
+              Secure process
             </div>
           </div>
 
@@ -64,30 +112,72 @@
             "
           >
             <div style="margin: 0">
-              <h3>How it works</h3>
+              <h3><i class="fa-solid fa-list-check"></i> How it works</h3>
               <p class="muted" style="margin: 0">
                 Choose a service, submit your details, upload documents, and get
-                a ticket number.
+                a ticket number for tracking.
               </p>
             </div>
 
             <div style="margin: 0">
-              <h3>VIP Support</h3>
+              <h3><i class="fa-solid fa-star"></i> VIP Support</h3>
               <p class="muted" style="margin: 0">
-                VIP requests are prioritized and may require a 30% deposit.
+                VIP requests are prioritized and may require a 30% deposit
+                before processing starts.
               </p>
             </div>
 
             <div style="margin: 0">
-              <h3>Tracking</h3>
+              <h3><i class="fa-solid fa-ticket"></i> Tracking</h3>
               <p class="muted" style="margin: 0">
-                After submission, track progress using your ticket and phone
-                number.
+                After submission, track progress using your ticket number and
+                phone number.
               </p>
             </div>
           </div>
 
-          <div id="servicesMsg" class="muted" style="margin-top: 14px">
+          <div
+            style="
+              margin-top: 14px;
+              display: grid;
+              grid-template-columns: repeat(4, minmax(0, 1fr));
+              gap: 12px;
+            "
+          >
+            <div class="card" style="padding: 14px">
+              <p class="muted" style="margin: 0 0 4px">Support Areas</p>
+              <p style="margin: 0; font-weight: 900; font-size: 22px">11+</p>
+              <p class="muted" style="margin: 4px 0 0; font-size: 13px">
+                Services available
+              </p>
+            </div>
+
+            <div class="card" style="padding: 14px">
+              <p class="muted" style="margin: 0 0 4px">Submission Flow</p>
+              <p style="margin: 0; font-weight: 900; font-size: 22px">Simple</p>
+              <p class="muted" style="margin: 4px 0 0; font-size: 13px">
+                Choose, submit, track
+              </p>
+            </div>
+
+            <div class="card" style="padding: 14px">
+              <p class="muted" style="margin: 0 0 4px">Priority Option</p>
+              <p style="margin: 0; font-weight: 900; font-size: 22px">VIP</p>
+              <p class="muted" style="margin: 4px 0 0; font-size: 13px">
+                Faster handling
+              </p>
+            </div>
+
+            <div class="card" style="padding: 14px">
+              <p class="muted" style="margin: 0 0 4px">Tracking</p>
+              <p style="margin: 0; font-weight: 900; font-size: 22px">24/7</p>
+              <p class="muted" style="margin: 4px 0 0; font-size: 13px">
+                Ticket based updates
+              </p>
+            </div>
+          </div>
+
+          <div id="servicesMsg" class="muted" style="margin-top: 16px">
             Loading services...
           </div>
 
@@ -96,7 +186,7 @@
 
         <section style="margin-top: 14px">
           <div class="req">
-            <h3>Before you begin</h3>
+            <h3><i class="fa-solid fa-circle-info"></i> Before you begin</h3>
             <ul>
               <li>
                 Use the correct phone number because it is used for tracking.
@@ -106,17 +196,46 @@
                 For services with course choices, prepare at least 3 options if
                 possible.
               </li>
+              <li>
+                If you choose VIP, payment is handled after the booking is
+                saved.
+              </li>
             </ul>
           </div>
         </section>
       </main>
 
       <footer style="margin-top: 18px">
-        <div class="actions">
-          <a href="index.html"><button type="button">Back Home</button></a>
-          <a href="services.html"
-            ><button type="button">Refresh Services</button></a
-          >
+        <div
+          class="card"
+          style="
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+          "
+        >
+          <div>
+            <h3 style="margin: 0">Need help choosing a service?</h3>
+            <p class="muted" style="margin: 6px 0 0">
+              Start with the service that matches your current application need.
+            </p>
+          </div>
+
+          <div class="actions">
+            <a href="index.html">
+              <button type="button">
+                <i class="fa-solid fa-house"></i> Back Home
+              </button>
+            </a>
+            <a href="services.html">
+              <button type="button">
+                <i class="fa-solid fa-rotate-right"></i> Refresh Services
+              </button>
+            </a>
+          </div>
         </div>
       </footer>
     </div>
@@ -128,6 +247,16 @@
     <style>
       @media (max-width: 900px) {
         .req[style*="grid-template-columns: repeat(3"] {
+          grid-template-columns: 1fr !important;
+        }
+
+        section div[style*="grid-template-columns: repeat(4"] {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+      }
+
+      @media (max-width: 700px) {
+        section div[style*="grid-template-columns: repeat(4"] {
           grid-template-columns: 1fr !important;
         }
       }
