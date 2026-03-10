@@ -1,4 +1,3 @@
-//SERVICE.JS
 const serviceNameEl = document.getElementById("serviceName");
 const serviceDescEl = document.getElementById("serviceDesc");
 const requirementsBox = document.getElementById("requirementsBox");
@@ -622,10 +621,11 @@ form.addEventListener("submit", async (e) => {
     console.error("VIP payment start error:", vipErr);
 
     msgEl.textContent =
-      "✅ VIP booking saved, but payment could not start right now. You can still track your ticket while payment setup is completed.";
+      "✅ VIP booking saved, but payment failed to start: " +
+      (vipErr?.message || "Unknown error");
 
     setTimeout(() => {
       window.location.href = `ticket.html?ticket=${encodeURIComponent(booking.ticket)}`;
-    }, 1800);
+    }, 4000);
   }
 });
