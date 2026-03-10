@@ -1057,11 +1057,24 @@
           .join("");
       }
 
+      async function waitForSupabaseClient(maxWaitMs = 5000) {
+        const start = Date.now();
+
+        while (!window.supabaseClient) {
+          if (Date.now() - start > maxWaitMs) {
+            throw new Error("Supabase client failed to initialize.");
+          }
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+      }
+
       async function loadAnnouncements() {
         announcementsMsg.textContent = "Loading updates...";
         announcementsList.innerHTML = "";
 
         try {
+          await waitForSupabaseClient();
+
           const { data, error } = await window.supabaseClient
             .from("announcements")
             .select("id, title, content, is_highlight, is_active, created_at")
@@ -1080,7 +1093,10 @@
       }
 
       refreshAnnouncementsBtn.addEventListener("click", loadAnnouncements);
-      loadAnnouncements();
+
+      window.addEventListener("load", () => {
+        loadAnnouncements();
+      });
 
       window.addEventListener("scroll", () => {
         if (window.scrollY > 320) {
