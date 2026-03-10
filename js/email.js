@@ -36,7 +36,7 @@ window.emailTemplate = function ({
   const safeTicket = String(ticket || "");
   const safePhone = String(phone || "").trim();
 
-  const baseUrl = "https://kuccps-assist.netlify.app";
+  const baseUrl = "https://kuccpsassist.online";
 
   let trackUrl = `${baseUrl}/tracking.html?ticket=${encodeURIComponent(
     safeTicket,
