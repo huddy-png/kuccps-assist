@@ -21,13 +21,6 @@ export async function onRequestPost(context) {
     const INTASEND_PUBLISHABLE_KEY = env.INTASEND_PUBLISHABLE_KEY;
     const SITE_URL = env.SITE_URL || "https://kuccpsassist.online";
 
-    if (!INTASEND_SECRET_KEY || !INTASEND_PUBLISHABLE_KEY) {
-      return Response.json(
-        { error: "Missing IntaSend environment variables" },
-        { status: 500 },
-      );
-    }
-
     const intasendRes = await fetch(
       "https://payment.intasend.com/api/v1/checkout/",
       {
@@ -49,7 +42,15 @@ export async function onRequestPost(context) {
       },
     );
 
-    const result = await intasendRes.json();
+    // READ RESPONSE SAFELY
+    const text = await intasendRes.text();
+
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch {
+      result = { raw: text };
+    }
 
     if (!intasendRes.ok) {
       return Response.json(
@@ -57,9 +58,8 @@ export async function onRequestPost(context) {
           error:
             result?.detail ||
             result?.message ||
-            result?.error ||
-            "Failed to create checkout",
-          raw: result,
+            result?.raw ||
+            "IntaSend error",
         },
         { status: 400 },
       );
@@ -70,10 +70,7 @@ export async function onRequestPost(context) {
 
     if (!paymentUrl) {
       return Response.json(
-        {
-          error: "Payment link was not returned by IntaSend",
-          raw: result,
-        },
+        { error: "Payment link was not returned by IntaSend", raw: result },
         { status: 500 },
       );
     }
@@ -84,9 +81,7 @@ export async function onRequestPost(context) {
     });
   } catch (err) {
     return Response.json(
-      {
-        error: err.message || "Unexpected server error",
-      },
+      { error: err.message || "Unexpected server error" },
       { status: 500 },
     );
   }
