@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KUCCPS Assist</title>
     <link rel="stylesheet" href="css/style.css" />
-
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -13,531 +12,420 @@
   </head>
 
   <body>
-    <div class="container">
-      <!-- TOP MOST NAV -->
-      <nav
-        style="
-          position: sticky;
-          top: 0;
-          z-index: 20;
-          margin-bottom: 18px;
-          background: rgba(255, 255, 255, 0.92);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          border-radius: 16px;
-          padding: 12px 14px;
-          box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
-        "
-      >
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
-          "
-        >
-          <div style="display: flex; align-items: center; gap: 10px">
-            <div
-              style="
-                width: 38px;
-                height: 38px;
-                border-radius: 12px;
-                display: grid;
-                place-items: center;
-                background: linear-gradient(135deg, #1e5bff, #4f86ff);
-                color: #fff;
-                font-size: 16px;
-                box-shadow: 0 10px 20px rgba(30, 91, 255, 0.24);
-              "
-            >
-              <i class="fa-solid fa-graduation-cap"></i>
-            </div>
-
-            <div>
-              <div style="font-weight: 900; font-size: 16px">KUCCPS Assist</div>
-              <div class="muted" style="font-size: 12px">
-                Student Application Support
-              </div>
-            </div>
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
           </div>
+          <div class="brand-text">
+            <strong>KUCCPS Assist</strong>
+            <span>Student Application Support</span>
+          </div>
+        </a>
 
-          <div
-            style="
-              display: flex;
-              gap: 10px;
-              align-items: center;
-              flex-wrap: wrap;
-            "
-          >
-            <a href="#home" class="muted" style="font-weight: 700">Home</a>
-            <a href="services.html" class="muted" style="font-weight: 700"
-              >Services</a
-            >
-            <a href="tracking.html" class="muted" style="font-weight: 700"
-              >Track</a
-            >
-            <a href="#resources" class="muted" style="font-weight: 700"
-              >Resources</a
-            >
-            <a href="#testimonials" class="muted" style="font-weight: 700"
-              >Testimonials</a
-            >
-            <a href="#successSection" class="muted" style="font-weight: 700"
-              >Success</a
-            >
-            <a href="#questions" class="muted" style="font-weight: 700"
-              >Questions</a
-            >
-            <a href="#contact" class="muted" style="font-weight: 700"
-              >Contact</a
-            >
+        <nav class="desktop-nav">
+          <a href="#home">Home</a>
+          <a href="services.html">Services</a>
+          <a href="tracking.html">Track</a>
+          <a href="#howItWorks">How It Works</a>
+          <a href="#resources">Resources</a>
+          <a href="#testimonials">Testimonials</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <button id="menuToggle" class="menu-toggle" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <div id="menuOverlay" class="menu-overlay"></div>
+
+    <aside id="mobileDrawer" class="mobile-drawer">
+      <div class="drawer-top">
+        <div class="brand">
+          <div class="brand-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="brand-text">
+            <strong>KUCCPS Assist</strong>
+            <span>Student Application Support</span>
           </div>
         </div>
-      </nav>
 
-      <!-- HERO -->
-      <header
-        id="home"
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 16px;
-          flex-wrap: wrap;
-        "
-      >
-        <div style="min-width: 260px; flex: 1">
-          <div
-            style="
-              display: inline-flex;
-              align-items: center;
-              gap: 8px;
-              padding: 6px 10px;
-              border-radius: 999px;
-              background: rgba(30, 91, 255, 0.08);
-              color: #1e5bff;
-              font-size: 12px;
-              font-weight: 800;
-              margin-bottom: 10px;
-            "
-          >
+        <button id="menuClose" class="menu-close" aria-label="Close menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <nav class="drawer-nav">
+        <a href="#home" class="drawer-link active">Home</a>
+        <a href="services.html" class="drawer-link">Services</a>
+        <a href="tracking.html" class="drawer-link">Track Ticket</a>
+        <a href="#howItWorks" class="drawer-link">How It Works</a>
+        <a href="#resources" class="drawer-link">Resources</a>
+        <a href="#testimonials" class="drawer-link">Testimonials</a>
+        <a href="#contact" class="drawer-link">Contact</a>
+        <a href="login.html" class="drawer-link drawer-login">Login</a>
+      </nav>
+    </aside>
+
+    <main class="page-shell">
+      <section id="home" class="hero-section">
+        <div class="hero-copy">
+          <div class="hero-pill">
             <i class="fa-solid fa-circle-check"></i>
             Trusted Student Support
           </div>
 
-          <h1 style="margin: 0; font-size: 34px; line-height: 1.1">
-            Professional Help for KUCCPS, KMTC, HELB, TVET and More
-          </h1>
+          <h1>Professional KUCCPS, KMTC, HELB & TVET Support for Students</h1>
 
-          <p
-            class="muted"
-            style="margin: 10px 0 0; max-width: 760px; font-size: 15px"
-          >
-            Get guided support for applications, revisions, transfers, tracking,
-            resources, and student support services — all in one place.
+          <p class="hero-text">
+            Get guided application help, upload your documents securely, and
+            track your request using your support ticket — all in one place.
           </p>
 
-          <div
-            style="margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap"
-          >
-            <a href="services.html">
-              <button type="button">
-                <i class="fa-solid fa-list-check"></i> View Services
-              </button>
+          <div class="hero-actions">
+            <a href="services.html" class="hero-btn hero-btn-primary">
+              <i class="fa-solid fa-list-check"></i>
+              Get Help Now
             </a>
 
-            <a href="tracking.html">
-              <button type="button">
-                <i class="fa-solid fa-magnifying-glass"></i> Track Application
-              </button>
+            <a href="tracking.html" class="hero-btn hero-btn-secondary">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              Track Ticket
             </a>
           </div>
 
-          <div
-            style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap"
-          >
-            <span class="badge">Fast Support</span>
-            <span class="badge">Ticket Tracking</span>
-            <span class="badge">Resources Available</span>
+          <div class="hero-badges">
+            <span class="hero-badge">Fast Support</span>
+            <span class="hero-badge">Secure Uploads</span>
+            <span class="hero-badge">Ticket Tracking</span>
           </div>
         </div>
 
-        <div
-          class="card"
-          style="
-            min-width: 280px;
-            max-width: 360px;
-            flex: 0.9;
-            padding: 18px;
-            gap: 12px;
-          "
-        >
-          <h2 style="margin: 0; font-size: 18px">
-            <i class="fa-solid fa-user-shield"></i> Account Status
-          </h2>
-
-          <p id="status" class="muted" style="margin: 0">
-            Checking login status...
-          </p>
-
-          <div class="actions" style="margin-top: 4px">
-            <a href="services.html">
-              <button type="button">
-                <i class="fa-solid fa-briefcase"></i> Services
-              </button>
-            </a>
-
-            <a href="tracking.html">
-              <button type="button">
-                <i class="fa-solid fa-ticket"></i> Track Ticket
-              </button>
-            </a>
-
-            <a href="admin.html" id="adminLink" style="display: none">
-              <button type="button">
-                <i class="fa-solid fa-shield-halved"></i> Admin Panel
-              </button>
-            </a>
-
-            <a href="login.html" id="loginLink">
-              <button type="button">
-                <i class="fa-solid fa-right-to-bracket"></i> Login
-              </button>
-            </a>
-
-            <button id="logoutBtn" type="button" style="display: none">
-              <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </button>
+        <div class="hero-panel card">
+          <div class="hero-panel-top">
+            <h2><i class="fa-solid fa-user-shield"></i> Account Status</h2>
+            <p id="status" class="muted">Checking login status...</p>
           </div>
-        </div>
-      </header>
 
-      <!-- TRUST STRIP -->
-      <section style="margin-top: 18px">
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 12px;
-            align-items: center;
-            text-align: center;
-          "
-        >
-          <div class="card" style="padding: 12px">
-            <div style="font-size: 20px; color: #1e5bff">
+          <div class="hero-panel-actions">
+            <a href="services.html" class="mini-action">
+              <i class="fa-solid fa-briefcase"></i>
+              <span>Services</span>
+            </a>
+
+            <a href="tracking.html" class="mini-action">
+              <i class="fa-solid fa-ticket"></i>
+              <span>Track Ticket</span>
+            </a>
+
+            <a
+              href="admin.html"
+              id="adminLink"
+              class="mini-action"
+              style="display: none"
+            >
               <i class="fa-solid fa-shield-halved"></i>
-            </div>
-            <p class="muted" style="font-size: 13px">Secure Student Support</p>
-          </div>
-
-          <div class="card" style="padding: 12px">
-            <div style="font-size: 20px; color: #1e5bff">
-              <i class="fa-solid fa-clock"></i>
-            </div>
-            <p class="muted" style="font-size: 13px">Fast Response</p>
-          </div>
-
-          <div class="card" style="padding: 12px">
-            <div style="font-size: 20px; color: #1e5bff">
-              <i class="fa-solid fa-graduation-cap"></i>
-            </div>
-            <p class="muted" style="font-size: 13px">KUCCPS Focused</p>
-          </div>
-
-          <div class="card" style="padding: 12px">
-            <div style="font-size: 20px; color: #1e5bff">
-              <i class="fa-solid fa-users"></i>
-            </div>
-            <p class="muted" style="font-size: 13px">Student Community</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- LIVE STATS -->
-      <section id="stats" style="margin-top: 18px">
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 12px;
-          "
-        >
-          <div class="card" style="padding: 16px">
-            <div class="muted" style="font-size: 12px">Students Assisted</div>
-            <div
-              id="statBookings"
-              style="font-size: 26px; font-weight: 900; margin-top: 4px"
-            >
-              --
-            </div>
-            <div class="muted" style="font-size: 13px">Booking requests</div>
-          </div>
-
-          <div class="card" style="padding: 16px">
-            <div class="muted" style="font-size: 12px">Testimonials</div>
-            <div
-              id="statTestimonials"
-              style="font-size: 26px; font-weight: 900; margin-top: 4px"
-            >
-              --
-            </div>
-            <div class="muted" style="font-size: 13px">Student feedback</div>
-          </div>
-
-          <div class="card" style="padding: 16px">
-            <div class="muted" style="font-size: 12px">Public Questions</div>
-            <div
-              id="statQuestions"
-              style="font-size: 26px; font-weight: 900; margin-top: 4px"
-            >
-              --
-            </div>
-            <div class="muted" style="font-size: 13px">Community posts</div>
-          </div>
-
-          <div class="card" style="padding: 16px">
-            <div class="muted" style="font-size: 12px">Success Stories</div>
-            <div
-              id="statSuccess"
-              style="font-size: 26px; font-weight: 900; margin-top: 4px"
-            >
-              --
-            </div>
-            <div class="muted" style="font-size: 13px">Verified outcomes</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- WHY CHOOSE US -->
-      <section style="margin-top: 22px">
-        <div class="card">
-          <h2 style="margin: 0; font-size: 20px">
-            <i class="fa-solid fa-star"></i> Why Students Choose KUCCPS Assist
-          </h2>
-
-          <div
-            style="
-              margin-top: 14px;
-              display: grid;
-              grid-template-columns: repeat(3, minmax(0, 1fr));
-              gap: 14px;
-            "
-          >
-            <div class="req" style="margin-top: 0">
-              <h3>Guided Applications</h3>
-              <p class="muted">
-                We help students correctly apply for KUCCPS, KMTC and TVET
-                courses without mistakes.
-              </p>
-            </div>
-
-            <div class="req" style="margin-top: 0">
-              <h3>Application Tracking</h3>
-              <p class="muted">
-                Every student receives a ticket to track the progress of their
-                application.
-              </p>
-            </div>
-
-            <div class="req" style="margin-top: 0">
-              <h3>Student Resources</h3>
-              <p class="muted">
-                Access helpful guides, requirements and instructions directly
-                from the homepage.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- FEATURED SERVICES -->
-      <section style="margin-top: 22px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-layer-group"></i> Featured Services
-              </h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Choose a service and submit your application professionally.
-              </p>
-            </div>
-
-            <a href="services.html">
-              <button type="button">
-                <i class="fa-solid fa-arrow-right"></i> View All Services
-              </button>
+              <span>Admin Panel</span>
             </a>
-          </div>
 
-          <div
-            style="
-              margin-top: 14px;
-              display: grid;
-              grid-template-columns: repeat(3, minmax(0, 1fr));
-              gap: 12px;
-            "
-          >
-            <div class="req" style="margin-top: 0">
-              <h3><i class="fa-solid fa-school"></i> KUCCPS Services</h3>
-              <p class="muted" style="margin: 0">
-                Degree applications, TVET applications, course revision and
-                transfers.
-              </p>
-            </div>
+            <a href="login.html" id="loginLink" class="mini-action">
+              <i class="fa-solid fa-right-to-bracket"></i>
+              <span>Login</span>
+            </a>
 
-            <div class="req" style="margin-top: 0">
-              <h3><i class="fa-solid fa-stethoscope"></i> KMTC Support</h3>
-              <p class="muted" style="margin: 0">
-                KMTC via KUCCPS and direct KMTC application support.
-              </p>
-            </div>
-
-            <div class="req" style="margin-top: 0">
-              <h3>
-                <i class="fa-solid fa-file-signature"></i> Student Services
-              </h3>
-              <p class="muted" style="margin: 0">
-                HELB / HEF, KRA PIN, SHA registration and related support.
-              </p>
-            </div>
+            <button
+              id="logoutBtn"
+              type="button"
+              class="mini-action logout-btn"
+              style="display: none"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </section>
 
-      <!-- LIVE ACTIVITY -->
-      <section id="activity" style="margin-top: 22px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-bolt"></i> Live Platform Activity
-              </h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Recent activity from students using KUCCPS Assist.
-              </p>
-            </div>
+      <section class="quick-actions-section">
+        <a href="services.html" class="quick-action-card quick-action-blue">
+          <div class="quick-action-icon">
+            <i class="fa-solid fa-file-circle-plus"></i>
+          </div>
+          <div>
+            <h3>Apply for Help</h3>
+            <p>Choose a service and submit your request professionally.</p>
+          </div>
+        </a>
 
-            <button
-              id="refreshActivityBtn"
-              type="button"
-              style="padding: 10px 14px"
-            >
-              <i class="fa-solid fa-rotate-right"></i> Refresh
-            </button>
+        <a href="tracking.html" class="quick-action-card quick-action-green">
+          <div class="quick-action-icon">
+            <i class="fa-solid fa-magnifying-glass-location"></i>
+          </div>
+          <div>
+            <h3>Track Ticket</h3>
+            <p>Follow your application progress using your ticket details.</p>
+          </div>
+        </a>
+
+        <a href="services.html" class="quick-action-card quick-action-dark">
+          <div class="quick-action-icon">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <div>
+            <h3>View Services</h3>
+            <p>Explore KUCCPS, KMTC, HELB, SHA and support services.</p>
+          </div>
+        </a>
+      </section>
+
+      <section id="stats" class="section-block">
+        <div class="section-head compact-head">
+          <div>
+            <h2>Live Platform Stats</h2>
+            <p>Quick overview of activity on KUCCPS Assist.</p>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card card">
+            <div class="stat-label">Students Assisted</div>
+            <div id="statBookings" class="stat-value">--</div>
+            <div class="stat-note">Booking requests</div>
           </div>
 
-          <div id="activityFeed" style="margin-top: 14px"></div>
+          <div class="stat-card card">
+            <div class="stat-label">Testimonials</div>
+            <div id="statTestimonials" class="stat-value">--</div>
+            <div class="stat-note">Student feedback</div>
+          </div>
+
+          <div class="stat-card card">
+            <div class="stat-label">Public Questions</div>
+            <div id="statQuestions" class="stat-value">--</div>
+            <div class="stat-note">Community posts</div>
+          </div>
+
+          <div class="stat-card card">
+            <div class="stat-label">Success Stories</div>
+            <div id="statSuccess" class="stat-value">--</div>
+            <div class="stat-note">Verified outcomes</div>
+          </div>
         </div>
       </section>
 
-      <!-- RESOURCES -->
-      <section id="resources" style="margin-top: 22px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-folder-open"></i> Useful Resources
-              </h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Download helpful guides, forms and support documents.
-              </p>
-            </div>
-
-            <button
-              id="refreshResourcesBtn"
-              type="button"
-              style="padding: 10px 14px"
-            >
-              <i class="fa-solid fa-rotate-right"></i> Refresh
-            </button>
+      <section class="section-block">
+        <div class="section-head">
+          <div>
+            <h2>Main Services</h2>
+            <p>Core support services students use most.</p>
           </div>
 
-          <div id="resourcesMsg" class="muted" style="margin-top: 12px">
+          <a href="services.html" class="section-link">
+            View All Services <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card card">
+            <div class="service-icon blue">
+              <i class="fa-solid fa-school"></i>
+            </div>
+            <h3>KUCCPS Degree Support</h3>
+            <p>
+              Help with course selection, application, revision and transfer.
+            </p>
+            <a href="services.html" class="service-link">Apply Now</a>
+          </div>
+
+          <div class="service-card card">
+            <div class="service-icon green">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+            <h3>TVET / College Support</h3>
+            <p>
+              Apply for diploma and certificate programmes correctly and easily.
+            </p>
+            <a href="services.html" class="service-link">Apply Now</a>
+          </div>
+
+          <div class="service-card card">
+            <div class="service-icon amber">
+              <i class="fa-solid fa-stethoscope"></i>
+            </div>
+            <h3>KMTC Application Help</h3>
+            <p>
+              Guidance for KMTC via KUCCPS and direct KMTC application support.
+            </p>
+            <a href="services.html" class="service-link">Apply Now</a>
+          </div>
+
+          <div class="service-card card">
+            <div class="service-icon dark">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+            <h3>HELB / HEF Help</h3>
+            <p>
+              Assistance with funding application, corrections and support
+              steps.
+            </p>
+            <a href="services.html" class="service-link">Apply Now</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="howItWorks" class="section-block">
+        <div class="section-head centered-head">
+          <div>
+            <h2>How It Works</h2>
+            <p>Four simple steps to get support and track progress.</p>
+          </div>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card card">
+            <div class="step-number">1</div>
+            <h3>Choose a Service</h3>
+            <p>Select the support you need from our services page.</p>
+          </div>
+
+          <div class="step-card card">
+            <div class="step-number">2</div>
+            <h3>Submit Details</h3>
+            <p>Fill in your request and provide the required information.</p>
+          </div>
+
+          <div class="step-card card">
+            <div class="step-number">3</div>
+            <h3>Upload Documents</h3>
+            <p>Attach result slips, ID, screenshots or other requirements.</p>
+          </div>
+
+          <div class="step-card card">
+            <div class="step-number">4</div>
+            <h3>Track Progress</h3>
+            <p>Use your ticket number and phone to follow your application.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-head centered-head">
+          <div>
+            <h2>Why Choose KUCCPS Assist</h2>
+            <p>Clean, guided and student-focused support experience.</p>
+          </div>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-card card">
+            <i class="fa-solid fa-circle-check"></i>
+            <h3>Guided Applications</h3>
+            <p>Reduce mistakes and get support with the right process.</p>
+          </div>
+
+          <div class="why-card card">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>Secure Uploads</h3>
+            <p>
+              Your supporting documents are submitted safely through the
+              platform.
+            </p>
+          </div>
+
+          <div class="why-card card">
+            <i class="fa-solid fa-ticket"></i>
+            <h3>Trackable Requests</h3>
+            <p>Every student receives a ticket for easy follow-up.</p>
+          </div>
+
+          <div class="why-card card">
+            <i class="fa-solid fa-user-graduate"></i>
+            <h3>Student-Focused</h3>
+            <p>
+              Everything is built around helping students move faster and
+              better.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="activity" class="section-block">
+        <div class="section-head">
+          <div>
+            <h2>Live Platform Activity</h2>
+            <p>Recent activity from students using KUCCPS Assist.</p>
+          </div>
+
+          <button
+            id="refreshActivityBtn"
+            type="button"
+            class="small-refresh-btn"
+          >
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+
+        <div class="card section-card">
+          <div id="activityFeed"></div>
+        </div>
+      </section>
+
+      <section id="resources" class="section-block">
+        <div class="section-head">
+          <div>
+            <h2>Useful Resources</h2>
+            <p>Helpful guides, support documents and references.</p>
+          </div>
+
+          <button
+            id="refreshResourcesBtn"
+            type="button"
+            class="small-refresh-btn"
+          >
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+
+        <div class="card section-card">
+          <div id="resourcesMsg" class="muted section-msg">
             Loading resources...
           </div>
-
-          <div id="resourcesList" class="grid" style="margin-top: 12px"></div>
+          <div id="resourcesList" class="grid resource-list-spacer"></div>
         </div>
       </section>
 
-      <!-- TESTIMONIALS -->
-      <section id="testimonials" style="margin-top: 22px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-star"></i> Student Testimonials
-              </h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Real feedback from students we have helped.
-              </p>
-            </div>
-
-            <button
-              id="refreshTestimonialsBtn"
-              type="button"
-              style="padding: 10px 14px"
-            >
-              <i class="fa-solid fa-rotate-right"></i> Refresh
-            </button>
+      <section id="testimonials" class="section-block">
+        <div class="section-head">
+          <div>
+            <h2>Student Testimonials</h2>
+            <p>Real feedback from students we have helped.</p>
           </div>
 
-          <div id="testimonialsMsg" class="muted" style="margin-top: 12px">
+          <button
+            id="refreshTestimonialsBtn"
+            type="button"
+            class="small-refresh-btn"
+          >
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+
+        <div class="card section-card">
+          <div id="testimonialsMsg" class="muted section-msg">
             Loading testimonials...
           </div>
+          <div id="testimonialsList" class="grid resource-list-spacer"></div>
 
-          <div
-            id="testimonialsList"
-            class="grid"
-            style="margin-top: 12px"
-          ></div>
-
-          <div class="req" style="margin-top: 16px">
+          <div class="submit-box">
             <h3>Leave a testimonial</h3>
 
-            <div
-              style="
-                margin-top: 10px;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-              "
-            >
+            <div class="form-grid two-col">
               <div>
                 <label>Your Name</label>
                 <input id="tesName" placeholder="e.g. Brian O." />
@@ -551,7 +439,7 @@
                 />
               </div>
 
-              <div style="grid-column: 1 / -1">
+              <div class="full-span">
                 <label>Your Message</label>
                 <textarea
                   id="tesMessage"
@@ -560,107 +448,67 @@
                 ></textarea>
               </div>
 
-              <div
-                style="
-                  grid-column: 1 / -1;
-                  display: flex;
-                  gap: 10px;
-                  align-items: center;
-                  flex-wrap: wrap;
-                "
-              >
+              <div class="full-span submit-row">
                 <button id="tesSubmitBtn" type="button">
                   Submit Testimonial
                 </button>
-                <p id="tesSubmitMsg" class="muted" style="margin: 0"></p>
+                <p id="tesSubmitMsg" class="muted"></p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SUCCESS WALL -->
-      <section id="successSection" style="margin-top: 22px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-trophy"></i> Student Success Wall
-              </h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Students successfully assisted through KUCCPS Assist.
-              </p>
-            </div>
-
-            <button
-              id="refreshSuccessBtn"
-              type="button"
-              style="padding: 10px 14px"
-            >
-              <i class="fa-solid fa-rotate-right"></i> Refresh
-            </button>
+      <section id="successSection" class="section-block">
+        <div class="section-head">
+          <div>
+            <h2>Student Success Wall</h2>
+            <p>Students successfully assisted through KUCCPS Assist.</p>
           </div>
 
-          <div id="successWall" class="grid" style="margin-top: 14px"></div>
+          <button
+            id="refreshSuccessBtn"
+            type="button"
+            class="small-refresh-btn"
+          >
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+
+        <div class="card section-card">
+          <div id="successWall" class="grid"></div>
         </div>
       </section>
 
-      <!-- PUBLIC QUESTIONS -->
-      <section id="questions" style="margin-top: 22px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-comments"></i> Public Questions
-              </h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Visitors can ask public questions and see approved community
-                messages here.
-              </p>
-            </div>
-
-            <button
-              id="refreshQuestionsBtn"
-              type="button"
-              style="padding: 10px 14px"
-            >
-              <i class="fa-solid fa-rotate-right"></i> Refresh
-            </button>
+      <section id="questions" class="section-block">
+        <div class="section-head">
+          <div>
+            <h2>Public Questions</h2>
+            <p>
+              Visitors can ask questions and see approved community messages.
+            </p>
           </div>
 
-          <div id="questionsMsg" class="muted" style="margin-top: 12px">
+          <button
+            id="refreshQuestionsBtn"
+            type="button"
+            class="small-refresh-btn"
+          >
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+
+        <div class="card section-card">
+          <div id="questionsMsg" class="muted section-msg">
             Loading questions...
           </div>
 
-          <div id="questionsList" class="grid" style="margin-top: 12px"></div>
+          <div id="questionsList" class="grid resource-list-spacer"></div>
 
-          <div class="req" style="margin-top: 16px">
+          <div class="submit-box">
             <h3>Ask a public question</h3>
 
-            <div
-              style="
-                margin-top: 10px;
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 12px;
-              "
-            >
+            <div class="form-grid one-col">
               <div>
                 <label>Your Name</label>
                 <input id="qName" placeholder="e.g. Mercy K." />
@@ -675,292 +523,186 @@
                 ></textarea>
               </div>
 
-              <div
-                style="
-                  display: flex;
-                  gap: 10px;
-                  align-items: center;
-                  flex-wrap: wrap;
-                "
-              >
+              <div class="submit-row">
                 <button id="qSubmitBtn" type="button">Submit Question</button>
-                <p id="qSubmitMsg" class="muted" style="margin: 0"></p>
+                <p id="qSubmitMsg" class="muted"></p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- UPDATES -->
-      <section style="margin-top: 22px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-bullhorn"></i> Latest Updates
-              </h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Deadlines, requirements, and important notices will appear here.
-              </p>
-            </div>
-
-            <button
-              id="refreshAnnouncementsBtn"
-              type="button"
-              style="padding: 10px 14px"
-            >
-              <i class="fa-solid fa-rotate-right"></i> Refresh
-            </button>
+      <section class="section-block">
+        <div class="section-head">
+          <div>
+            <h2>Latest Updates</h2>
+            <p>Deadlines, requirements and important notices.</p>
           </div>
 
-          <div id="announcementsMsg" class="muted" style="margin-top: 12px">
+          <button
+            id="refreshAnnouncementsBtn"
+            type="button"
+            class="small-refresh-btn"
+          >
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+
+        <div class="card section-card">
+          <div id="announcementsMsg" class="muted section-msg">
             Loading updates...
           </div>
 
-          <div id="announcementsList" style="margin-top: 12px"></div>
+          <div id="announcementsList" class="resource-list-spacer"></div>
         </div>
       </section>
 
-      <!-- CONTACT -->
-      <section id="contact" style="margin-top: 22px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div style="min-width: 260px">
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-headset"></i> Support – Verny
-              </h2>
-              <p class="muted" style="margin: 6px 0 0; max-width: 620px">
-                Reach out directly for quick help with KUCCPS, KMTC, HELB, TVET
-                and related student applications.
-              </p>
+      <section class="section-block">
+        <div class="track-box card">
+          <div class="track-copy">
+            <div class="hero-pill alt-pill">
+              <i class="fa-solid fa-ticket"></i>
+              Easy Tracking
             </div>
+            <h2>Already Submitted a Request?</h2>
+            <p>
+              Use your ticket number and phone details to see progress and
+              updates.
+            </p>
+          </div>
 
-            <div class="actions" style="gap: 10px; flex-wrap: wrap">
-              <a href="tel:0722847842">
-                <button type="button">
-                  <i class="fa-solid fa-phone"></i> Call 0722847842
-                </button>
+          <div class="track-cta">
+            <a href="tracking.html" class="hero-btn hero-btn-primary">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              Track Your Ticket
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section-block">
+        <div class="contact-box card">
+          <div class="contact-copy">
+            <h2><i class="fa-solid fa-headset"></i> Support – Verny</h2>
+            <p>
+              Reach out directly for help with KUCCPS, KMTC, HELB, TVET and
+              other student support services.
+            </p>
+
+            <div class="contact-actions">
+              <a href="tel:0722847842" class="hero-btn hero-btn-primary">
+                <i class="fa-solid fa-phone"></i>
+                Call 0722847842
               </a>
 
               <a
                 href="https://wa.me/254722847842?text=Hello%2C%20I%20would%20like%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
                 target="_blank"
                 rel="noopener"
+                class="hero-btn hero-btn-whatsapp"
               >
-                <button
-                  type="button"
-                  style="background: #25d366; color: white; border: none"
-                >
-                  <i class="fa-brands fa-whatsapp"></i> WhatsApp Support
-                </button>
-              </a>
-
-              <a
-                href="mailto:emilliojohnverny@gmail.com?subject=KUCCPS%20Assist%20Support&body=Hello%2C%20I%20would%20like%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
-              >
-                <button type="button">
-                  <i class="fa-solid fa-envelope"></i> Email Support
-                </button>
+                <i class="fa-brands fa-whatsapp"></i>
+                WhatsApp Support
               </a>
             </div>
           </div>
 
-          <div
-            style="
-              margin-top: 14px;
-              display: grid;
-              grid-template-columns: repeat(3, minmax(0, 1fr));
-              gap: 12px;
-            "
-          >
-            <div class="req" style="margin-top: 0">
+          <div class="contact-grid">
+            <div class="contact-card">
               <h3><i class="fa-solid fa-phone"></i> Primary Phone</h3>
-              <p style="margin: 0">0722847842</p>
+              <p>0722847842</p>
             </div>
 
-            <div class="req" style="margin-top: 0">
+            <div class="contact-card">
               <h3>
                 <i class="fa-solid fa-mobile-screen"></i> Alternative Phone
               </h3>
-              <p style="margin: 0">0753893862</p>
+              <p>0753893862</p>
             </div>
 
-            <div class="req" style="margin-top: 0">
+            <div class="contact-card">
               <h3><i class="fa-solid fa-envelope"></i> Email</h3>
-              <p style="margin: 0">emilliojohnverny@gmail.com</p>
+              <p>emilliojohnverny@gmail.com</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- FINAL CTA -->
-      <section style="margin-top: 26px">
-        <div
-          class="card"
-          style="
-            text-align: center;
-            padding: 24px;
-            background: linear-gradient(135deg, #1e5bff, #4f86ff);
-            color: white;
-          "
-        >
-          <h2 style="margin: 0">Start Your KUCCPS Application Today</h2>
+      <section class="section-block">
+        <div class="final-cta card">
+          <h2>Start Your KUCCPS Application Today</h2>
+          <p>Submit your request and receive guided professional support.</p>
 
-          <p style="margin-top: 8px; opacity: 0.92">
-            Submit your request and receive professional assistance.
-          </p>
-
-          <div
-            style="
-              margin-top: 16px;
-              display: flex;
-              gap: 12px;
-              justify-content: center;
-              flex-wrap: wrap;
-            "
-          >
-            <a href="services.html">
-              <button type="button" style="background: white; color: #1e5bff">
-                View Services
-              </button>
+          <div class="hero-actions center-actions">
+            <a href="services.html" class="hero-btn hero-btn-light">
+              <i class="fa-solid fa-list-check"></i>
+              View Services
             </a>
 
-            <a href="tracking.html">
-              <button type="button" style="background: white; color: #1e5bff">
-                Track Application
-              </button>
+            <a href="tracking.html" class="hero-btn hero-btn-light-outline">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              Track Application
             </a>
           </div>
         </div>
       </section>
 
-      <!-- FOOTER -->
-      <footer
-        style="
-          margin-top: 26px;
-          padding-top: 18px;
-          border-top: 1px solid rgba(2, 6, 23, 0.08);
-        "
-      >
-        <div
-          style="
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr;
-            gap: 16px;
-          "
-        >
+      <footer class="site-footer">
+        <div class="footer-grid">
           <div>
-            <h3 style="margin: 0 0 8px">KUCCPS Assist</h3>
-            <p class="muted" style="margin: 0; line-height: 1.6">
+            <h3>KUCCPS Assist</h3>
+            <p class="muted">
               Student application support platform for KUCCPS, TVET, KMTC, HELB
               / HEF, KRA PIN, SHA registration and more.
             </p>
           </div>
 
           <div>
-            <h3 style="margin: 0 0 8px">Quick Links</h3>
-            <p style="margin: 0 0 6px"><a href="#home">Home</a></p>
-            <p style="margin: 0 0 6px"><a href="services.html">Services</a></p>
-            <p style="margin: 0">
-              <a href="tracking.html">Track Application</a>
-            </p>
+            <h3>Quick Links</h3>
+            <p><a href="#home">Home</a></p>
+            <p><a href="services.html">Services</a></p>
+            <p><a href="tracking.html">Track Application</a></p>
           </div>
 
           <div>
-            <h3 style="margin: 0 0 8px">Explore</h3>
-            <p style="margin: 0 0 6px"><a href="#resources">Resources</a></p>
-            <p style="margin: 0 0 6px">
-              <a href="#testimonials">Testimonials</a>
-            </p>
-            <p style="margin: 0 0 6px">
-              <a href="#successSection">Success Wall</a>
-            </p>
-            <p style="margin: 0"><a href="#questions">Questions</a></p>
+            <h3>Explore</h3>
+            <p><a href="#resources">Resources</a></p>
+            <p><a href="#testimonials">Testimonials</a></p>
+            <p><a href="#successSection">Success Wall</a></p>
+            <p><a href="#questions">Questions</a></p>
           </div>
 
           <div>
-            <h3 style="margin: 0 0 8px">Contact</h3>
-            <p style="margin: 0 0 6px">0722847842</p>
-            <p style="margin: 0 0 6px">0753893862</p>
-            <p style="margin: 0">emilliojohnverny@gmail.com</p>
+            <h3>Contact</h3>
+            <p>0722847842</p>
+            <p>0753893862</p>
+            <p>emilliojohnverny@gmail.com</p>
           </div>
         </div>
 
-        <p
-          class="muted"
-          style="text-align: center; margin: 18px 0 0; font-size: 13px"
-        >
+        <p class="footer-note">
           KUCCPS Assist • Student Application Support Platform
         </p>
       </footer>
-    </div>
+    </main>
 
-    <!-- Floating WhatsApp Button -->
     <a
       href="https://wa.me/254722847842?text=Hello%2C%20I%20need%20help%20with%20my%20KUCCPS%20%2F%20HELB%20%2F%20KMTC%20application."
       target="_blank"
       rel="noopener"
       aria-label="Chat on WhatsApp"
       title="Chat on WhatsApp"
-      style="
-        position: fixed;
-        right: 18px;
-        bottom: 18px;
-        z-index: 999;
-        width: 58px;
-        height: 58px;
-        border-radius: 999px;
-        background: #25d366;
-        color: white;
-        display: grid;
-        place-items: center;
-        font-size: 28px;
-        box-shadow: 0 14px 30px rgba(37, 211, 102, 0.35);
-        text-decoration: none;
-      "
+      class="floating-whatsapp"
     >
       <i class="fa-brands fa-whatsapp"></i>
     </a>
 
-    <!-- Back to Top Button -->
     <button
       id="backToTopBtn"
       type="button"
       aria-label="Back to top"
       title="Back to top"
-      style="
-        position: fixed;
-        right: 18px;
-        bottom: 88px;
-        z-index: 998;
-        width: 46px;
-        height: 46px;
-        border-radius: 999px;
-        border: none;
-        background: #1e5bff;
-        color: white;
-        display: none;
-        place-items: center;
-        font-size: 18px;
-        box-shadow: 0 12px 24px rgba(30, 91, 255, 0.28);
-        cursor: pointer;
-      "
+      class="back-to-top-btn"
     >
       <i class="fa-solid fa-arrow-up"></i>
     </button>
@@ -986,6 +728,31 @@
         "refreshAnnouncementsBtn",
       );
       const backToTopBtn = document.getElementById("backToTopBtn");
+
+      const menuToggle = document.getElementById("menuToggle");
+      const menuClose = document.getElementById("menuClose");
+      const mobileDrawer = document.getElementById("mobileDrawer");
+      const menuOverlay = document.getElementById("menuOverlay");
+
+      function openMenu() {
+        mobileDrawer?.classList.add("show");
+        menuOverlay?.classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeMenu() {
+        mobileDrawer?.classList.remove("show");
+        menuOverlay?.classList.remove("show");
+        document.body.style.overflow = "";
+      }
+
+      menuToggle?.addEventListener("click", openMenu);
+      menuClose?.addEventListener("click", closeMenu);
+      menuOverlay?.addEventListener("click", closeMenu);
+
+      document.querySelectorAll(".drawer-link").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
 
       function escapeHtml(str) {
         return String(str || "")
@@ -1022,35 +789,20 @@
             const highlight = !!a.is_highlight;
 
             return `
-              <div style="
-                padding: 12px;
-                border-radius: 12px;
-                border: 1px solid rgba(0,0,0,0.08);
-                margin-bottom: 10px;
-                background: ${highlight ? "rgba(30, 91, 255, 0.06)" : "#fff"};
-              ">
-                <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
-                  <div style="display:flex; align-items:center; gap:8px;">
+              <div class="announcement-card">
+                <div class="announcement-top">
+                  <div class="announcement-title-wrap">
                     ${
                       highlight
-                        ? `<span style="
-                            font-size: 12px;
-                            padding: 4px 8px;
-                            border-radius: 999px;
-                            background: rgba(30, 91, 255, 0.12);
-                            color: #1e5bff;
-                            font-weight: 600;
-                          ">Highlighted</span>`
+                        ? `<span class="announcement-highlight">Highlighted</span>`
                         : ""
                     }
-                    <strong style="font-size: 15px;">${title}</strong>
+                    <strong class="announcement-title">${title}</strong>
                   </div>
-                  <span class="muted" style="font-size: 12px;">${created}</span>
+                  <span class="announcement-time">${created}</span>
                 </div>
 
-                <p style="margin: 10px 0 0; line-height: 1.5;">
-                  ${content}
-                </p>
+                <p class="announcement-content">${content}</p>
               </div>
             `;
           })
@@ -1092,7 +844,7 @@
         }
       }
 
-      refreshAnnouncementsBtn.addEventListener("click", loadAnnouncements);
+      refreshAnnouncementsBtn?.addEventListener("click", loadAnnouncements);
 
       window.addEventListener("load", () => {
         loadAnnouncements();
@@ -1106,46 +858,986 @@
         }
       });
 
-      backToTopBtn.addEventListener("click", () => {
+      backToTopBtn?.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     </script>
 
     <style>
+      :root {
+        --brand-blue: #2563eb;
+        --brand-blue-dark: #1d4ed8;
+        --brand-green: #16a34a;
+        --brand-dark: #0f172a;
+        --brand-soft: #64748b;
+        --brand-bg: #f8fafc;
+        --brand-white: #ffffff;
+        --border-soft: rgba(15, 23, 42, 0.08);
+        --shadow-soft: 0 16px 36px rgba(15, 23, 42, 0.08);
+        --radius-xl: 24px;
+        --radius-lg: 20px;
+        --radius-md: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
       html {
         scroll-behavior: smooth;
       }
 
-      @media (max-width: 980px) {
-        footer div[style*="grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr"] {
-          grid-template-columns: 1fr !important;
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+        color: var(--brand-dark);
+      }
+
+      .muted {
+        color: var(--brand-soft);
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(14px);
+        background: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+      }
+
+      .site-header-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--brand-dark);
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--brand-blue), #60a5fa);
+        color: white;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+        flex-shrink: 0;
+      }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.12;
+      }
+
+      .brand-text strong {
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .brand-text span {
+        font-size: 12px;
+        color: var(--brand-soft);
+      }
+
+      .desktop-nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .desktop-nav a {
+        color: var(--brand-dark);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .desktop-nav a:hover {
+        color: var(--brand-blue);
+      }
+
+      .menu-toggle,
+      .menu-close {
+        border: none;
+        background: #eef2ff;
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+        cursor: pointer;
+        display: none;
+        place-items: center;
+      }
+
+      .menu-toggle span {
+        display: block;
+        width: 22px;
+        height: 2.5px;
+        border-radius: 999px;
+        background: var(--brand-dark);
+        margin: 2.5px 0;
+      }
+
+      .menu-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.45);
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.25s ease;
+        z-index: 1190;
+      }
+
+      .menu-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .mobile-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: min(86vw, 360px);
+        background: white;
+        transform: translateX(100%);
+        transition: 0.28s ease;
+        z-index: 1200;
+        padding: 20px 18px 24px;
+        box-shadow: -18px 0 40px rgba(15, 23, 42, 0.16);
+        overflow-y: auto;
+      }
+
+      .mobile-drawer.show {
+        transform: translateX(0);
+      }
+
+      .drawer-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+
+      .drawer-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .drawer-link {
+        text-decoration: none;
+        color: var(--brand-dark);
+        font-weight: 800;
+        padding: 15px 14px;
+        border-radius: 16px;
+        background: transparent;
+      }
+
+      .drawer-link.active,
+      .drawer-link:hover {
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--brand-blue);
+      }
+
+      .drawer-login {
+        background: linear-gradient(135deg, var(--brand-green), #22c55e);
+        color: white !important;
+        text-align: center;
+        margin-top: 8px;
+      }
+
+      .page-shell {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 28px 18px 90px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .section-block {
+        margin-top: 24px;
+      }
+
+      .hero-section {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 20px;
+        align-items: stretch;
+      }
+
+      .hero-copy,
+      .hero-panel {
+        padding: 28px;
+      }
+
+      .hero-copy {
+        background: linear-gradient(135deg, #ffffff, #eef4ff);
+        border: 1px solid var(--border-soft);
+        border-radius: 28px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .hero-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--brand-blue);
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 16px;
+      }
+
+      .alt-pill {
+        background: rgba(22, 163, 74, 0.1);
+        color: var(--brand-green);
+      }
+
+      .hero-copy h1 {
+        margin: 0;
+        font-size: 46px;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+
+      .hero-text {
+        margin: 14px 0 0;
+        font-size: 17px;
+        line-height: 1.7;
+        color: var(--brand-soft);
+        max-width: 700px;
+      }
+
+      .hero-actions {
+        margin-top: 22px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .center-actions {
+        justify-content: center;
+      }
+
+      .hero-btn {
+        text-decoration: none;
+        border-radius: 16px;
+        padding: 14px 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 800;
+        transition: 0.2s ease;
+      }
+
+      .hero-btn-primary {
+        background: linear-gradient(135deg, var(--brand-blue), #60a5fa);
+        color: white;
+        box-shadow: 0 16px 28px rgba(37, 99, 235, 0.22);
+      }
+
+      .hero-btn-secondary {
+        background: white;
+        color: var(--brand-blue);
+        border: 1px solid rgba(37, 99, 235, 0.18);
+      }
+
+      .hero-btn-whatsapp {
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+        color: white;
+      }
+
+      .hero-btn-light {
+        background: white;
+        color: var(--brand-blue);
+      }
+
+      .hero-btn-light-outline {
+        background: rgba(255, 255, 255, 0.12);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .hero-badges {
+        margin-top: 18px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: white;
+        color: var(--brand-soft);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .hero-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .hero-panel-top h2 {
+        margin: 0 0 10px;
+        font-size: 20px;
+      }
+
+      .hero-panel-actions {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .mini-action {
+        text-decoration: none;
+        color: var(--brand-dark);
+        background: #f8fafc;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 18px;
+        min-height: 88px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
+        font-weight: 800;
+      }
+
+      .mini-action i {
+        color: var(--brand-blue);
+      }
+
+      .logout-btn {
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        font: inherit;
+      }
+
+      .quick-actions-section {
+        margin-top: 22px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .quick-action-card {
+        text-decoration: none;
+        color: white;
+        border-radius: 24px;
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: var(--shadow-soft);
+      }
+
+      .quick-action-card h3 {
+        margin: 0 0 6px;
+        font-size: 21px;
+      }
+
+      .quick-action-card p {
+        margin: 0;
+        opacity: 0.92;
+        line-height: 1.5;
+      }
+
+      .quick-action-blue {
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+      }
+
+      .quick-action-green {
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+      }
+
+      .quick-action-dark {
+        background: linear-gradient(135deg, #0f172a, #334155);
+      }
+
+      .quick-action-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.14);
+        display: grid;
+        place-items: center;
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+
+      .section-head {
+        margin-bottom: 14px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .section-head h2,
+      .compact-head h2,
+      .centered-head h2 {
+        margin: 0;
+        font-size: 28px;
+      }
+
+      .section-head p,
+      .compact-head p,
+      .centered-head p {
+        margin: 6px 0 0;
+        color: var(--brand-soft);
+      }
+
+      .centered-head {
+        text-align: center;
+        justify-content: center;
+      }
+
+      .section-link {
+        text-decoration: none;
+        color: var(--brand-blue);
+        font-weight: 800;
+      }
+
+      .small-refresh-btn {
+        border: none;
+        background: #eff6ff;
+        color: var(--brand-blue);
+        border-radius: 14px;
+        padding: 11px 14px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .stats-grid,
+      .services-grid,
+      .steps-grid,
+      .why-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .steps-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .why-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .stat-card,
+      .service-card,
+      .step-card,
+      .why-card {
+        padding: 20px;
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: var(--brand-soft);
+      }
+
+      .stat-value {
+        margin-top: 6px;
+        font-size: 32px;
+        font-weight: 900;
+      }
+
+      .stat-note {
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--brand-soft);
+      }
+
+      .service-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 14px;
+        font-size: 20px;
+      }
+
+      .service-icon.blue {
+        background: rgba(37, 99, 235, 0.12);
+        color: var(--brand-blue);
+      }
+
+      .service-icon.green {
+        background: rgba(22, 163, 74, 0.12);
+        color: var(--brand-green);
+      }
+
+      .service-icon.amber {
+        background: rgba(245, 158, 11, 0.14);
+        color: #d97706;
+      }
+
+      .service-icon.dark {
+        background: rgba(15, 23, 42, 0.08);
+        color: var(--brand-dark);
+      }
+
+      .service-card h3,
+      .step-card h3,
+      .why-card h3,
+      .contact-card h3 {
+        margin: 0 0 10px;
+        font-size: 19px;
+      }
+
+      .service-card p,
+      .step-card p,
+      .why-card p,
+      .contact-copy p {
+        margin: 0;
+        color: var(--brand-soft);
+        line-height: 1.6;
+      }
+
+      .service-link {
+        margin-top: 16px;
+        display: inline-flex;
+        text-decoration: none;
+        color: var(--brand-blue);
+        font-weight: 800;
+      }
+
+      .step-number {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--brand-blue), #60a5fa);
+        color: white;
+        font-weight: 900;
+        margin-bottom: 14px;
+      }
+
+      .why-card i {
+        font-size: 24px;
+        color: var(--brand-green);
+        margin-bottom: 14px;
+      }
+
+      .section-card {
+        padding: 18px;
+      }
+
+      .section-msg {
+        margin-bottom: 12px;
+      }
+
+      .resource-list-spacer {
+        margin-top: 12px;
+      }
+
+      .submit-box {
+        margin-top: 18px;
+        background: #f8fafc;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 22px;
+        padding: 18px;
+      }
+
+      .submit-box h3 {
+        margin: 0 0 14px;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .form-grid.two-col {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .form-grid.one-col {
+        grid-template-columns: 1fr;
+      }
+
+      .full-span {
+        grid-column: 1 / -1;
+      }
+
+      .submit-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .submit-row p {
+        margin: 0;
+      }
+
+      .track-box {
+        padding: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .track-box h2 {
+        margin: 0 0 8px;
+        font-size: 28px;
+      }
+
+      .track-box p {
+        margin: 0;
+        color: var(--brand-soft);
+        line-height: 1.6;
+      }
+
+      .contact-box {
+        padding: 24px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .contact-copy h2 {
+        margin: 0 0 10px;
+        font-size: 28px;
+      }
+
+      .contact-actions {
+        margin-top: 18px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .contact-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .contact-card {
+        background: #f8fafc;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 18px;
+        padding: 18px;
+      }
+
+      .contact-card p {
+        margin: 0;
+        color: var(--brand-soft);
+      }
+
+      .final-cta {
+        text-align: center;
+        padding: 30px 24px;
+        background: linear-gradient(135deg, var(--brand-blue), #4f86ff);
+        color: white;
+      }
+
+      .final-cta h2 {
+        margin: 0;
+        font-size: 34px;
+      }
+
+      .final-cta p {
+        margin: 10px auto 0;
+        max-width: 680px;
+        opacity: 0.94;
+        line-height: 1.6;
+      }
+
+      .site-footer {
+        margin-top: 28px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(2, 6, 23, 0.08);
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr 0.8fr 1fr;
+        gap: 18px;
+      }
+
+      .footer-grid h3 {
+        margin: 0 0 10px;
+      }
+
+      .footer-grid p {
+        margin: 0 0 8px;
+        line-height: 1.6;
+      }
+
+      .footer-grid a {
+        color: var(--brand-dark);
+        text-decoration: none;
+      }
+
+      .footer-grid a:hover {
+        color: var(--brand-blue);
+      }
+
+      .footer-note {
+        text-align: center;
+        margin: 18px 0 0;
+        font-size: 13px;
+        color: var(--brand-soft);
+      }
+
+      .floating-whatsapp {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 999;
+        width: 58px;
+        height: 58px;
+        border-radius: 999px;
+        background: #25d366;
+        color: white;
+        display: grid;
+        place-items: center;
+        font-size: 28px;
+        box-shadow: 0 14px 30px rgba(37, 211, 102, 0.35);
+        text-decoration: none;
+      }
+
+      .back-to-top-btn {
+        position: fixed;
+        right: 18px;
+        bottom: 88px;
+        z-index: 998;
+        width: 46px;
+        height: 46px;
+        border-radius: 999px;
+        border: none;
+        background: var(--brand-blue);
+        color: white;
+        display: none;
+        place-items: center;
+        font-size: 18px;
+        box-shadow: 0 12px 24px rgba(30, 91, 255, 0.28);
+        cursor: pointer;
+      }
+
+      .announcement-card {
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        background: #fff;
+        margin-bottom: 12px;
+      }
+
+      .announcement-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .announcement-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .announcement-highlight {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.1);
+        color: var(--brand-blue);
+        font-weight: 700;
+      }
+
+      .announcement-title {
+        font-size: 15px;
+      }
+
+      .announcement-time {
+        font-size: 12px;
+        color: var(--brand-soft);
+      }
+
+      .announcement-content {
+        margin: 10px 0 0;
+        line-height: 1.6;
+        color: var(--brand-soft);
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 16px;
+        padding: 14px 16px;
+        font: inherit;
+        color: var(--brand-dark);
+        background: white;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+
+      button {
+        font: inherit;
+      }
+
+      @media (max-width: 1100px) {
+        .hero-section,
+        .contact-box,
+        .services-grid,
+        .steps-grid,
+        .why-grid,
+        .stats-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .hero-section {
+          grid-template-columns: 1fr;
+        }
+
+        .contact-box {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
         }
       }
 
       @media (max-width: 900px) {
-        section div[style*="grid-template-columns: repeat(4"] {
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        .desktop-nav {
+          display: none;
         }
 
-        section div[style*="grid-template-columns: repeat(3"] {
-          grid-template-columns: 1fr !important;
+        .menu-toggle,
+        .menu-close {
+          display: grid;
         }
 
-        #testimonialsList,
-        #resourcesList,
-        #questionsList,
-        #successWall {
-          grid-template-columns: 1fr !important;
+        .quick-actions-section,
+        .services-grid,
+        .steps-grid,
+        .why-grid,
+        .stats-grid,
+        .footer-grid,
+        .hero-panel-actions,
+        .form-grid.two-col {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-copy h1 {
+          font-size: 36px;
+        }
+
+        .final-cta h2,
+        .track-box h2,
+        .contact-copy h2,
+        .section-head h2,
+        .compact-head h2,
+        .centered-head h2 {
+          font-size: 24px;
         }
       }
 
-      @media (max-width: 700px) {
-        section div[style*="grid-template-columns: repeat(4"] {
-          grid-template-columns: 1fr !important;
+      @media (max-width: 640px) {
+        .page-shell {
+          padding: 20px 14px 90px;
         }
 
-        nav div[style*="justify-content: space-between"] {
-          justify-content: center !important;
+        .site-header-inner {
+          padding: 12px 14px;
+        }
+
+        .hero-copy,
+        .hero-panel,
+        .section-card,
+        .contact-box,
+        .track-box,
+        .final-cta {
+          padding: 18px;
+        }
+
+        .hero-copy h1 {
+          font-size: 30px;
+        }
+
+        .hero-text {
+          font-size: 15px;
+        }
+
+        .hero-actions,
+        .contact-actions,
+        .submit-row {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .hero-btn,
+        .hero-btn-primary,
+        .hero-btn-secondary,
+        .hero-btn-whatsapp,
+        .hero-btn-light,
+        .hero-btn-light-outline {
+          width: 100%;
+        }
+
+        .floating-whatsapp {
+          width: 54px;
+          height: 54px;
+          font-size: 26px;
+          right: 14px;
+          bottom: 14px;
+        }
+
+        .back-to-top-btn {
+          right: 14px;
+          bottom: 78px;
         }
       }
     </style>
