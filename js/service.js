@@ -22,8 +22,12 @@ const depositPaidEl = document.getElementById("depositPaid");
 const depositRefEl = document.getElementById("depositRef");
 
 const logoutBtn = document.getElementById("logoutBtn");
+const vipPayBtn = document.getElementById("vipPayBtn");
 
 const VIP_DEPOSIT_PERCENT = 30;
+
+let currentVipTicket = null;
+let intasendInstance = null;
 
 function escapeHtml(str = "") {
   return String(str).replace(
@@ -220,13 +224,8 @@ function normalizeKenyanPhone(phone = "") {
     .trim()
     .replace(/\s+/g, "");
 
-  if (value.startsWith("+")) {
-    value = value.slice(1);
-  }
-
-  if (value.startsWith("0")) {
-    value = `254${value.slice(1)}`;
-  }
+  if (value.startsWith("+")) value = value.slice(1);
+  if (value.startsWith("0")) value = `254${value.slice(1)}`;
 
   return value;
 }
@@ -277,9 +276,7 @@ function loadDraft(slug) {
     const radio = document.querySelector(`input[name="tier"][value="${tier}"]`);
     if (radio) radio.checked = true;
 
-    if (depositBox) {
-      depositBox.style.display = "none";
-    }
+    if (depositBox) depositBox.style.display = "none";
     if (depositPaidEl) depositPaidEl.checked = false;
     if (depositRefEl) depositRefEl.value = "";
 
@@ -306,9 +303,7 @@ function bindDraftAutoSave() {
 
   document.querySelectorAll('input[name="tier"]').forEach((r) => {
     r.addEventListener("change", () => {
-      if (depositBox) {
-        depositBox.style.display = "none";
-      }
+      if (depositBox) depositBox.style.display = "none";
       saveDraft(getSlug());
     });
   });
@@ -322,7 +317,6 @@ async function requireSessionOrRedirect() {
   if (!session) {
     const slug = getSlug();
     saveDraft(slug);
-
     const backTo = window.location.pathname + window.location.search;
     window.location.href = `login.html?next=${encodeURIComponent(backTo)}`;
     return null;
@@ -334,6 +328,77 @@ async function getLoggedInEmail() {
   const { data, error } = await window.supabaseClient.auth.getUser();
   if (error) console.warn("getUser error:", error);
   return data?.user?.email || null;
+}
+
+function initIntaSend() {
+  if (intasendInstance) return intasendInstance;
+
+  if (!window.IntaSend) {
+    console.error("IntaSend SDK not loaded.");
+    return null;
+  }
+
+  if (
+    !window.INTASEND_PUBLIC_KEY ||
+    window.INTASEND_PUBLIC_KEY.includes("PASTE_YOUR")
+  ) {
+    console.error("IntaSend publishable key missing.");
+    return null;
+  }
+
+  intasendInstance = new window.IntaSend({
+    publicAPIKey: window.INTASEND_PUBLIC_KEY,
+    live: window.INTASEND_LIVE === true,
+  })
+    .on("COMPLETE", async () => {
+      msgEl.textContent = "✅ Payment completed. Redirecting to your ticket...";
+      submitBtn.disabled = false;
+
+      if (currentVipTicket) {
+        try {
+          await logActivity("A student completed VIP payment.");
+        } catch (e) {
+          console.warn("VIP complete activity log failed:", e);
+        }
+
+        window.location.href = `ticket.html?ticket=${encodeURIComponent(currentVipTicket)}`;
+      }
+    })
+    .on("FAILED", () => {
+      submitBtn.disabled = false;
+      msgEl.textContent =
+        "✅ VIP booking saved, but payment was not completed. You can still track your ticket.";
+      if (currentVipTicket) {
+        setTimeout(() => {
+          window.location.href = `ticket.html?ticket=${encodeURIComponent(currentVipTicket)}`;
+        }, 3000);
+      }
+    })
+    .on("IN-PROGRESS", () => {
+      msgEl.textContent =
+        "Payment in progress. Complete the M-Pesa prompt on your phone.";
+    });
+
+  return intasendInstance;
+}
+
+function configureVipPaymentButton({
+  amount,
+  email,
+  phone,
+  ticket,
+  serviceName,
+}) {
+  const redirectUrl = `${window.location.origin}/ticket.html?ticket=${encodeURIComponent(ticket)}`;
+
+  vipPayBtn.setAttribute("data-amount", String(amount));
+  vipPayBtn.setAttribute("data-currency", "KES");
+  vipPayBtn.setAttribute("data-email", email || "");
+  vipPayBtn.setAttribute("data-phone_number", normalizeKenyanPhone(phone));
+  vipPayBtn.setAttribute("data-api_ref", ticket);
+  vipPayBtn.setAttribute("data-comment", `VIP deposit for ${serviceName}`);
+  vipPayBtn.setAttribute("data-method", "M-PESA");
+  vipPayBtn.setAttribute("data-redirect_url", redirectUrl);
 }
 
 async function loadServiceBySlug(slug) {
@@ -390,60 +455,11 @@ async function loadServiceBySlug(slug) {
     }
   }
 
-  if (depositBox) {
-    depositBox.style.display = "none";
-  }
+  if (depositBox) depositBox.style.display = "none";
 
   loadDraft(getSlug());
   msgEl.textContent = "";
   return data;
-}
-
-async function startVipCheckout({
-  bookingId,
-  ticket,
-  amount,
-  email,
-  phone,
-  serviceName,
-}) {
-  const payload = {
-    bookingId,
-    ticket,
-    amount,
-    email,
-    phone: normalizeKenyanPhone(phone),
-    serviceName,
-  };
-
-  const response = await fetch("/api/create-vip-checkout", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  let result = {};
-  try {
-    result = await response.json();
-  } catch (parseErr) {
-    throw new Error("Payment server returned an unreadable response.");
-  }
-
-  if (!response.ok) {
-    const errMsg =
-      result?.error ||
-      result?.message ||
-      "Unable to start VIP payment right now.";
-    throw new Error(errMsg);
-  }
-
-  if (!result.paymentUrl) {
-    throw new Error("Payment link was not returned.");
-  }
-
-  return result;
 }
 
 logoutBtn?.addEventListener("click", async () => {
@@ -455,6 +471,7 @@ bindDraftAutoSave();
 
 (async function init() {
   const slug = getSlug();
+  initIntaSend();
   window._service = await loadServiceBySlug(slug);
 })();
 
@@ -472,6 +489,13 @@ form.addEventListener("submit", async (e) => {
 
   const session = await requireSessionOrRedirect();
   if (!session) return;
+
+  const sdk = initIntaSend();
+  if (!sdk) {
+    msgEl.textContent =
+      "Payment setup is incomplete. Add your IntaSend publishable key in service.html.";
+    return;
+  }
 
   const userEmail = await getLoggedInEmail();
   const tier = getTier();
@@ -598,10 +622,6 @@ form.addEventListener("submit", async (e) => {
       });
 
       await sendFn({ to: booking.email, subject, html });
-    } else {
-      console.warn(
-        "No user email found (user is logged in but email missing).",
-      );
     }
   } catch (e) {
     console.warn("Email send failed (non-blocking):", e);
@@ -616,36 +636,19 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  try {
-    msgEl.textContent = "Starting VIP payment...";
+  currentVipTicket = booking.ticket;
 
-    const checkout = await startVipCheckout({
-      bookingId: booking.id,
-      ticket: booking.ticket,
-      amount: vipDepositAmount,
-      email: booking.email || userEmail || "",
-      phone: booking.phone || phoneValue || "",
-      serviceName: service.name || "VIP Booking",
-    });
+  configureVipPaymentButton({
+    amount: vipDepositAmount,
+    email: booking.email || userEmail || "",
+    phone: booking.phone || phoneValue || "",
+    ticket: booking.ticket,
+    serviceName: service.name || "VIP Booking",
+  });
 
-    try {
-      await logActivity(`A student started VIP payment for ${service.name}.`);
-    } catch (e) {
-      console.warn("VIP payment activity log failed:", e);
-    }
+  msgEl.textContent = "Opening M-Pesa payment...";
 
-    msgEl.textContent = "Redirecting to payment...";
-    window.location.href = checkout.paymentUrl;
-  } catch (vipErr) {
-    console.error("VIP payment start error:", vipErr);
-
-    submitBtn.disabled = false;
-    msgEl.textContent =
-      "✅ VIP booking saved, but payment failed to start: " +
-      (vipErr?.message || "Unknown error");
-
-    setTimeout(() => {
-      window.location.href = `ticket.html?ticket=${encodeURIComponent(booking.ticket)}`;
-    }, 4000);
-  }
+  setTimeout(() => {
+    vipPayBtn.click();
+  }, 300);
 });

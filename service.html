@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
+    <script src="https://unpkg.com/intasend-inlinejs-sdk@3.0.2/build/intasend-inline.js"></script>
   </head>
 
   <body>
@@ -195,10 +196,31 @@
       </section>
     </main>
 
+    <button
+      id="vipPayBtn"
+      class="intaSendPayButton"
+      type="button"
+      style="
+        position: fixed;
+        left: -9999px;
+        top: -9999px;
+        opacity: 0;
+        pointer-events: none;
+      "
+    >
+      Pay VIP Deposit
+    </button>
+
+    <script>
+      window.INTASEND_PUBLIC_KEY =
+        "ISPubKey_live_79bb183e-3d8c-4eba-97bb-3540ddbb6617";
+      window.INTASEND_LIVE = true;
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/email.js"></script>
-    <script src="js/service.js"></script>
+    <script defer src="js/service.js"></script>
 
     <style>
       :root {
