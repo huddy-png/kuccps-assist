@@ -34,20 +34,12 @@ export async function onRequestPost(context) {
       phone = `254${phone.slice(1)}`;
     }
 
-    if (!phone.startsWith("254")) {
-      return Response.json(
-        { error: "Invalid phone number format. Use a valid Kenyan number." },
-        { status: 400 },
-      );
-    }
-
     const INTASEND_SECRET_KEY = env.INTASEND_SECRET_KEY;
-    const INTASEND_PUBLISHABLE_KEY = env.INTASEND_PUBLISHABLE_KEY;
     const SITE_URL = env.SITE_URL || "https://kuccpsassist.online";
 
-    if (!INTASEND_SECRET_KEY || !INTASEND_PUBLISHABLE_KEY) {
+    if (!INTASEND_SECRET_KEY) {
       return Response.json(
-        { error: "Missing IntaSend environment variables" },
+        { error: "Missing IntaSend secret key" },
         { status: 500 },
       );
     }
@@ -61,7 +53,6 @@ export async function onRequestPost(context) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          public_key: INTASEND_PUBLISHABLE_KEY,
           amount,
           currency: "KES",
           api_ref: ticket,
