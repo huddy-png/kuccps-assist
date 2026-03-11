@@ -24,23 +24,19 @@ export async function onRequestPost(context) {
       );
     }
 
-    /* -----------------------------
-       Normalize phone number
-    ----------------------------- */
-
-    phone = phone.replace(/\s+/g, "");
-
-    if (phone.startsWith("0")) {
-      phone = "254" + phone.substring(1);
-    }
+    phone = String(phone).trim().replace(/\s+/g, "");
 
     if (phone.startsWith("+")) {
-      phone = phone.substring(1);
+      phone = phone.slice(1);
+    }
+
+    if (phone.startsWith("0")) {
+      phone = `254${phone.slice(1)}`;
     }
 
     if (!phone.startsWith("254")) {
       return Response.json(
-        { error: "Invalid phone number format" },
+        { error: "Invalid phone number format. Use a valid Kenyan number." },
         { status: 400 },
       );
     }
@@ -56,10 +52,6 @@ export async function onRequestPost(context) {
       );
     }
 
-    /* -----------------------------
-       Create IntaSend checkout
-    ----------------------------- */
-
     const intasendRes = await fetch(
       "https://payment.intasend.com/api/v1/checkout/",
       {
@@ -70,10 +62,10 @@ export async function onRequestPost(context) {
         },
         body: JSON.stringify({
           public_key: INTASEND_PUBLISHABLE_KEY,
-          amount: amount,
+          amount,
           currency: "KES",
           api_ref: ticket,
-          email: email,
+          email,
           phone_number: phone,
           redirect_url: `${SITE_URL}/ticket.html?ticket=${encodeURIComponent(ticket)}`,
           comment: `VIP deposit for ${serviceName}`,
@@ -81,7 +73,14 @@ export async function onRequestPost(context) {
       },
     );
 
-    const result = await intasendRes.json();
+    const rawText = await intasendRes.text();
+
+    let result = {};
+    try {
+      result = rawText ? JSON.parse(rawText) : {};
+    } catch {
+      result = { raw: rawText };
+    }
 
     if (!intasendRes.ok) {
       return Response.json(
@@ -90,6 +89,7 @@ export async function onRequestPost(context) {
             result?.detail ||
             result?.message ||
             result?.error ||
+            result?.raw ||
             "Failed to create checkout",
           raw: result,
         },
@@ -98,7 +98,7 @@ export async function onRequestPost(context) {
     }
 
     const paymentUrl =
-      result.url || result.checkout_url || result.hosted_url || null;
+      result?.url || result?.checkout_url || result?.hosted_url || null;
 
     if (!paymentUrl) {
       return Response.json(
