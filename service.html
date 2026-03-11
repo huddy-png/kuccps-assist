@@ -12,250 +12,188 @@
   </head>
 
   <body>
-    <div class="container">
-      <header
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 14px;
-          flex-wrap: wrap;
-        "
-      >
-        <div style="min-width: 260px; flex: 1">
-          <div
-            style="
-              display: inline-flex;
-              align-items: center;
-              gap: 8px;
-              padding: 6px 10px;
-              border-radius: 999px;
-              background: rgba(30, 91, 255, 0.08);
-              color: #1e5bff;
-              font-size: 12px;
-              font-weight: 800;
-              margin-bottom: 10px;
-            "
-          >
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="brand-text">
+            <strong>KUCCPS Assist</strong>
+            <span>Student Application Support</span>
+          </div>
+        </a>
+
+        <nav class="desktop-nav">
+          <a href="index.html">Home</a>
+          <a href="services.html">Services</a>
+          <a href="tracking.html">Track</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero-head">
+        <div>
+          <div class="pill">
             <i class="fa-solid fa-file-circle-check"></i>
             Start Application
           </div>
 
-          <h1 id="serviceName" style="margin: 0">Loading...</h1>
-          <p id="serviceDesc" class="muted" style="margin: 8px 0 0"></p>
+          <h1 id="serviceName">Loading...</h1>
+          <p id="serviceDesc" class="muted"></p>
         </div>
 
-        <nav class="actions">
-          <a href="services.html">
-            <button type="button">
-              <i class="fa-solid fa-arrow-left"></i> Back to Services
-            </button>
+        <div class="hero-actions">
+          <a href="services.html" class="hero-btn hero-btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Services
           </a>
-          <a href="index.html">
-            <button type="button">
-              <i class="fa-solid fa-house"></i> Home
-            </button>
+
+          <a href="index.html" class="hero-btn hero-btn-primary">
+            <i class="fa-solid fa-house"></i>
+            Home
           </a>
-        </nav>
-      </header>
+        </div>
+      </section>
 
-      <section
-        id="serviceMetaCard"
-        class="req"
-        style="margin-top: 16px; display: none"
-      >
-        <h3>Service Information</h3>
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 12px;
-          "
-        >
-          <div class="card" style="padding: 14px">
-            <p class="muted" style="margin: 0 0 4px">Service Fee</p>
-            <p
-              id="servicePrice"
-              style="margin: 0; font-weight: 900; color: #1e5bff"
-            >
-              —
-            </p>
+      <section id="serviceMetaCard" class="meta-section" style="display: none">
+        <div class="section-title">
+          <h2>Service Information</h2>
+          <p class="muted">
+            Review this summary before submitting your request.
+          </p>
+        </div>
+
+        <div class="meta-grid">
+          <div class="meta-card">
+            <p class="muted">Service Fee</p>
+            <h3 id="servicePrice">—</h3>
           </div>
 
-          <div class="card" style="padding: 14px">
-            <p class="muted" style="margin: 0 0 4px">Processing Time</p>
-            <p id="serviceProcessingTime" style="margin: 0; font-weight: 700">
-              —
-            </p>
+          <div class="meta-card">
+            <p class="muted">Processing Time</p>
+            <h3 id="serviceProcessingTime">—</h3>
           </div>
 
-          <div class="card" style="padding: 14px">
-            <p class="muted" style="margin: 0 0 4px">Tier Options</p>
-            <p id="serviceTierInfo" style="margin: 0; font-weight: 700">
-              Regular / VIP
-            </p>
+          <div class="meta-card">
+            <p class="muted">Tier Options</p>
+            <h3 id="serviceTierInfo">Regular / VIP</h3>
           </div>
 
-          <div class="card" style="padding: 14px">
-            <p class="muted" style="margin: 0 0 4px">VIP Deposit</p>
-            <p id="serviceVipInfo" style="margin: 0; font-weight: 700">
-              30% required
-            </p>
+          <div class="meta-card">
+            <p class="muted">VIP Deposit</p>
+            <h3 id="serviceVipInfo">30% required</h3>
           </div>
         </div>
       </section>
 
-      <section class="req" style="margin-top: 16px">
-        <h3><i class="fa-solid fa-list-check"></i> Requirements</h3>
-        <div id="requirementsBox" class="muted">Loading requirements...</div>
+      <section class="requirements-section">
+        <div class="section-title">
+          <h2><i class="fa-solid fa-list-check"></i> Requirements</h2>
+          <p class="muted">Prepare the items below before submitting.</p>
+        </div>
+
+        <div id="requirementsBox" class="requirements-box muted">
+          Loading requirements...
+        </div>
       </section>
 
-      <section style="margin-top: 16px">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
-            flex-wrap: wrap;
-          "
-        >
+      <section class="form-shell">
+        <div class="form-head">
           <div>
-            <h2 style="margin: 0 0 10px">Submit your details</h2>
-            <p class="muted" style="margin: 0 0 14px">
-              Fill the details below and upload documents. After submission
-              you’ll get a ticket and your request will be pending approval.
+            <h2>Submit your details</h2>
+            <p class="muted">
+              Fill in your details, upload documents, and receive a ticket for
+              tracking after submission.
             </p>
           </div>
 
-          <div
-            class="badge"
-            style="
-              background: rgba(30, 91, 255, 0.08);
-              color: #1e5bff;
-              border: 1px solid rgba(30, 91, 255, 0.14);
-            "
-          >
+          <div class="secure-badge">
             <i class="fa-solid fa-shield-halved"></i>
             Secure submission
           </div>
         </div>
 
-        <form id="bookingForm">
-          <div
-            id="dynamicFields"
-            style="
-              display: grid;
-              grid-template-columns: repeat(2, minmax(0, 1fr));
-              gap: 12px;
-            "
-          ></div>
+        <form id="bookingForm" class="booking-form">
+          <div id="dynamicFields" class="dynamic-fields"></div>
 
-          <div style="margin-top: 14px">
+          <div class="single-field">
             <label for="phone"><strong>Phone number</strong></label>
             <input id="phone" type="tel" placeholder="e.g. 07xx xxx xxx" />
           </div>
 
-          <div class="req" style="margin-top: 14px">
-            <h3><i class="fa-solid fa-layer-group"></i> Service Tier</h3>
+          <section class="tier-section">
+            <div class="section-title small-title">
+              <h3><i class="fa-solid fa-layer-group"></i> Service Tier</h3>
+              <p class="muted">
+                Choose between standard support and priority VIP handling.
+              </p>
+            </div>
 
-            <div
-              style="
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: 12px;
-                margin-top: 10px;
-              "
-            >
-              <label
-                class="card"
-                style="
-                  padding: 14px;
-                  cursor: pointer;
-                  gap: 8px;
-                  border: 1px solid rgba(2, 6, 23, 0.1);
-                "
-              >
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    font-weight: 800;
-                  "
-                >
+            <div class="tier-grid">
+              <label class="tier-card">
+                <div class="tier-top">
                   <input type="radio" name="tier" value="regular" checked />
-                  Regular
+                  <span>Regular</span>
                 </div>
-                <p class="muted" style="margin: 0">
-                  Standard application review and support.
-                </p>
+                <p>Standard application review and support.</p>
               </label>
 
-              <label
-                class="card"
-                style="
-                  padding: 14px;
-                  cursor: pointer;
-                  gap: 8px;
-                  border: 1px solid rgba(30, 91, 255, 0.16);
-                  background: linear-gradient(
-                    180deg,
-                    rgba(30, 91, 255, 0.04),
-                    #fff
-                  );
-                "
-              >
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    font-weight: 800;
-                  "
-                >
+              <label class="tier-card vip-card">
+                <div class="tier-top">
                   <input type="radio" name="tier" value="vip" />
-                  VIP
+                  <span>VIP</span>
                 </div>
-                <p class="muted" style="margin: 0">
-                  Priority processing with a required 30% deposit after
-                  submission.
+                <p>
+                  Priority processing with a required 30% deposit after booking
+                  is saved.
                 </p>
               </label>
             </div>
 
-            <p class="muted" style="margin: 10px 0 0">
-              VIP requests are prioritized. If you choose VIP, the payment step
-              starts after your booking is saved.
+            <p class="muted tier-note">
+              If you choose VIP, the payment step starts after your booking is
+              saved successfully.
             </p>
-          </div>
+          </section>
 
           <div id="depositBox" style="display: none"></div>
 
-          <div style="margin-top: 12px">
+          <div class="upload-box">
             <label for="docs"><strong>Upload documents</strong></label>
             <input id="docs" type="file" multiple />
-            <p class="muted" style="margin: 6px 0 0">
+            <p class="muted">
               You can upload multiple files such as ID, result slip,
-              screenshots, or any supporting documents.
+              screenshots, or any other supporting documents.
             </p>
           </div>
 
-          <div
-            style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap"
-          >
-            <button id="submitBtn" type="submit">
-              <i class="fa-solid fa-paper-plane"></i> Submit Application
+          <div class="form-actions">
+            <button
+              id="submitBtn"
+              type="submit"
+              class="hero-btn hero-btn-primary action-btn"
+            >
+              <i class="fa-solid fa-paper-plane"></i>
+              Submit Application
             </button>
-            <button id="logoutBtn" type="button">
-              <i class="fa-solid fa-right-from-bracket"></i> Logout
+
+            <button
+              id="logoutBtn"
+              type="button"
+              class="hero-btn hero-btn-secondary action-btn"
+            >
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Logout
             </button>
           </div>
 
-          <p id="msg" class="muted" style="margin-top: 10px"></p>
+          <p id="msg" class="muted form-message"></p>
         </form>
       </section>
-    </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="js/supabase.js"></script>
@@ -263,18 +201,410 @@
     <script src="js/service.js"></script>
 
     <style>
+      :root {
+        --brand-blue: #2563eb;
+        --brand-blue-dark: #1d4ed8;
+        --brand-green: #16a34a;
+        --brand-dark: #0f172a;
+        --brand-soft: #64748b;
+        --brand-bg: #f8fafc;
+        --brand-white: #ffffff;
+        --border-soft: rgba(15, 23, 42, 0.08);
+        --shadow-soft: 0 16px 36px rgba(15, 23, 42, 0.08);
+        --radius-xl: 24px;
+        --radius-lg: 20px;
+        --radius-md: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+        color: var(--brand-dark);
+      }
+
+      .muted {
+        color: var(--brand-soft);
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(14px);
+        background: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+      }
+
+      .site-header-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--brand-dark);
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--brand-blue), #60a5fa);
+        color: white;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+        flex-shrink: 0;
+      }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.12;
+      }
+
+      .brand-text strong {
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .brand-text span {
+        font-size: 12px;
+        color: var(--brand-soft);
+      }
+
+      .desktop-nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .desktop-nav a {
+        color: var(--brand-dark);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .desktop-nav a:hover {
+        color: var(--brand-blue);
+      }
+
+      .page-shell {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 28px 18px 80px;
+      }
+
+      .hero-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+
+      .hero-head h1 {
+        margin: 0;
+        font-size: 38px;
+        line-height: 1.08;
+      }
+
+      .hero-head p {
+        margin: 8px 0 0;
+        max-width: 760px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--brand-blue);
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 14px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .hero-btn {
+        text-decoration: none;
+        border-radius: 16px;
+        padding: 14px 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 800;
+        transition: 0.2s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .hero-btn-primary {
+        background: linear-gradient(135deg, var(--brand-blue), #60a5fa);
+        color: white;
+        box-shadow: 0 16px 28px rgba(37, 99, 235, 0.22);
+      }
+
+      .hero-btn-secondary {
+        background: white;
+        color: var(--brand-blue);
+        border: 1px solid rgba(37, 99, 235, 0.18);
+      }
+
+      .meta-section,
+      .requirements-section,
+      .form-shell {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-soft);
+        padding: 22px;
+        margin-top: 18px;
+      }
+
+      .section-title h2,
+      .section-title h3 {
+        margin: 0;
+      }
+
+      .section-title p {
+        margin: 6px 0 0;
+      }
+
+      .small-title h3 {
+        font-size: 20px;
+      }
+
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .meta-card {
+        background: #fff;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 18px;
+        padding: 16px;
+      }
+
+      .meta-card p {
+        margin: 0 0 6px;
+      }
+
+      .meta-card h3 {
+        margin: 0;
+        font-size: 20px;
+        color: var(--brand-blue);
+      }
+
+      .requirements-box {
+        margin-top: 14px;
+        background: #f8fafc;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 18px;
+        padding: 16px;
+      }
+
+      .form-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+
+      .form-head h2 {
+        margin: 0 0 8px;
+      }
+
+      .secure-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--brand-blue);
+        border: 1px solid rgba(37, 99, 235, 0.14);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .booking-form {
+        display: block;
+      }
+
+      .dynamic-fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .single-field {
+        margin-top: 16px;
+      }
+
+      .tier-section {
+        margin-top: 18px;
+        background: #f8fafc;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 22px;
+        padding: 18px;
+      }
+
+      .tier-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 14px;
+      }
+
+      .tier-card {
+        background: white;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 18px;
+        padding: 16px;
+        cursor: pointer;
+      }
+
+      .vip-card {
+        background: linear-gradient(180deg, rgba(37, 99, 235, 0.04), #fff);
+        border-color: rgba(37, 99, 235, 0.18);
+      }
+
+      .tier-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .tier-card p {
+        margin: 0;
+        color: var(--brand-soft);
+        line-height: 1.6;
+      }
+
+      .tier-note {
+        margin: 12px 0 0;
+      }
+
+      .upload-box {
+        margin-top: 18px;
+      }
+
+      .upload-box p {
+        margin: 8px 0 0;
+      }
+
+      .form-actions {
+        margin-top: 18px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        font: inherit;
+      }
+
+      .form-message {
+        margin-top: 12px;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 16px;
+        padding: 14px 16px;
+        font: inherit;
+        color: var(--brand-dark);
+        background: white;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+
+      @media (max-width: 1000px) {
+        .meta-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .dynamic-fields,
+        .tier-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
       @media (max-width: 900px) {
-        #serviceMetaCard > div[style*="grid-template-columns: repeat(4"] {
-          grid-template-columns: 1fr !important;
+        .desktop-nav {
+          display: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page-shell {
+          padding: 22px 14px 70px;
         }
 
-        #dynamicFields[style],
-        #dynamicFields {
-          grid-template-columns: 1fr !important;
+        .site-header-inner {
+          padding: 12px 14px;
         }
 
-        form .req div[style*="grid-template-columns: repeat(2"] {
-          grid-template-columns: 1fr !important;
+        .hero-head h1 {
+          font-size: 30px;
+        }
+
+        .hero-actions,
+        .form-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .hero-btn {
+          width: 100%;
+        }
+
+        .meta-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .meta-section,
+        .requirements-section,
+        .form-shell {
+          padding: 18px;
         }
       }
     </style>
