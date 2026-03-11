@@ -15,57 +15,38 @@ export async function onRequestPost(context) {
     }
 
     const expectedChallenge = env.INTASEND_WEBHOOK_CHALLENGE || "";
-    const incomingChallenge =
-      payload.challenge ||
-      payload.webhook_challenge ||
-      payload.challenge_code ||
-      "";
+    const incomingChallenge = String(payload.challenge || expectedChallenge);
 
-    if (
-      expectedChallenge &&
-      incomingChallenge &&
-      incomingChallenge !== expectedChallenge
-    ) {
+    if (expectedChallenge && incomingChallenge !== expectedChallenge) {
       return Response.json(
-        { ok: false, error: "Webhook challenge mismatch" },
+        {
+          ok: false,
+          error: "Webhook challenge mismatch",
+          received: incomingChallenge,
+        },
         { status: 403 },
       );
     }
 
-    const invoice = payload.invoice || {};
-    const collection = payload.collection || {};
-    const transaction = payload.transaction || {};
-
-    const ticket =
-      invoice.api_ref ||
-      collection.api_ref ||
-      transaction.api_ref ||
-      payload.api_ref ||
-      null;
-
-    const statusRaw =
-      invoice.state ||
-      collection.state ||
-      transaction.state ||
-      payload.state ||
-      payload.status ||
-      "";
-
-    const status = String(statusRaw).toUpperCase();
+    const ticket = String(payload.api_ref || "").trim();
+    const state = String(payload.state || "")
+      .trim()
+      .toUpperCase();
 
     const trackingRef =
-      transaction.tracking_id ||
-      collection.tracking_id ||
-      payload.tracking_id ||
-      transaction.reference ||
-      collection.reference ||
-      payload.reference ||
+      payload.invoice_id ||
+      payload.mpesa_reference ||
+      payload.provider_ref ||
       payload.id ||
       null;
 
     if (!ticket) {
       return Response.json(
-        { ok: false, error: "Missing ticket/api_ref in webhook payload" },
+        {
+          ok: false,
+          error: "Missing api_ref in webhook payload",
+          payload,
+        },
         { status: 400 },
       );
     }
@@ -73,11 +54,18 @@ export async function onRequestPost(context) {
     let payment_status = "pending";
     let deposit_paid = false;
 
-    if (["COMPLETE", "COMPLETED", "SUCCESS", "PAID"].includes(status)) {
+    if (state === "COMPLETE") {
       payment_status = "paid";
       deposit_paid = true;
-    } else if (["FAILED", "CANCELLED", "CANCELED"].includes(status)) {
+    } else if (state === "FAILED") {
       payment_status = "failed";
+      deposit_paid = false;
+    } else if (
+      state === "PROCESSING" ||
+      state === "PENDING" ||
+      state === "CLEARING"
+    ) {
+      payment_status = "pending";
       deposit_paid = false;
     }
 
@@ -91,23 +79,22 @@ export async function onRequestPost(context) {
       );
     }
 
-    const updateRes = await fetch(
-      `${supabaseUrl}/rest/v1/bookings?ticket=eq.${encodeURIComponent(ticket)}`,
-      {
-        method: "PATCH",
-        headers: {
-          apikey: supabaseServiceRoleKey,
-          Authorization: `Bearer ${supabaseServiceRoleKey}`,
-          "Content-Type": "application/json",
-          Prefer: "return=representation",
-        },
-        body: JSON.stringify({
-          payment_status,
-          deposit_paid,
-          deposit_reference: trackingRef,
-        }),
+    const updateUrl = `${supabaseUrl}/rest/v1/bookings?ticket=eq.${ticket}`;
+
+    const updateRes = await fetch(updateUrl, {
+      method: "PATCH",
+      headers: {
+        apikey: supabaseServiceRoleKey,
+        Authorization: `Bearer ${supabaseServiceRoleKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
       },
-    );
+      body: JSON.stringify({
+        payment_status,
+        deposit_paid,
+        deposit_reference: trackingRef,
+      }),
+    });
 
     const updateText = await updateRes.text();
 
@@ -117,6 +104,9 @@ export async function onRequestPost(context) {
           ok: false,
           error: "Failed to update booking in Supabase",
           supabase_response: updateText,
+          ticket,
+          state,
+          updateUrl,
         },
         { status: 500 },
       );
@@ -125,9 +115,11 @@ export async function onRequestPost(context) {
     return Response.json({
       ok: true,
       ticket,
+      state,
       payment_status,
       deposit_paid,
       deposit_reference: trackingRef,
+      supabase_response: updateText,
     });
   } catch (err) {
     return Response.json(
