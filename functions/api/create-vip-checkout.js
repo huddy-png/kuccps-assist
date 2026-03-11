@@ -11,65 +11,70 @@ export async function onRequestPost(context) {
     const serviceName = data.serviceName || "VIP Booking";
 
     if (!bookingId || !ticket || !amount) {
-      return Response.json(
-        { error: "bookingId, ticket and amount required" },
+      return new Response(
+        JSON.stringify({ error: "bookingId, ticket and amount required" }),
         { status: 400 },
       );
     }
 
+    // -------- Phone normalization --------
     phone = phone.replace(/\s+/g, "");
 
-    if (phone.startsWith("+")) phone = phone.slice(1);
-    if (phone.startsWith("0")) phone = "254" + phone.slice(1);
+    if (phone.startsWith("+")) {
+      phone = phone.slice(1);
+    }
+
+    if (phone.startsWith("0")) {
+      phone = "254" + phone.slice(1);
+    }
 
     const INTASEND_SECRET_KEY = env.INTASEND_SECRET_KEY;
     const INTASEND_PUBLISHABLE_KEY = env.INTASEND_PUBLISHABLE_KEY;
     const SITE_URL = env.SITE_URL || "https://kuccpsassist.online";
 
+    if (!INTASEND_SECRET_KEY || !INTASEND_PUBLISHABLE_KEY) {
+      return new Response(
+        JSON.stringify({ error: "Missing IntaSend keys in environment" }),
+        { status: 500 },
+      );
+    }
+
+    // -------- Correct IntaSend endpoint --------
     const payload = {
       public_key: INTASEND_PUBLISHABLE_KEY,
-      amount,
+      amount: amount,
       currency: "KES",
       api_ref: ticket,
-      email,
+      email: email,
       phone_number: phone,
-      method: "M-PESA",
       comment: `VIP deposit for ${serviceName}`,
       redirect_url: `${SITE_URL}/ticket.html?ticket=${encodeURIComponent(ticket)}`,
     };
 
     const intasendRes = await fetch(
-      "https://api.intasend.com/api/v1/checkout/",
+      "https://payment.intasend.com/api/v1/checkout/",
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${INTASEND_SECRET_KEY}`,
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
         body: JSON.stringify(payload),
       },
     );
 
-    const rawText = await intasendRes.text();
-
-    let result = {};
-    try {
-      result = JSON.parse(rawText);
-    } catch {
-      result = { raw: rawText };
-    }
+    const result = await intasendRes.json();
 
     if (!intasendRes.ok) {
-      return Response.json(
-        {
+      return new Response(
+        JSON.stringify({
           error:
             result?.detail ||
             result?.message ||
-            result?.raw ||
+            result?.error ||
             "Payment creation failed",
           raw: result,
-        },
+        }),
         { status: 400 },
       );
     }
@@ -78,24 +83,34 @@ export async function onRequestPost(context) {
       result.url || result.checkout_url || result.hosted_url || null;
 
     if (!paymentUrl) {
-      return Response.json(
-        { error: "Payment link not returned", raw: result },
+      return new Response(
+        JSON.stringify({
+          error: "Payment link was not returned by IntaSend",
+          raw: result,
+        }),
         { status: 500 },
       );
     }
 
-    return Response.json({
-      ok: true,
-      paymentUrl,
-    });
+    return new Response(
+      JSON.stringify({
+        ok: true,
+        paymentUrl,
+      }),
+      { status: 200 },
+    );
   } catch (err) {
-    return Response.json(
-      { error: err.message || "Unexpected server error" },
+    return new Response(
+      JSON.stringify({
+        error: err.message || "Unexpected server error",
+      }),
       { status: 500 },
     );
   }
 }
 
 export async function onRequest() {
-  return Response.json({ error: "Method not allowed" }, { status: 405 });
+  return new Response(JSON.stringify({ error: "Method not allowed" }), {
+    status: 405,
+  });
 }
