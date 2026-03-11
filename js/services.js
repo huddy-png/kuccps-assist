@@ -117,7 +117,7 @@ function renderCard(service) {
   const startUrl = buildStartApplicationUrl(service.slug);
 
   return `
-    <div class="card" style="height:100%;">
+    <div class="card service-card">
       <div
         style="
           display:flex;
@@ -203,12 +203,21 @@ function renderSection(title, services) {
         <div>
           <h2 style="margin:0; font-size:20px;">${escapeHtml(title)}</h2>
           <p class="muted" style="margin:6px 0 0;">
-            ${escapeHtml(`${services.length} service${services.length === 1 ? "" : "s"} available`)}
+            ${escapeHtml(
+              `${services.length} service${services.length === 1 ? "" : "s"} available`,
+            )}
           </p>
         </div>
       </div>
 
-      <div class="services-grid">
+      <div
+        style="
+          display:grid;
+          grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+          gap:18px;
+          align-items:stretch;
+        "
+      >
         ${services.map(renderCard).join("")}
       </div>
     </section>

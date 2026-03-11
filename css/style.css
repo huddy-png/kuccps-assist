@@ -802,3 +802,16 @@ select:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+#servicesContent {
+  display: block;
+  margin-top: 16px;
+}
+
+#servicesContent > * {
+  min-width: 0;
+}
+
+#servicesContent .card,
+#servicesContent .service-card {
+  height: 100%;
+}
