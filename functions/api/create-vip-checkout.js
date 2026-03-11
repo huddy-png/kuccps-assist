@@ -32,10 +32,7 @@ export async function onRequestPost(context) {
     const SITE_URL = env.SITE_URL || "https://kuccpsassist.online";
 
     if (!INTASEND_SECRET_KEY || !INTASEND_PUBLISHABLE_KEY) {
-      return Response.json(
-        { error: "Missing IntaSend environment variables" },
-        { status: 500 },
-      );
+      return Response.json({ error: "Missing IntaSend keys" }, { status: 500 });
     }
 
     const intasendRes = await fetch(
@@ -51,6 +48,8 @@ export async function onRequestPost(context) {
           amount: amount,
           currency: "KES",
           api_ref: ticket,
+          first_name: "Student",
+          last_name: "Applicant",
           email: email,
           phone_number: phone,
           redirect_url: `${SITE_URL}/ticket.html?ticket=${encodeURIComponent(ticket)}`,
@@ -66,7 +65,7 @@ export async function onRequestPost(context) {
       result = JSON.parse(text);
     } catch {
       return Response.json(
-        { error: text || "Payment API returned invalid response" },
+        { error: text || "Invalid response from IntaSend" },
         { status: 400 },
       );
     }
