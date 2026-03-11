@@ -5,205 +5,727 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Track Application | KUCCPS Assist</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
   </head>
 
   <body>
-    <div class="container">
-      <header
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 12px;
-          flex-wrap: wrap;
-        "
-      >
-        <div style="min-width: 260px">
-          <h1 style="margin: 0">Track Your Application</h1>
-          <p class="muted" style="margin: 6px 0 0; max-width: 620px">
-            Enter your ticket number and the phone number you used during
-            submission.
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="brand-text">
+            <strong>KUCCPS Assist</strong>
+            <span>Student Application Support</span>
+          </div>
+        </a>
+
+        <nav class="desktop-nav">
+          <a href="index.html">Home</a>
+          <a href="services.html">Services</a>
+          <a href="tracking.html">Track</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero-head">
+        <div>
+          <div class="pill">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Track Application
+          </div>
+
+          <h1>Track Your Application</h1>
+          <p class="muted hero-copy">
+            Enter your ticket number and the phone number used during submission
+            to view your latest status and any admin update.
           </p>
         </div>
 
-        <nav class="actions">
-          <a href="services.html"><button type="button">Services</button></a>
-          <a href="index.html"><button type="button">Home</button></a>
-        </nav>
-      </header>
+        <div class="hero-actions">
+          <a href="services.html" class="hero-btn hero-btn-secondary">
+            <i class="fa-solid fa-briefcase"></i>
+            Services
+          </a>
 
-      <main style="margin-top: 16px">
-        <section
-          style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 14px"
-        >
-          <div class="card">
-            <h2 style="margin: 0; font-size: 18px">Track Ticket</h2>
-            <p class="muted" style="margin: 6px 0 0">
+          <a href="index.html" class="hero-btn hero-btn-primary">
+            <i class="fa-solid fa-house"></i>
+            Home
+          </a>
+        </div>
+      </section>
+
+      <section class="tracking-layout">
+        <div class="track-card glass-card">
+          <div class="section-title">
+            <h2>Track Ticket</h2>
+            <p class="muted">
               Use the exact phone number used during submission.
             </p>
-
-            <form id="trackForm" style="margin-top: 12px">
-              <div>
-                <label>Ticket Number</label>
-                <input
-                  id="ticket"
-                  type="text"
-                  placeholder="e.g. KAS-20260227-3QJQLH"
-                />
-              </div>
-
-              <div style="margin-top: 12px">
-                <label>Phone Number</label>
-                <input id="phone" type="tel" placeholder="e.g. 07xx xxx xxx" />
-              </div>
-
-              <div style="margin-top: 14px">
-                <button id="trackBtn" type="submit">Track</button>
-              </div>
-
-              <p id="msg" class="muted" style="margin-top: 10px"></p>
-            </form>
-
-            <div class="req" style="margin-top: 12px">
-              <h3>Tip</h3>
-              <ul>
-                <li>
-                  If you can’t find your record, re-check the ticket format.
-                </li>
-                <li>VIP tickets are handled first.</li>
-                <li>
-                  When “Needs Info” appears, upload requested documents below.
-                </li>
-              </ul>
-            </div>
           </div>
 
-          <div class="card">
-            <h2 style="margin: 0; font-size: 18px">Status Result</h2>
-            <p class="muted" style="margin: 6px 0 0">
-              Your latest status will appear here after tracking.
+          <form id="trackForm" class="track-form">
+            <div class="field-group">
+              <label>Ticket Number</label>
+              <input
+                id="ticket"
+                type="text"
+                placeholder="e.g. KAS-20260227-3QJQLH"
+              />
+            </div>
+
+            <div class="field-group">
+              <label>Phone Number</label>
+              <input id="phone" type="tel" placeholder="e.g. 07xx xxx xxx" />
+            </div>
+
+            <div class="form-actions">
+              <button
+                id="trackBtn"
+                type="submit"
+                class="hero-btn hero-btn-primary action-btn"
+              >
+                <i class="fa-solid fa-magnifying-glass"></i>
+                Track
+              </button>
+            </div>
+
+            <p id="msg" class="muted form-message"></p>
+          </form>
+
+          <div class="info-box">
+            <h3><i class="fa-solid fa-lightbulb"></i> Tips</h3>
+            <ul>
+              <li>
+                If you can’t find your record, re-check the ticket format.
+              </li>
+              <li>VIP tickets are handled first.</li>
+              <li>
+                When “Needs Info” appears, upload requested documents below.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="result-card glass-card">
+          <div class="section-title">
+            <h2>Status Result</h2>
+            <p class="muted">
+              Your latest application status will appear here after tracking.
             </p>
+          </div>
+
+          <div id="result" class="result-shell" style="display: none">
+            <div class="status-head">
+              <h3>Status</h3>
+              <span id="rStatus" class="status-badge">—</span>
+            </div>
+
+            <div class="result-grid">
+              <div class="result-item">
+                <span class="result-label">Ticket</span>
+                <strong id="rTicket">—</strong>
+              </div>
+
+              <div class="result-item">
+                <span class="result-label">Service</span>
+                <strong id="rService">—</strong>
+              </div>
+
+              <div class="result-item">
+                <span class="result-label">Tier</span>
+                <strong id="rTier">—</strong>
+              </div>
+
+              <div class="result-item">
+                <span class="result-label">Current Status</span>
+                <strong id="rStatusMirror">—</strong>
+              </div>
+            </div>
 
             <div
-              id="result"
-              class="req"
-              style="margin-top: 12px; display: none"
+              id="serviceMetaCard"
+              class="service-meta-grid"
+              style="display: none"
             >
-              <h3>Status</h3>
-
-              <p style="margin: 6px 0 0">
-                <strong>Ticket:</strong> <span id="rTicket"></span>
-              </p>
-              <p style="margin: 6px 0 0">
-                <strong>Service:</strong> <span id="rService"></span>
-              </p>
-              <p style="margin: 6px 0 0">
-                <strong>Tier:</strong> <span id="rTier"></span>
-              </p>
-              <p style="margin: 6px 0 0">
-                <strong>Current Status:</strong> <span id="rStatus"></span>
-              </p>
-
-              <div
-                id="serviceMetaCard"
-                style="
-                  margin-top: 12px;
-                  display: none;
-                  grid-template-columns: repeat(2, minmax(0, 1fr));
-                  gap: 12px;
-                "
-              >
-                <div class="card" style="padding: 12px; gap: 6px">
-                  <div class="muted" style="font-size: 12px">Service Fee</div>
-                  <div
-                    id="rPrice"
-                    style="font-size: 18px; font-weight: 900; color: #1e5bff"
-                  >
-                    —
-                  </div>
-                </div>
-
-                <div class="card" style="padding: 12px; gap: 6px">
-                  <div class="muted" style="font-size: 12px">
-                    Processing Time
-                  </div>
-                  <div id="rProcessingTime" style="font-weight: 800">—</div>
-                </div>
+              <div class="meta-mini-card">
+                <div class="muted mini-label">Service Fee</div>
+                <div id="rPrice" class="mini-value">—</div>
               </div>
 
-              <div id="needInfoBox" style="display: none; margin-top: 12px">
-                <strong>Message from Admin:</strong>
-                <div
-                  id="rNeedInfoMsg"
-                  style="margin-top: 8px; white-space: pre-wrap"
-                  class="muted"
-                ></div>
+              <div class="meta-mini-card">
+                <div class="muted mini-label">Processing Time</div>
+                <div id="rProcessingTime" class="mini-plain">—</div>
               </div>
-
-              <div
-                id="uploadSection"
-                style="
-                  display: none;
-                  margin-top: 12px;
-                  padding-top: 12px;
-                  border-top: 1px solid rgba(2, 6, 23, 0.1);
-                "
-              >
-                <h3 style="margin: 0 0 8px">Upload requested documents</h3>
-                <p class="muted" style="margin: 0 0 10px">
-                  Select the documents requested above and upload them below.
-                </p>
-
-                <input id="moreFiles" type="file" multiple />
-
-                <div style="margin-top: 10px">
-                  <button id="uploadMoreBtn" type="button">
-                    Upload Documents
-                  </button>
-                </div>
-
-                <p id="uploadMsg" class="muted" style="margin-top: 10px"></p>
-              </div>
-
-              <p class="muted" style="margin: 10px 0 0">
-                Submitted: <span id="rCreated"></span><br />
-                Updated: <span id="rUpdated"></span>
-              </p>
             </div>
 
-            <div class="req" style="margin-top: 12px">
-              <h3>What this page does</h3>
-              <ul>
-                <li>
-                  Shows ticket status: pending / approved / declined / needs
-                  info.
-                </li>
-                <li>
-                  Shows any admin message requesting additional documents.
-                </li>
-                <li>Allows uploading documents only when requested.</li>
-              </ul>
+            <div id="needInfoBox" class="need-info-box" style="display: none">
+              <strong>Message from Admin:</strong>
+              <div id="rNeedInfoMsg" class="muted need-info-msg"></div>
+            </div>
+
+            <div
+              id="uploadSection"
+              class="upload-section"
+              style="display: none"
+            >
+              <h3>Upload requested documents</h3>
+              <p class="muted">
+                Select the documents requested above and upload them below.
+              </p>
+
+              <input id="moreFiles" type="file" multiple />
+
+              <div class="form-actions">
+                <button
+                  id="uploadMoreBtn"
+                  type="button"
+                  class="hero-btn hero-btn-secondary action-btn"
+                >
+                  <i class="fa-solid fa-upload"></i>
+                  Upload Documents
+                </button>
+              </div>
+
+              <p id="uploadMsg" class="muted form-message"></p>
+            </div>
+
+            <div class="timeline-box">
+              <div class="time-item">
+                <span class="result-label">Submitted</span>
+                <strong id="rCreated">—</strong>
+              </div>
+
+              <div class="time-item">
+                <span class="result-label">Updated</span>
+                <strong id="rUpdated">—</strong>
+              </div>
             </div>
           </div>
-        </section>
-      </main>
-    </div>
+
+          <div class="info-box info-box-alt">
+            <h3><i class="fa-solid fa-circle-info"></i> What this page does</h3>
+            <ul>
+              <li>
+                Shows ticket status: pending, approved, declined, or needs info.
+              </li>
+              <li>Shows any admin message requesting additional documents.</li>
+              <li>Allows uploading documents only when requested.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/email.js"></script>
     <script src="js/tracking.js"></script>
 
+    <script>
+      const statusBadge = document.getElementById("rStatus");
+      const statusMirror = document.getElementById("rStatusMirror");
+
+      const observer = new MutationObserver(() => {
+        const value = (statusBadge?.textContent || "").trim();
+        if (statusMirror) statusMirror.textContent = value;
+        applyStatusStyle(value);
+      });
+
+      if (statusBadge) {
+        observer.observe(statusBadge, {
+          childList: true,
+          subtree: true,
+          characterData: true,
+        });
+      }
+
+      function applyStatusStyle(value) {
+        if (!statusBadge) return;
+
+        statusBadge.className = "status-badge";
+
+        const status = String(value || "").toLowerCase();
+
+        if (status.includes("approved")) {
+          statusBadge.classList.add("status-approved");
+        } else if (status.includes("declined")) {
+          statusBadge.classList.add("status-declined");
+        } else if (status.includes("need")) {
+          statusBadge.classList.add("status-needs-info");
+        } else if (status.includes("pending")) {
+          statusBadge.classList.add("status-pending");
+        } else {
+          statusBadge.classList.add("status-default");
+        }
+      }
+    </script>
+
     <style>
-      @media (max-width: 900px) {
-        main section[style*="grid-template-columns"] {
-          grid-template-columns: 1fr !important;
+      :root {
+        --brand-blue: #2563eb;
+        --brand-blue-dark: #1d4ed8;
+        --brand-green: #16a34a;
+        --brand-dark: #0f172a;
+        --brand-soft: #64748b;
+        --brand-bg: #f8fafc;
+        --brand-white: #ffffff;
+        --border-soft: rgba(15, 23, 42, 0.08);
+        --shadow-soft: 0 16px 36px rgba(15, 23, 42, 0.08);
+        --radius-xl: 24px;
+        --radius-lg: 20px;
+        --radius-md: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%);
+        color: var(--brand-dark);
+      }
+
+      .muted {
+        color: var(--brand-soft);
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(14px);
+        background: rgba(255, 255, 255, 0.9);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+      }
+
+      .site-header-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--brand-dark);
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--brand-blue), #60a5fa);
+        color: white;
+        box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+        flex-shrink: 0;
+      }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.12;
+      }
+
+      .brand-text strong {
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .brand-text span {
+        font-size: 12px;
+        color: var(--brand-soft);
+      }
+
+      .desktop-nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .desktop-nav a {
+        color: var(--brand-dark);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .desktop-nav a:hover {
+        color: var(--brand-blue);
+      }
+
+      .page-shell {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 28px 18px 80px;
+      }
+
+      .hero-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+      }
+
+      .hero-head h1 {
+        margin: 0;
+        font-size: 38px;
+        line-height: 1.08;
+      }
+
+      .hero-copy {
+        margin: 8px 0 0;
+        max-width: 720px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(37, 99, 235, 0.08);
+        color: var(--brand-blue);
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 14px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .hero-btn {
+        text-decoration: none;
+        border-radius: 16px;
+        padding: 14px 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: 800;
+        transition: 0.2s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .hero-btn-primary {
+        background: linear-gradient(135deg, var(--brand-blue), #60a5fa);
+        color: white;
+        box-shadow: 0 16px 28px rgba(37, 99, 235, 0.22);
+      }
+
+      .hero-btn-secondary {
+        background: white;
+        color: var(--brand-blue);
+        border: 1px solid rgba(37, 99, 235, 0.18);
+      }
+
+      .tracking-layout {
+        display: grid;
+        grid-template-columns: 0.95fr 1.05fr;
+        gap: 18px;
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-soft);
+        padding: 22px;
+      }
+
+      .section-title h2,
+      .section-title h3 {
+        margin: 0;
+      }
+
+      .section-title p {
+        margin: 6px 0 0;
+      }
+
+      .track-form {
+        margin-top: 16px;
+      }
+
+      .field-group + .field-group {
+        margin-top: 14px;
+      }
+
+      .field-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 16px;
+        padding: 14px 16px;
+        font: inherit;
+        color: var(--brand-dark);
+        background: white;
+      }
+
+      .form-actions {
+        margin-top: 16px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        font: inherit;
+      }
+
+      .form-message {
+        margin-top: 12px;
+      }
+
+      .info-box {
+        margin-top: 18px;
+        background: #f8fafc;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 20px;
+        padding: 18px;
+      }
+
+      .info-box h3 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+
+      .info-box ul {
+        margin: 0;
+        padding-left: 18px;
+        line-height: 1.7;
+        color: var(--brand-soft);
+      }
+
+      .info-box-alt {
+        margin-top: 18px;
+      }
+
+      .result-shell {
+        margin-top: 16px;
+        background: #f8fafc;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 22px;
+        padding: 18px;
+      }
+
+      .status-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+
+      .status-head h3 {
+        margin: 0;
+        font-size: 22px;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 14px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 800;
+        border: 1px solid transparent;
+      }
+
+      .status-approved {
+        background: rgba(22, 163, 74, 0.12);
+        color: #166534;
+        border-color: rgba(22, 163, 74, 0.18);
+      }
+
+      .status-declined {
+        background: rgba(220, 38, 38, 0.1);
+        color: #b91c1c;
+        border-color: rgba(220, 38, 38, 0.16);
+      }
+
+      .status-needs-info {
+        background: rgba(245, 158, 11, 0.12);
+        color: #b45309;
+        border-color: rgba(245, 158, 11, 0.18);
+      }
+
+      .status-pending {
+        background: rgba(37, 99, 235, 0.1);
+        color: #1d4ed8;
+        border-color: rgba(37, 99, 235, 0.16);
+      }
+
+      .status-default {
+        background: rgba(100, 116, 139, 0.1);
+        color: #475569;
+        border-color: rgba(100, 116, 139, 0.16);
+      }
+
+      .result-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .result-item {
+        background: white;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 18px;
+        padding: 14px;
+      }
+
+      .result-label {
+        display: block;
+        font-size: 12px;
+        color: var(--brand-soft);
+        margin-bottom: 6px;
+        font-weight: 700;
+      }
+
+      .service-meta-grid {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .meta-mini-card {
+        background: white;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 18px;
+        padding: 14px;
+      }
+
+      .mini-label {
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+
+      .mini-value {
+        font-size: 20px;
+        font-weight: 900;
+        color: var(--brand-blue);
+      }
+
+      .mini-plain {
+        font-weight: 800;
+      }
+
+      .need-info-box {
+        margin-top: 16px;
+        background: rgba(245, 158, 11, 0.08);
+        border: 1px solid rgba(245, 158, 11, 0.18);
+        border-radius: 18px;
+        padding: 16px;
+      }
+
+      .need-info-msg {
+        margin-top: 8px;
+        white-space: pre-wrap;
+        line-height: 1.7;
+      }
+
+      .upload-section {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(148, 163, 184, 0.16);
+      }
+
+      .upload-section h3 {
+        margin: 0 0 8px;
+      }
+
+      .upload-section p {
+        margin: 0 0 12px;
+      }
+
+      .timeline-box {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .time-item {
+        background: white;
+        border: 1px solid rgba(148, 163, 184, 0.14);
+        border-radius: 18px;
+        padding: 14px;
+      }
+
+      @media (max-width: 950px) {
+        .tracking-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .result-grid,
+        .service-meta-grid,
+        .timeline-box {
+          grid-template-columns: 1fr;
         }
       }
 
-      @media (max-width: 700px) {
-        #serviceMetaCard[style*="grid-template-columns: repeat(2"] {
-          grid-template-columns: 1fr !important;
+      @media (max-width: 900px) {
+        .desktop-nav {
+          display: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page-shell {
+          padding: 22px 14px 70px;
+        }
+
+        .site-header-inner {
+          padding: 12px 14px;
+        }
+
+        .hero-head h1 {
+          font-size: 30px;
+        }
+
+        .hero-actions,
+        .form-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .hero-btn {
+          width: 100%;
+        }
+
+        .glass-card {
+          padding: 18px;
         }
       }
     </style>
