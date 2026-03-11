@@ -30,7 +30,7 @@
           <a href="tracking.html">Track</a>
           <a href="#howItWorks">How It Works</a>
           <a href="#resources">Resources</a>
-          <a href="#testimonials">Testimonials</a>
+          <a href="#livePreview">Live Preview</a>
           <a href="#contact">Contact</a>
         </nav>
 
@@ -67,7 +67,7 @@
         <a href="tracking.html" class="drawer-link">Track Ticket</a>
         <a href="#howItWorks" class="drawer-link">How It Works</a>
         <a href="#resources" class="drawer-link">Resources</a>
-        <a href="#testimonials" class="drawer-link">Testimonials</a>
+        <a href="#livePreview" class="drawer-link">Live Preview</a>
         <a href="#contact" class="drawer-link">Contact</a>
         <a href="login.html" class="drawer-link drawer-login">Login</a>
       </nav>
@@ -81,11 +81,12 @@
             Trusted Student Support
           </div>
 
-          <h1>Professional KUCCPS, KMTC, HELB & TVET Support for Students</h1>
+          <h1>Smart KUCCPS, KMTC, HELB & TVET Support for Serious Students</h1>
 
           <p class="hero-text">
-            Get guided application help, upload your documents securely, and
-            track your request using your support ticket — all in one place.
+            Apply correctly, upload your documents securely, and track every
+            request using your support ticket — with a cleaner, faster and more
+            professional student experience.
           </p>
 
           <div class="hero-actions">
@@ -107,47 +108,75 @@
           </div>
         </div>
 
-        <div class="hero-panel card">
-          <div class="hero-panel-top">
-            <h2><i class="fa-solid fa-user-shield"></i> Account Status</h2>
-            <p id="status" class="muted">Checking login status...</p>
+        <div class="hero-side">
+          <div class="hero-panel card">
+            <div class="hero-panel-top">
+              <h2><i class="fa-solid fa-user-shield"></i> Account Status</h2>
+              <p id="status" class="muted">Checking login status...</p>
+            </div>
+
+            <div class="hero-panel-actions">
+              <a href="services.html" class="mini-action">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>Services</span>
+              </a>
+
+              <a href="tracking.html" class="mini-action">
+                <i class="fa-solid fa-ticket"></i>
+                <span>Track Ticket</span>
+              </a>
+
+              <a
+                href="admin.html"
+                id="adminLink"
+                class="mini-action"
+                style="display: none"
+              >
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Admin Panel</span>
+              </a>
+
+              <a href="login.html" id="loginLink" class="mini-action">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Login</span>
+              </a>
+
+              <button
+                id="logoutBtn"
+                type="button"
+                class="mini-action logout-btn"
+                style="display: none"
+              >
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
 
-          <div class="hero-panel-actions">
-            <a href="services.html" class="mini-action">
-              <i class="fa-solid fa-briefcase"></i>
-              <span>Services</span>
-            </a>
+          <div class="hero-preview card">
+            <div class="preview-top">
+              <span class="preview-label">Live Snapshot</span>
+              <span class="preview-dot"></span>
+            </div>
 
-            <a href="tracking.html" class="mini-action">
-              <i class="fa-solid fa-ticket"></i>
-              <span>Track Ticket</span>
-            </a>
-
-            <a
-              href="admin.html"
-              id="adminLink"
-              class="mini-action"
-              style="display: none"
-            >
-              <i class="fa-solid fa-shield-halved"></i>
-              <span>Admin Panel</span>
-            </a>
-
-            <a href="login.html" id="loginLink" class="mini-action">
-              <i class="fa-solid fa-right-to-bracket"></i>
-              <span>Login</span>
-            </a>
-
-            <button
-              id="logoutBtn"
-              type="button"
-              class="mini-action logout-btn"
-              style="display: none"
-            >
-              <i class="fa-solid fa-right-from-bracket"></i>
-              <span>Logout</span>
-            </button>
+            <div class="preview-grid">
+              <div>
+                <div class="preview-value" id="statBookings">--</div>
+                <div class="preview-note">Students Assisted</div>
+              </div>
+              <div>
+                <div class="preview-value" id="statSuccess">--</div>
+                <div class="preview-note">Success Stories</div>
+              </div>
+              <div>
+                <div class="preview-value" id="statTestimonials">--</div>
+                <div class="preview-note">Testimonials</div>
+              </div>
+              <div>
+                <div class="preview-value" id="statQuestions">--</div>
+                <div class="preview-note">Public Questions</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -169,7 +198,7 @@
           </div>
           <div>
             <h3>Track Ticket</h3>
-            <p>Follow your application progress using your ticket details.</p>
+            <p>Follow progress using your ticket and phone details.</p>
           </div>
         </a>
 
@@ -179,44 +208,9 @@
           </div>
           <div>
             <h3>View Services</h3>
-            <p>Explore KUCCPS, KMTC, HELB, SHA and support services.</p>
+            <p>Explore KUCCPS, KMTC, HELB, SHA and student support services.</p>
           </div>
         </a>
-      </section>
-
-      <section id="stats" class="section-block">
-        <div class="section-head compact-head">
-          <div>
-            <h2>Live Platform Stats</h2>
-            <p>Quick overview of activity on KUCCPS Assist.</p>
-          </div>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card card">
-            <div class="stat-label">Students Assisted</div>
-            <div id="statBookings" class="stat-value">--</div>
-            <div class="stat-note">Booking requests</div>
-          </div>
-
-          <div class="stat-card card">
-            <div class="stat-label">Testimonials</div>
-            <div id="statTestimonials" class="stat-value">--</div>
-            <div class="stat-note">Student feedback</div>
-          </div>
-
-          <div class="stat-card card">
-            <div class="stat-label">Public Questions</div>
-            <div id="statQuestions" class="stat-value">--</div>
-            <div class="stat-note">Community posts</div>
-          </div>
-
-          <div class="stat-card card">
-            <div class="stat-label">Success Stories</div>
-            <div id="statSuccess" class="stat-value">--</div>
-            <div class="stat-note">Verified outcomes</div>
-          </div>
-        </div>
       </section>
 
       <section class="section-block">
@@ -283,7 +277,7 @@
         <div class="section-head centered-head">
           <div>
             <h2>How It Works</h2>
-            <p>Four simple steps to get support and track progress.</p>
+            <p>Simple, guided and easy to follow from start to finish.</p>
           </div>
         </div>
 
@@ -303,13 +297,13 @@
           <div class="step-card card">
             <div class="step-number">3</div>
             <h3>Upload Documents</h3>
-            <p>Attach result slips, ID, screenshots or other requirements.</p>
+            <p>Attach result slips, ID, screenshots or supporting documents.</p>
           </div>
 
           <div class="step-card card">
             <div class="step-number">4</div>
             <h3>Track Progress</h3>
-            <p>Use your ticket number and phone to follow your application.</p>
+            <p>Use your ticket number and phone to follow updates anytime.</p>
           </div>
         </div>
       </section>
@@ -318,7 +312,7 @@
         <div class="section-head centered-head">
           <div>
             <h2>Why Choose KUCCPS Assist</h2>
-            <p>Clean, guided and student-focused support experience.</p>
+            <p>Built for trust, clarity and a smoother student experience.</p>
           </div>
         </div>
 
@@ -355,24 +349,51 @@
         </div>
       </section>
 
-      <section id="activity" class="section-block">
+      <section id="livePreview" class="section-block">
         <div class="section-head">
           <div>
-            <h2>Live Platform Activity</h2>
-            <p>Recent activity from students using KUCCPS Assist.</p>
+            <h2>Live Platform Preview</h2>
+            <p>Cleaner homepage previews of your live applets and updates.</p>
           </div>
-
-          <button
-            id="refreshActivityBtn"
-            type="button"
-            class="small-refresh-btn"
-          >
-            <i class="fa-solid fa-rotate-right"></i> Refresh
-          </button>
         </div>
 
-        <div class="card section-card">
-          <div id="activityFeed"></div>
+        <div class="preview-sections-grid">
+          <div class="preview-card card">
+            <div class="preview-card-head">
+              <div>
+                <h3><i class="fa-solid fa-bolt"></i> Activity Preview</h3>
+                <p>Recent platform activity.</p>
+              </div>
+              <button
+                id="refreshActivityBtn"
+                type="button"
+                class="small-refresh-btn"
+              >
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+              </button>
+            </div>
+            <div id="activityFeed" class="preview-body compact-feed"></div>
+          </div>
+
+          <div class="preview-card card">
+            <div class="preview-card-head">
+              <div>
+                <h3><i class="fa-solid fa-bullhorn"></i> Latest Updates</h3>
+                <p>Important notices and deadlines.</p>
+              </div>
+              <button
+                id="refreshAnnouncementsBtn"
+                type="button"
+                class="small-refresh-btn"
+              >
+                <i class="fa-solid fa-rotate-right"></i> Refresh
+              </button>
+            </div>
+            <div id="announcementsMsg" class="muted section-msg">
+              Loading updates...
+            </div>
+            <div id="announcementsList" class="preview-body"></div>
+          </div>
         </div>
       </section>
 
@@ -404,7 +425,7 @@
         <div class="section-head">
           <div>
             <h2>Student Testimonials</h2>
-            <p>Real feedback from students we have helped.</p>
+            <p>Public proof that the platform is helping students.</p>
           </div>
 
           <button
@@ -462,8 +483,8 @@
       <section id="successSection" class="section-block">
         <div class="section-head">
           <div>
-            <h2>Student Success Wall</h2>
-            <p>Students successfully assisted through KUCCPS Assist.</p>
+            <h2>Success Wall</h2>
+            <p>Real student wins and approved outcomes.</p>
           </div>
 
           <button
@@ -484,9 +505,7 @@
         <div class="section-head">
           <div>
             <h2>Public Questions</h2>
-            <p>
-              Visitors can ask questions and see approved community messages.
-            </p>
+            <p>Students can ask and learn from approved public messages.</p>
           </div>
 
           <button
@@ -529,31 +548,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-head">
-          <div>
-            <h2>Latest Updates</h2>
-            <p>Deadlines, requirements and important notices.</p>
-          </div>
-
-          <button
-            id="refreshAnnouncementsBtn"
-            type="button"
-            class="small-refresh-btn"
-          >
-            <i class="fa-solid fa-rotate-right"></i> Refresh
-          </button>
-        </div>
-
-        <div class="card section-card">
-          <div id="announcementsMsg" class="muted section-msg">
-            Loading updates...
-          </div>
-
-          <div id="announcementsList" class="resource-list-spacer"></div>
         </div>
       </section>
 
@@ -782,6 +776,7 @@
         announcementsMsg.textContent = "";
 
         announcementsList.innerHTML = rows
+          .slice(0, 3)
           .map((a) => {
             const title = escapeHtml(a.title);
             const content = escapeHtml(a.content);
@@ -1085,16 +1080,22 @@
         align-items: stretch;
       }
 
-      .hero-copy,
-      .hero-panel {
-        padding: 28px;
-      }
-
       .hero-copy {
+        padding: 30px;
         background: linear-gradient(135deg, #ffffff, #eef4ff);
         border: 1px solid var(--border-soft);
         border-radius: 28px;
         box-shadow: var(--shadow-soft);
+      }
+
+      .hero-side {
+        display: grid;
+        gap: 16px;
+      }
+
+      .hero-panel,
+      .hero-preview {
+        padding: 22px;
       }
 
       .hero-pill {
@@ -1117,8 +1118,8 @@
 
       .hero-copy h1 {
         margin: 0;
-        font-size: 46px;
-        line-height: 1.05;
+        font-size: 48px;
+        line-height: 1.03;
         letter-spacing: -0.02em;
       }
 
@@ -1199,12 +1200,6 @@
         font-weight: 700;
       }
 
-      .hero-panel {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
       .hero-panel-top h2 {
         margin: 0 0 10px;
         font-size: 20px;
@@ -1241,6 +1236,50 @@
         cursor: pointer;
         text-align: left;
         font: inherit;
+      }
+
+      .hero-preview {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: white;
+      }
+
+      .preview-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .preview-label {
+        font-size: 13px;
+        font-weight: 800;
+        opacity: 0.9;
+      }
+
+      .preview-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.18);
+      }
+
+      .preview-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .preview-value {
+        font-size: 28px;
+        font-weight: 900;
+      }
+
+      .preview-note {
+        margin-top: 4px;
+        font-size: 13px;
+        opacity: 0.82;
       }
 
       .quick-actions-section {
@@ -1305,14 +1344,12 @@
       }
 
       .section-head h2,
-      .compact-head h2,
       .centered-head h2 {
         margin: 0;
         font-size: 28px;
       }
 
       .section-head p,
-      .compact-head p,
       .centered-head p {
         margin: 6px 0 0;
         color: var(--brand-soft);
@@ -1339,16 +1376,11 @@
         cursor: pointer;
       }
 
-      .stats-grid,
       .services-grid,
       .steps-grid,
       .why-grid {
         display: grid;
         gap: 14px;
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
       .services-grid {
@@ -1363,28 +1395,10 @@
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
 
-      .stat-card,
       .service-card,
       .step-card,
       .why-card {
         padding: 20px;
-      }
-
-      .stat-label {
-        font-size: 13px;
-        color: var(--brand-soft);
-      }
-
-      .stat-value {
-        margin-top: 6px;
-        font-size: 32px;
-        font-weight: 900;
-      }
-
-      .stat-note {
-        margin-top: 6px;
-        font-size: 13px;
-        color: var(--brand-soft);
       }
 
       .service-icon {
@@ -1420,7 +1434,8 @@
       .service-card h3,
       .step-card h3,
       .why-card h3,
-      .contact-card h3 {
+      .contact-card h3,
+      .preview-card-head h3 {
         margin: 0 0 10px;
         font-size: 19px;
       }
@@ -1428,7 +1443,8 @@
       .service-card p,
       .step-card p,
       .why-card p,
-      .contact-copy p {
+      .contact-copy p,
+      .preview-card-head p {
         margin: 0;
         color: var(--brand-soft);
         line-height: 1.6;
@@ -1458,6 +1474,33 @@
         font-size: 24px;
         color: var(--brand-green);
         margin-bottom: 14px;
+      }
+
+      .preview-sections-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .preview-card {
+        padding: 18px;
+      }
+
+      .preview-card-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+      }
+
+      .preview-body {
+        min-height: 120px;
+      }
+
+      .compact-feed > *:nth-child(n + 4) {
+        display: none;
       }
 
       .section-card {
@@ -1733,7 +1776,7 @@
         .services-grid,
         .steps-grid,
         .why-grid,
-        .stats-grid {
+        .preview-sections-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
@@ -1741,10 +1784,7 @@
           grid-template-columns: 1fr;
         }
 
-        .contact-box {
-          grid-template-columns: 1fr;
-        }
-
+        .contact-box,
         .footer-grid {
           grid-template-columns: 1fr 1fr;
         }
@@ -1764,10 +1804,11 @@
         .services-grid,
         .steps-grid,
         .why-grid,
-        .stats-grid,
+        .preview-sections-grid,
         .footer-grid,
         .hero-panel-actions,
-        .form-grid.two-col {
+        .form-grid.two-col,
+        .contact-box {
           grid-template-columns: 1fr;
         }
 
@@ -1779,7 +1820,6 @@
         .track-box h2,
         .contact-copy h2,
         .section-head h2,
-        .compact-head h2,
         .centered-head h2 {
           font-size: 24px;
         }
@@ -1796,10 +1836,12 @@
 
         .hero-copy,
         .hero-panel,
+        .hero-preview,
         .section-card,
         .contact-box,
         .track-box,
-        .final-cta {
+        .final-cta,
+        .preview-card {
           padding: 18px;
         }
 
