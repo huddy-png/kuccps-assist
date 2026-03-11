@@ -215,6 +215,22 @@ function computeVipDepositAmount(servicePrice) {
   return Math.ceil((price * VIP_DEPOSIT_PERCENT) / 100);
 }
 
+function normalizeKenyanPhone(phone = "") {
+  let value = String(phone || "")
+    .trim()
+    .replace(/\s+/g, "");
+
+  if (value.startsWith("+")) {
+    value = value.slice(1);
+  }
+
+  if (value.startsWith("0")) {
+    value = `254${value.slice(1)}`;
+  }
+
+  return value;
+}
+
 async function logActivity(message) {
   try {
     if (!message) return;
@@ -391,26 +407,28 @@ async function startVipCheckout({
   phone,
   serviceName,
 }) {
+  const payload = {
+    bookingId,
+    ticket,
+    amount,
+    email,
+    phone: normalizeKenyanPhone(phone),
+    serviceName,
+  };
+
   const response = await fetch("/api/create-vip-checkout", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      bookingId,
-      ticket,
-      amount,
-      email,
-      phone,
-      serviceName,
-    }),
+    body: JSON.stringify(payload),
   });
 
   let result = {};
   try {
     result = await response.json();
-  } catch {
-    result = {};
+  } catch (parseErr) {
+    throw new Error("Payment server returned an unreadable response.");
   }
 
   if (!response.ok) {
@@ -592,6 +610,7 @@ form.addEventListener("submit", async (e) => {
   clearDraft(getSlug());
 
   if (tier !== "vip") {
+    submitBtn.disabled = false;
     msgEl.textContent = "✅ Submitted! Redirecting to your ticket...";
     window.location.href = `ticket.html?ticket=${encodeURIComponent(booking.ticket)}`;
     return;
@@ -620,6 +639,7 @@ form.addEventListener("submit", async (e) => {
   } catch (vipErr) {
     console.error("VIP payment start error:", vipErr);
 
+    submitBtn.disabled = false;
     msgEl.textContent =
       "✅ VIP booking saved, but payment failed to start: " +
       (vipErr?.message || "Unknown error");
