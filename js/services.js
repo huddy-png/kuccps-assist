@@ -1,6 +1,8 @@
 const contentEl = document.getElementById("servicesContent");
 const msgEl = document.getElementById("servicesMsg");
 
+let allServices = [];
+
 function escapeHtml(str = "") {
   return String(str).replace(
     /[&<>"']/g,
@@ -17,17 +19,18 @@ function escapeHtml(str = "") {
 
 function renderRequirements(reqText = "") {
   const normalized = String(reqText || "").replace(/\\n/g, "\n");
+
   const lines = normalized
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean);
 
   if (!lines.length) {
-    return "<p class='muted'>No requirements added yet.</p>";
+    return "<p class='muted'>No requirements listed.</p>";
   }
 
   return `<ul>${lines
-    .slice(0, 4)
+    .slice(0, 3)
     .map((l) => `<li>${escapeHtml(l)}</li>`)
     .join("")}</ul>`;
 }
@@ -35,74 +38,39 @@ function renderRequirements(reqText = "") {
 function getCategory(serviceName = "", slug = "") {
   const text = `${serviceName} ${slug}`.toLowerCase();
 
-  if (text.includes("kuccps")) return "KUCCPS Services";
+  if (text.includes("kuccps")) return "KUCCPS";
 
   if (
     text.includes("kmtc") ||
-    text.includes("self-sponsored") ||
+    text.includes("tvet") ||
     text.includes("degree")
   ) {
-    return "College & Training";
+    return "Training";
   }
 
-  return "Student Support Services";
+  if (text.includes("helb") || text.includes("kra") || text.includes("sha")) {
+    return "Student Services";
+  }
+
+  return "General";
 }
 
 function getBadge(serviceName = "", slug = "") {
   const text = `${serviceName} ${slug}`.toLowerCase();
 
-  if (text.includes("helb") || text.includes("sha") || text.includes("kra")) {
-    return "Student Service";
-  }
+  if (text.includes("revision")) return "Popular";
+  if (text.includes("transfer")) return "Trending";
+  if (text.includes("helb")) return "Finance";
+  if (text.includes("kra")) return "Registration";
 
-  if (text.includes("revision") || text.includes("transfer")) {
-    return "Popular";
-  }
-
-  if (text.includes("kmtc")) {
-    return "Medical Training";
-  }
-
-  return "Application";
-}
-
-function getHelperText(serviceName = "", slug = "") {
-  const text = `${serviceName} ${slug}`.toLowerCase();
-
-  if (text.includes("revision")) {
-    return "Best for students changing course choices before closure.";
-  }
-
-  if (text.includes("transfer")) {
-    return "Best for students changing institution after placement.";
-  }
-
-  if (text.includes("helb")) {
-    return "Best for funding, loan, appeal, and follow-up support.";
-  }
-
-  if (text.includes("kra")) {
-    return "Best for first-time KRA PIN setup and registration support.";
-  }
-
-  if (text.includes("sha")) {
-    return "Best for account registration and setup assistance.";
-  }
-
-  if (text.includes("kmtc")) {
-    return "Best for students applying to KMTC programmes.";
-  }
-
-  if (text.includes("self-sponsored")) {
-    return "Best for direct degree application outside KUCCPS placement.";
-  }
-
-  return "Best for students who need guided application support.";
+  return "";
 }
 
 function formatPrice(price) {
   const n = Number(price || 0);
-  if (!n) return "Price available on request";
+
+  if (!n) return "Contact";
+
   return `KES ${n.toLocaleString()}`;
 }
 
@@ -113,120 +81,92 @@ function buildStartApplicationUrl(slug = "") {
 
 function renderCard(service) {
   const badge = getBadge(service.name, service.slug);
-  const helper = getHelperText(service.name, service.slug);
   const startUrl = buildStartApplicationUrl(service.slug);
 
   return `
-    <div class="card service-card">
-      <div
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:flex-start;
-          gap:10px;
-          flex-wrap:wrap;
-        "
-      >
-        <h2 style="margin:0; font-size:18px;">${escapeHtml(service.name)}</h2>
-        <span class="badge">${escapeHtml(badge)}</span>
-      </div>
+  <div class="card service-card">
 
-      <p class="muted" style="margin:0;">${escapeHtml(
-        service.description || "",
-      )}</p>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;">
 
-      <div
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:10px;
-          flex-wrap:wrap;
-          padding:10px 12px;
-          border-radius:12px;
-          background:linear-gradient(180deg, #fbfdff, #f7f9ff);
-          border:1px solid rgba(30, 91, 255, 0.12);
-        "
-      >
-        <div>
-          <div style="font-size:12px; color:#64748b; font-weight:700;">
-            Service Fee
-          </div>
-          <div style="font-size:18px; font-weight:900; color:#1e5bff;">
-            ${escapeHtml(formatPrice(service.price))}
-          </div>
-        </div>
-        <div class="muted" style="font-size:12px;">
-          Regular & VIP available
-        </div>
-      </div>
+      <h2 style="margin:0;font-size:18px;">${escapeHtml(service.name)}</h2>
 
-      <div
-        style="
-          border-left: 3px solid rgba(30, 91, 255, 0.22);
-          padding-left: 10px;
-          margin-top: 2px;
-        "
-      >
-        <p class="muted" style="margin:0; font-size:13px;">${escapeHtml(
-          helper,
-        )}</p>
-      </div>
+      ${badge ? `<span class="badge">${escapeHtml(badge)}</span>` : ""}
 
-      <div class="req">
-        <h3>Requirements</h3>
-        ${renderRequirements(service.requirements || "")}
-      </div>
+    </div>
 
-      <div style="margin-top:auto;">
-        <a href="${startUrl}">
-          <button type="button">Start Application</button>
-        </a>
-      </div>
+    <p class="muted">${escapeHtml(service.description || "")}</p>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+
+      <strong style="color:#2563eb;">
+        ${escapeHtml(formatPrice(service.price))}
+      </strong>
+
+      <span class="muted" style="font-size:12px;">
+        Regular / VIP
+      </span>
+
+    </div>
+
+    <div class="req">
+      <h3>Requirements</h3>
+      ${renderRequirements(service.requirements)}
+    </div>
+
+    <div style="margin-top:auto;">
+      <a href="${startUrl}">
+        <button type="button">
+          Start Application
+        </button>
+      </a>
+    </div>
+
+  </div>
+  `;
+}
+
+function renderServices(services) {
+  if (!services.length) {
+    contentEl.innerHTML = `<p class="muted">No services match your search.</p>`;
+    return;
+  }
+
+  contentEl.innerHTML = `
+    <div class="services-grid">
+      ${services.map(renderCard).join("")}
     </div>
   `;
 }
 
-function renderSection(title, services) {
-  return `
-    <section style="margin-top: 18px;">
-      <div
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:flex-end;
-          gap:10px;
-          flex-wrap:wrap;
-          margin-bottom:10px;
-        "
-      >
-        <div>
-          <h2 style="margin:0; font-size:20px;">${escapeHtml(title)}</h2>
-          <p class="muted" style="margin:6px 0 0;">
-            ${escapeHtml(
-              `${services.length} service${services.length === 1 ? "" : "s"} available`,
-            )}
-          </p>
-        </div>
-      </div>
+function createSearchBar() {
+  const searchBox = document.createElement("input");
 
-      <div
-        style="
-          display:grid;
-          grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
-          gap:18px;
-          align-items:stretch;
-        "
-      >
-        ${services.map(renderCard).join("")}
-      </div>
-    </section>
+  searchBox.placeholder = "Search services...";
+  searchBox.className = "service-search";
+
+  searchBox.style.cssText = `
+  width:100%;
+  padding:12px 14px;
+  margin-bottom:20px;
+  border-radius:10px;
+  border:1px solid #e2e8f0;
   `;
+
+  searchBox.addEventListener("input", () => {
+    const q = searchBox.value.toLowerCase();
+
+    const filtered = allServices.filter((s) =>
+      `${s.name} ${s.slug} ${s.description}`.toLowerCase().includes(q),
+    );
+
+    renderServices(filtered);
+  });
+
+  contentEl.before(searchBox);
 }
 
 async function loadServices() {
   msgEl.textContent = "Loading services...";
-  contentEl.innerHTML = "";
 
   const { data, error } = await window.supabaseClient
     .from("services")
@@ -234,8 +174,7 @@ async function loadServices() {
       "id,name,slug,description,requirements,is_active,sort_order,created_at,price",
     )
     .eq("is_active", true)
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: true });
+    .order("sort_order", { ascending: true });
 
   if (error) {
     msgEl.textContent = `Error: ${error.message}`;
@@ -243,37 +182,17 @@ async function loadServices() {
   }
 
   if (!data || data.length === 0) {
-    msgEl.textContent = "No services available yet.";
+    msgEl.textContent = "No services available.";
     return;
   }
 
-  const grouped = {
-    "KUCCPS Services": [],
-    "College & Training": [],
-    "Student Support Services": [],
-  };
+  allServices = data;
 
-  data.forEach((service) => {
-    const category = getCategory(service.name, service.slug);
-    grouped[category].push(service);
-  });
+  msgEl.textContent = `${data.length} services available`;
 
-  msgEl.textContent = `${data.length} service${data.length === 1 ? "" : "s"} available.`;
+  createSearchBar();
 
-  contentEl.innerHTML = [
-    grouped["KUCCPS Services"].length
-      ? renderSection("KUCCPS Services", grouped["KUCCPS Services"])
-      : "",
-    grouped["College & Training"].length
-      ? renderSection("College & Training", grouped["College & Training"])
-      : "",
-    grouped["Student Support Services"].length
-      ? renderSection(
-          "Student Support Services",
-          grouped["Student Support Services"],
-        )
-      : "",
-  ].join("");
+  renderServices(data);
 }
 
 loadServices();

@@ -815,3 +815,20 @@ select:focus-visible {
 #servicesContent .service-card {
   height: 100%;
 }
+#servicesContent {
+  display: block;
+  margin-top: 16px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -138,7 +138,8 @@
 
         <div id="servicesMsg" class="muted">Loading services...</div>
 
-        <div id="servicesContent" class="services-grid"></div>
+        <!-- IMPORTANT: no grid class here -->
+        <div id="servicesContent"></div>
       </section>
 
       <section class="before-start">
@@ -303,13 +304,6 @@
         margin-bottom: 26px;
       }
 
-      .services-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-        margin-top: 16px;
-      }
-
       .before-start {
         background: white;
         border-radius: 16px;
@@ -350,10 +344,6 @@
 
         .service-stats {
           grid-template-columns: 1fr 1fr;
-        }
-
-        .services-grid {
-          grid-template-columns: 1fr;
         }
       }
     </style>
