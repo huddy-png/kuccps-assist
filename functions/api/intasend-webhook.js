@@ -1,111 +1,157 @@
 export async function onRequestPost(context) {
   try {
     const { request, env } = context;
-    const payload = await request.json();
 
-    const SUPABASE_URL = env.SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = env.SUPABASE_SERVICE_ROLE_KEY;
+    const bodyText = await request.text();
 
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+    let payload = {};
+    try {
+      payload = JSON.parse(bodyText);
+    } catch {
       return Response.json(
-        { error: "Missing Supabase environment variables" },
+        { ok: false, error: "Invalid JSON payload" },
+        { status: 400 },
+      );
+    }
+
+    const expectedChallenge = env.INTASEND_WEBHOOK_CHALLENGE || "";
+    const incomingChallenge =
+      payload.challenge ||
+      payload.webhook_challenge ||
+      payload.challenge_code ||
+      "";
+
+    if (
+      expectedChallenge &&
+      incomingChallenge &&
+      incomingChallenge !== expectedChallenge
+    ) {
+      return Response.json(
+        { ok: false, error: "Webhook challenge mismatch" },
+        { status: 403 },
+      );
+    }
+
+    const invoice = payload.invoice || {};
+    const collection = payload.collection || {};
+    const transaction = payload.transaction || {};
+
+    const ticket =
+      invoice.api_ref ||
+      collection.api_ref ||
+      transaction.api_ref ||
+      payload.api_ref ||
+      null;
+
+    const statusRaw =
+      invoice.state ||
+      collection.state ||
+      transaction.state ||
+      payload.state ||
+      payload.status ||
+      "";
+
+    const status = String(statusRaw).toUpperCase();
+
+    const trackingRef =
+      transaction.tracking_id ||
+      collection.tracking_id ||
+      payload.tracking_id ||
+      transaction.reference ||
+      collection.reference ||
+      payload.reference ||
+      payload.id ||
+      null;
+
+    if (!ticket) {
+      return Response.json(
+        { ok: false, error: "Missing ticket/api_ref in webhook payload" },
+        { status: 400 },
+      );
+    }
+
+    let payment_status = "pending";
+    let deposit_paid = false;
+
+    if (["COMPLETE", "COMPLETED", "SUCCESS", "PAID"].includes(status)) {
+      payment_status = "paid";
+      deposit_paid = true;
+    } else if (["FAILED", "CANCELLED", "CANCELED"].includes(status)) {
+      payment_status = "failed";
+      deposit_paid = false;
+    }
+
+    const supabaseUrl = env.SUPABASE_URL;
+    const supabaseServiceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseServiceRoleKey) {
+      return Response.json(
+        { ok: false, error: "Missing Supabase server environment variables" },
         { status: 500 },
       );
     }
 
-    const invoiceId =
-      payload.invoice_id || payload.invoice?.invoice_id || payload.id || null;
-
-    const apiRef = payload.api_ref || payload.invoice?.api_ref || null;
-
-    const stateRaw =
-      payload.state ||
-      payload.status ||
-      payload.invoice?.state ||
-      payload.invoice?.status ||
-      "";
-
-    const state = String(stateRaw).toLowerCase();
-
-    let mappedStatus = "pending";
-    let markPaid = false;
-
-    if (
-      state.includes("complete") ||
-      state.includes("success") ||
-      state.includes("paid")
-    ) {
-      mappedStatus = "paid";
-      markPaid = true;
-    } else if (
-      state.includes("fail") ||
-      state.includes("cancel") ||
-      state.includes("declin")
-    ) {
-      mappedStatus = "failed";
-    }
-
-    if (invoiceId) {
-      await fetch(
-        `${SUPABASE_URL}/rest/v1/booking_payments?invoice_id=eq.${encodeURIComponent(invoiceId)}`,
-        {
-          method: "PATCH",
-          headers: {
-            apikey: SUPABASE_SERVICE_ROLE_KEY,
-            Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-            "Content-Type": "application/json",
-            Prefer: "return=minimal",
-          },
-          body: JSON.stringify({
-            status: mappedStatus,
-            reference:
-              payload.reference ||
-              payload.tracking_id ||
-              payload.checkout_id ||
-              null,
-            raw_payload: payload,
-            updated_at: new Date().toISOString(),
-          }),
+    const updateRes = await fetch(
+      `${supabaseUrl}/rest/v1/bookings?ticket=eq.${encodeURIComponent(ticket)}`,
+      {
+        method: "PATCH",
+        headers: {
+          apikey: supabaseServiceRoleKey,
+          Authorization: `Bearer ${supabaseServiceRoleKey}`,
+          "Content-Type": "application/json",
+          Prefer: "return=representation",
         },
+        body: JSON.stringify({
+          payment_status,
+          deposit_paid,
+          deposit_reference: trackingRef,
+        }),
+      },
+    );
+
+    const updateText = await updateRes.text();
+
+    if (!updateRes.ok) {
+      return Response.json(
+        {
+          ok: false,
+          error: "Failed to update booking in Supabase",
+          supabase_response: updateText,
+        },
+        { status: 500 },
       );
     }
 
-    if (markPaid && apiRef) {
-      await fetch(
-        `${SUPABASE_URL}/rest/v1/bookings?ticket=eq.${encodeURIComponent(apiRef)}`,
-        {
-          method: "PATCH",
-          headers: {
-            apikey: SUPABASE_SERVICE_ROLE_KEY,
-            Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-            "Content-Type": "application/json",
-            Prefer: "return=minimal",
-          },
-          body: JSON.stringify({
-            deposit_paid: true,
-            payment_status: "paid",
-            payment_reference:
-              payload.reference ||
-              payload.tracking_id ||
-              payload.checkout_id ||
-              null,
-            payment_paid_at: new Date().toISOString(),
-          }),
-        },
-      );
-    }
-
-    return new Response("Webhook received successfully", { status: 200 });
-  } catch (error) {
+    return Response.json({
+      ok: true,
+      ticket,
+      payment_status,
+      deposit_paid,
+      deposit_reference: trackingRef,
+    });
+  } catch (err) {
     return Response.json(
       {
-        error: error.message || "Webhook processing failed",
+        ok: false,
+        error: err.message || "Unexpected webhook error",
       },
       { status: 500 },
     );
   }
 }
 
+export async function onRequestGet(context) {
+  const challenge = context.env.INTASEND_WEBHOOK_CHALLENGE || "";
+  return Response.json({
+    ok: true,
+    message: "IntaSend webhook endpoint is live",
+    challenge,
+  });
+}
+
 export async function onRequest() {
-  return new Response("Method not allowed", { status: 405 });
+  return Response.json(
+    { ok: false, error: "Method not allowed" },
+    { status: 405 },
+  );
 }
