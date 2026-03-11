@@ -17,13 +17,6 @@ export async function onRequestPost(context) {
       );
     }
 
-    if (amount <= 0) {
-      return Response.json(
-        { error: "Invalid payment amount" },
-        { status: 400 },
-      );
-    }
-
     phone = String(phone).trim().replace(/\s+/g, "");
 
     if (phone.startsWith("+")) {
@@ -35,11 +28,12 @@ export async function onRequestPost(context) {
     }
 
     const INTASEND_SECRET_KEY = env.INTASEND_SECRET_KEY;
+    const INTASEND_PUBLISHABLE_KEY = env.INTASEND_PUBLISHABLE_KEY;
     const SITE_URL = env.SITE_URL || "https://kuccpsassist.online";
 
-    if (!INTASEND_SECRET_KEY) {
+    if (!INTASEND_SECRET_KEY || !INTASEND_PUBLISHABLE_KEY) {
       return Response.json(
-        { error: "Missing IntaSend secret key" },
+        { error: "Missing IntaSend environment variables" },
         { status: 500 },
       );
     }
@@ -53,10 +47,11 @@ export async function onRequestPost(context) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount,
+          public_key: INTASEND_PUBLISHABLE_KEY,
+          amount: amount,
           currency: "KES",
           api_ref: ticket,
-          email,
+          email: email,
           phone_number: phone,
           redirect_url: `${SITE_URL}/ticket.html?ticket=${encodeURIComponent(ticket)}`,
           comment: `VIP deposit for ${serviceName}`,
@@ -64,13 +59,16 @@ export async function onRequestPost(context) {
       },
     );
 
-    const rawText = await intasendRes.text();
+    const text = await intasendRes.text();
 
     let result = {};
     try {
-      result = rawText ? JSON.parse(rawText) : {};
+      result = JSON.parse(text);
     } catch {
-      result = { raw: rawText };
+      return Response.json(
+        { error: text || "Payment API returned invalid response" },
+        { status: 400 },
+      );
     }
 
     if (!intasendRes.ok) {
@@ -80,23 +78,18 @@ export async function onRequestPost(context) {
             result?.detail ||
             result?.message ||
             result?.error ||
-            result?.raw ||
             "Failed to create checkout",
-          raw: result,
         },
         { status: 400 },
       );
     }
 
     const paymentUrl =
-      result?.url || result?.checkout_url || result?.hosted_url || null;
+      result.url || result.checkout_url || result.hosted_url || null;
 
     if (!paymentUrl) {
       return Response.json(
-        {
-          error: "Payment link was not returned by IntaSend",
-          raw: result,
-        },
+        { error: "Payment link not returned by IntaSend" },
         { status: 500 },
       );
     }
@@ -107,9 +100,7 @@ export async function onRequestPost(context) {
     });
   } catch (err) {
     return Response.json(
-      {
-        error: err.message || "Unexpected server error",
-      },
+      { error: err.message || "Unexpected server error" },
       { status: 500 },
     );
   }
@@ -118,4 +109,3 @@ export async function onRequestPost(context) {
 export async function onRequest() {
   return Response.json({ error: "Method not allowed" }, { status: 405 });
 }
-//final final
