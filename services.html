@@ -3,8 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Services | KUCCPS Assist</title>
+
     <link rel="stylesheet" href="css/style.css" />
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -12,252 +15,345 @@
   </head>
 
   <body>
-    <div class="container">
-      <header
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 14px;
-          flex-wrap: wrap;
-        "
-      >
-        <div style="min-width: 260px; flex: 1">
-          <div
-            style="
-              display: inline-flex;
-              align-items: center;
-              gap: 8px;
-              padding: 6px 10px;
-              border-radius: 999px;
-              background: rgba(30, 91, 255, 0.08);
-              color: #1e5bff;
-              font-size: 12px;
-              font-weight: 800;
-              margin-bottom: 10px;
-            "
-          >
+    <header class="site-header">
+      <div class="site-header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+
+          <div class="brand-text">
+            <strong>KUCCPS Assist</strong>
+            <span>Student Application Support</span>
+          </div>
+        </a>
+
+        <nav class="desktop-nav">
+          <a href="index.html">Home</a>
+          <a href="services.html">Services</a>
+          <a href="tracking.html">Track</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero-head">
+        <div>
+          <div class="pill">
             <i class="fa-solid fa-briefcase"></i>
             Service Directory
           </div>
 
-          <h1 style="margin: 0">Services</h1>
-          <p class="muted" style="margin: 8px 0 0; max-width: 720px">
-            Choose the service you need, review the requirements, then start
-            your application securely.
+          <h1>Available Services</h1>
+
+          <p class="muted">
+            Choose a service below, review requirements, then start your
+            application securely.
           </p>
         </div>
 
-        <nav class="actions" style="align-items: center">
-          <a href="index.html">
-            <button type="button">
-              <i class="fa-solid fa-house"></i> Home
-            </button>
+        <div class="hero-actions">
+          <a href="tracking.html" class="hero-btn hero-btn-secondary">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Track Application
           </a>
 
-          <a href="tracking.html">
-            <button type="button">
-              <i class="fa-solid fa-magnifying-glass"></i> Track Application
-            </button>
+          <a href="index.html" class="hero-btn hero-btn-primary">
+            <i class="fa-solid fa-house"></i>
+            Back Home
           </a>
+        </div>
+      </section>
 
-          <a href="login.html">
-            <button type="button">
-              <i class="fa-solid fa-right-to-bracket"></i> Login
-            </button>
-          </a>
-        </nav>
-      </header>
+      <section class="service-info-grid">
+        <div class="info-card">
+          <i class="fa-solid fa-list-check"></i>
 
-      <main style="margin-top: 18px">
-        <section class="card">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 20px">
-                <i class="fa-solid fa-layer-group"></i> Available Services
-              </h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Services are grouped below to make selection easier.
-              </p>
-            </div>
+          <h3>How it works</h3>
 
-            <div
-              class="badge"
-              style="
-                background: rgba(30, 91, 255, 0.08);
-                color: #1e5bff;
-                border: 1px solid rgba(30, 91, 255, 0.14);
-              "
-            >
-              <i class="fa-solid fa-shield-halved"></i>
-              Secure process
-            </div>
-          </div>
+          <p>
+            Choose a service, submit your details, upload documents and receive
+            a ticket number for tracking.
+          </p>
+        </div>
 
-          <div
-            class="req"
-            style="
-              margin-top: 14px;
-              display: grid;
-              grid-template-columns: repeat(3, minmax(0, 1fr));
-              gap: 12px;
-            "
-          >
-            <div style="margin: 0">
-              <h3><i class="fa-solid fa-list-check"></i> How it works</h3>
-              <p class="muted" style="margin: 0">
-                Choose a service, submit your details, upload documents, and get
-                a ticket number for tracking.
-              </p>
-            </div>
+        <div class="info-card">
+          <i class="fa-solid fa-star"></i>
 
-            <div style="margin: 0">
-              <h3><i class="fa-solid fa-star"></i> VIP Support</h3>
-              <p class="muted" style="margin: 0">
-                VIP requests are prioritized and may require a 30% deposit
-                before processing starts.
-              </p>
-            </div>
+          <h3>VIP Support</h3>
 
-            <div style="margin: 0">
-              <h3><i class="fa-solid fa-ticket"></i> Tracking</h3>
-              <p class="muted" style="margin: 0">
-                After submission, track progress using your ticket number and
-                phone number.
-              </p>
-            </div>
-          </div>
+          <p>
+            VIP requests are prioritized and may require a 30% deposit before
+            processing begins.
+          </p>
+        </div>
 
-          <div
-            style="
-              margin-top: 14px;
-              display: grid;
-              grid-template-columns: repeat(4, minmax(0, 1fr));
-              gap: 12px;
-            "
-          >
-            <div class="card" style="padding: 14px">
-              <p class="muted" style="margin: 0 0 4px">Support Areas</p>
-              <p style="margin: 0; font-weight: 900; font-size: 22px">11+</p>
-              <p class="muted" style="margin: 4px 0 0; font-size: 13px">
-                Services available
-              </p>
-            </div>
+        <div class="info-card">
+          <i class="fa-solid fa-ticket"></i>
 
-            <div class="card" style="padding: 14px">
-              <p class="muted" style="margin: 0 0 4px">Submission Flow</p>
-              <p style="margin: 0; font-weight: 900; font-size: 22px">Simple</p>
-              <p class="muted" style="margin: 4px 0 0; font-size: 13px">
-                Choose, submit, track
-              </p>
-            </div>
+          <h3>Tracking</h3>
 
-            <div class="card" style="padding: 14px">
-              <p class="muted" style="margin: 0 0 4px">Priority Option</p>
-              <p style="margin: 0; font-weight: 900; font-size: 22px">VIP</p>
-              <p class="muted" style="margin: 4px 0 0; font-size: 13px">
-                Faster handling
-              </p>
-            </div>
+          <p>
+            Track the progress of your request anytime using your ticket number
+            and phone number.
+          </p>
+        </div>
+      </section>
 
-            <div class="card" style="padding: 14px">
-              <p class="muted" style="margin: 0 0 4px">Tracking</p>
-              <p style="margin: 0; font-weight: 900; font-size: 22px">24/7</p>
-              <p class="muted" style="margin: 4px 0 0; font-size: 13px">
-                Ticket based updates
-              </p>
-            </div>
-          </div>
+      <section class="service-stats">
+        <div class="stat-card">
+          <p class="muted">Support Areas</p>
+          <h2>11+</h2>
+          <span class="muted">Services available</span>
+        </div>
 
-          <div id="servicesMsg" class="muted" style="margin-top: 16px">
-            Loading services...
-          </div>
+        <div class="stat-card">
+          <p class="muted">Submission Flow</p>
+          <h2>Simple</h2>
+          <span class="muted">Choose → Submit → Track</span>
+        </div>
 
-          <div id="servicesContent" style="margin-top: 14px"></div>
-        </section>
+        <div class="stat-card">
+          <p class="muted">Priority Option</p>
+          <h2>VIP</h2>
+          <span class="muted">Faster handling</span>
+        </div>
 
-        <section style="margin-top: 14px">
-          <div class="req">
-            <h3><i class="fa-solid fa-circle-info"></i> Before you begin</h3>
-            <ul>
-              <li>
-                Use the correct phone number because it is used for tracking.
-              </li>
-              <li>Prepare required documents before opening the form.</li>
-              <li>
-                For services with course choices, prepare at least 3 options if
-                possible.
-              </li>
-              <li>
-                If you choose VIP, payment is handled after the booking is
-                saved.
-              </li>
-            </ul>
-          </div>
-        </section>
-      </main>
+        <div class="stat-card">
+          <p class="muted">Tracking</p>
+          <h2>24/7</h2>
+          <span class="muted">Ticket based updates</span>
+        </div>
+      </section>
 
-      <footer style="margin-top: 18px">
-        <div
-          class="card"
-          style="
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            align-items: center;
-          "
-        >
+      <section class="services-section">
+        <div class="section-title">
+          <h2>Services</h2>
+
+          <p class="muted">
+            Select the service that matches your current need.
+          </p>
+        </div>
+
+        <div id="servicesMsg" class="muted">Loading services...</div>
+
+        <div id="servicesContent" class="services-grid"></div>
+      </section>
+
+      <section class="before-start">
+        <h3>
+          <i class="fa-solid fa-circle-info"></i>
+          Before you begin
+        </h3>
+
+        <ul>
+          <li>
+            Use the correct phone number because it will be used for tracking.
+          </li>
+
+          <li>
+            Prepare all required documents before opening the application form.
+          </li>
+
+          <li>For course applications, prepare at least 3 course options.</li>
+
+          <li>VIP services require a 30% deposit before processing begins.</li>
+        </ul>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-inner">
           <div>
-            <h3 style="margin: 0">Need help choosing a service?</h3>
-            <p class="muted" style="margin: 6px 0 0">
-              Start with the service that matches your current application need.
+            <h3>KUCCPS Assist</h3>
+
+            <p class="muted">
+              Student application support platform for KUCCPS, TVET, KMTC, HELB
+              / HEF and student services.
             </p>
           </div>
 
-          <div class="actions">
-            <a href="index.html">
-              <button type="button">
-                <i class="fa-solid fa-house"></i> Back Home
-              </button>
+          <div class="footer-actions">
+            <a href="index.html" class="hero-btn hero-btn-secondary">
+              <i class="fa-solid fa-house"></i>
+              Home
             </a>
-            <a href="services.html">
-              <button type="button">
-                <i class="fa-solid fa-rotate-right"></i> Refresh Services
-              </button>
+
+            <a href="services.html" class="hero-btn hero-btn-primary">
+              <i class="fa-solid fa-rotate-right"></i>
+              Refresh
             </a>
           </div>
         </div>
       </footer>
-    </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
     <script src="js/supabase.js"></script>
+
     <script src="js/services.js"></script>
 
     <style>
-      @media (max-width: 900px) {
-        .req[style*="grid-template-columns: repeat(3"] {
-          grid-template-columns: 1fr !important;
-        }
-
-        section div[style*="grid-template-columns: repeat(4"] {
-          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        }
+      body {
+        margin: 0;
+        background: #f8fafc;
+        font-family: system-ui;
       }
 
-      @media (max-width: 700px) {
-        section div[style*="grid-template-columns: repeat(4"] {
-          grid-template-columns: 1fr !important;
+      .page-shell {
+        max-width: 1200px;
+        margin: auto;
+        padding: 30px 20px;
+      }
+
+      .hero-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .hero-head h1 {
+        margin: 0;
+        font-size: 36px;
+      }
+
+      .pill {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #2563eb;
+        font-size: 12px;
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .hero-btn {
+        padding: 12px 18px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .hero-btn-primary {
+        background: #2563eb;
+        color: white;
+      }
+
+      .hero-btn-secondary {
+        background: white;
+        border: 1px solid #e2e8f0;
+        color: #2563eb;
+      }
+
+      .service-info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 26px;
+      }
+
+      .info-card {
+        background: white;
+        padding: 18px;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .info-card i {
+        font-size: 20px;
+        color: #2563eb;
+        margin-bottom: 10px;
+      }
+
+      .service-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 18px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .stat-card h2 {
+        margin: 4px 0;
+      }
+
+      .services-section {
+        margin-bottom: 26px;
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .before-start {
+        background: white;
+        border-radius: 16px;
+        padding: 18px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .site-footer {
+        margin-top: 30px;
+      }
+
+      .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+      }
+
+      .footer-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .muted {
+        color: #64748b;
+      }
+
+      @media (max-width: 900px) {
+        .service-info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .service-stats {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .services-grid {
+          grid-template-columns: 1fr;
         }
       }
     </style>
