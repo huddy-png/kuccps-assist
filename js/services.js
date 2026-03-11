@@ -208,7 +208,7 @@ function renderSection(title, services) {
         </div>
       </div>
 
-      <div class="grid">
+      <div class="services-grid">
         ${services.map(renderCard).join("")}
       </div>
     </section>
