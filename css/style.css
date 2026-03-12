@@ -666,7 +666,11 @@ select:focus-visible {
   background: rgba(37, 99, 235, 0.2);
 }
 
-/* ---------- Admin helpers ---------- */
+/* ---------- Admin page ---------- */
+.admin-page {
+  overflow-x: hidden;
+}
+
 .admin-header {
   display: flex;
   justify-content: space-between;
@@ -676,6 +680,11 @@ select:focus-visible {
   margin-bottom: 20px;
 }
 
+.admin-header-copy {
+  min-width: 0;
+  flex: 1;
+}
+
 .admin-tags {
   display: flex;
   gap: 8px;
@@ -683,15 +692,32 @@ select:focus-visible {
   margin-top: 10px;
 }
 
+.admin-status-line {
+  margin-top: 10px;
+}
+
 .admin-grid {
   display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
   gap: 16px;
   margin-top: 16px;
+  align-items: start;
 }
 
 .admin-section {
   margin-top: 20px;
+}
+
+.admin-panel {
+  overflow: hidden;
+}
+
+.admin-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .admin-form-grid {
@@ -699,6 +725,38 @@ select:focus-visible {
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-top: 14px;
+}
+
+.admin-field {
+  min-width: 0;
+}
+
+.admin-field-full {
+  grid-column: 1 / -1;
+}
+
+.admin-inline-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: end;
+}
+
+.admin-inline-options button {
+  width: auto;
+}
+
+.admin-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: 700;
+}
+
+.admin-check input {
+  width: auto;
+  margin: 0;
 }
 
 .admin-actions-row {
@@ -716,11 +774,92 @@ select:focus-visible {
   margin-top: 16px;
 }
 
+.admin-help-text {
+  margin-top: 6px;
+}
+
+.admin-bookings-grid {
+  margin-top: 18px;
+}
+
+.admin-footer {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.admin-tips-card {
+  margin-top: 0;
+}
+
 .filter-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr minmax(0, 2fr);
   gap: 12px;
   margin-top: 14px;
+}
+
+.admin-search-field {
+  grid-column: auto;
+}
+
+/* cards rendered by admin js */
+.admin-render-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-render-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.admin-render-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.admin-render-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.admin-render-text {
+  white-space: pre-wrap;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.admin-render-footnote {
+  margin-top: 12px;
+  font-size: 12px;
+}
+
+.admin-render-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.admin-render-actions button,
+.admin-render-actions a {
+  flex: 1 1 calc(50% - 5px);
+  min-width: 140px;
+}
+
+.admin-render-actions a button {
+  width: 100%;
+}
+
+.admin-edit-box {
+  margin-top: 12px;
 }
 
 /* ---------- Responsive ---------- */
@@ -757,7 +896,6 @@ select:focus-visible {
     grid-template-columns: 1fr !important;
   }
 
-  /* public page full-width action buttons */
   .hero-actions > a,
   .hero-actions > button,
   .form-actions > a,
@@ -779,61 +917,32 @@ select:focus-visible {
 
   .admin-header .actions,
   .admin-actions-row,
-  #annList .actions,
-  #resList .actions,
-  #tesList .actions,
-  #qList .actions,
-  #bookingsList .actions {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-    align-items: stretch !important;
+  .admin-inline-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: stretch;
   }
 
   .admin-header .actions > a,
   .admin-header .actions > button,
   .admin-actions-row > a,
   .admin-actions-row > button,
-  #annList .actions > a,
-  #annList .actions > button,
-  #resList .actions > a,
-  #resList .actions > button,
-  #tesList .actions > a,
-  #tesList .actions > button,
-  #qList .actions > a,
-  #qList .actions > button,
-  #bookingsList .actions > a,
-  #bookingsList .actions > button,
-  .ann-action-wrap > button,
-  #resList .card button[data-res-action] {
+  .admin-inline-options > button,
+  .admin-render-actions > a,
+  .admin-render-actions > button {
     width: auto !important;
-    flex: 1 1 calc(50% - 8px);
+    flex: 1 1 calc(50% - 5px);
     min-width: 140px;
   }
 
-  #annList .card > div:first-child,
-  #resList .card > div:first-child,
-  #tesList .card > div:first-child,
-  #qList .card > div:first-child,
-  #bookingsList .card > div:first-child {
-    flex-direction: column !important;
-    align-items: flex-start !important;
+  .admin-render-top {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  #annList .card,
-  #resList .card,
-  #tesList .card,
-  #qList .card,
-  #bookingsList .card {
-    overflow: hidden;
-  }
-
-  #annList [style*="grid-template-columns"],
-  #resList [style*="grid-template-columns"],
-  #tesList [style*="grid-template-columns"],
-  #qList [style*="grid-template-columns"],
-  #bookingsList [style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
+  .admin-render-actions {
+    width: 100%;
   }
 }
 
@@ -905,6 +1014,25 @@ select:focus-visible {
   .back-to-top-btn {
     right: 14px;
     bottom: 78px;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-header .actions > a,
+  .admin-header .actions > button,
+  .admin-actions-row > a,
+  .admin-actions-row > button,
+  .admin-inline-options > button,
+  .admin-render-actions > a,
+  .admin-render-actions > button {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .admin-render-actions button,
+  .admin-render-actions a {
+    flex: 1 1 100%;
+    min-width: 100%;
   }
 }
 

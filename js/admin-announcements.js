@@ -35,9 +35,9 @@ function setBusy(state) {
   busy = state;
   annCreateBtn.disabled = state;
   annRefreshBtn.disabled = state;
-  annList
-    .querySelectorAll("button[data-action]")
-    .forEach((b) => (b.disabled = state));
+  annList.querySelectorAll("button[data-action]").forEach((b) => {
+    b.disabled = state;
+  });
 }
 
 function setMsg(text, type = "info") {
@@ -48,14 +48,7 @@ function setMsg(text, type = "info") {
 
 function buildEditForm(a) {
   return `
-    <div
-      class="card"
-      style="
-        margin-top:12px;
-        border:1px dashed rgba(2,6,23,0.18);
-        background:#fff;
-      "
-    >
+    <div class="card admin-edit-box" style="border:1px dashed rgba(2,6,23,0.18); background:#fff;">
       <h3 style="margin:0 0 8px;">Editing: ${esc(a.title)}</h3>
 
       <div style="display:grid; gap:10px;">
@@ -69,14 +62,7 @@ function buildEditForm(a) {
           <textarea id="editContent-${a.id}" rows="4">${esc(a.content)}</textarea>
         </div>
 
-        <div
-          style="
-            display:flex;
-            gap:10px;
-            flex-wrap:wrap;
-            margin-top:4px;
-          "
-        >
+        <div class="admin-render-actions" style="margin-top:4px;">
           <button data-action="save_edit" data-id="${a.id}" type="button">Save</button>
           <button data-action="cancel_edit" data-id="${a.id}" type="button">Cancel</button>
         </div>
@@ -90,32 +76,10 @@ function announcementCard(a) {
   const bg = a.is_highlight ? "rgba(30, 91, 255, 0.06)" : "#fff";
 
   return `
-    <div
-      class="card"
-      style="
-        background:${bg};
-        border-color:rgba(2,6,23,0.10);
-      "
-    >
-      <div
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:flex-start;
-          gap:14px;
-          flex-wrap:wrap;
-        "
-      >
-        <div style="flex:1; min-width:0;">
-          <div
-            style="
-              display:flex;
-              gap:8px;
-              align-items:center;
-              flex-wrap:wrap;
-              margin-bottom:8px;
-            "
-          >
+    <div class="card admin-render-card" style="background:${bg}; border-color:rgba(2,6,23,0.10);">
+      <div class="admin-render-top">
+        <div class="admin-render-body">
+          <div class="admin-render-meta">
             ${a.is_highlight ? `<span class="badge">Highlighted</span>` : ""}
             <span
               class="badge"
@@ -131,15 +95,9 @@ function announcementCard(a) {
 
           <h3 style="margin:0 0 8px;">${esc(a.title)}</h3>
 
-          <div
-            style="
-              white-space:pre-wrap;
-              line-height:1.65;
-              word-break:break-word;
-            "
-          >${esc(a.content)}</div>
+          <div class="admin-render-text">${esc(a.content)}</div>
 
-          <p class="muted" style="margin-top:12px; font-size:12px;">
+          <p class="muted admin-render-footnote">
             Created: ${esc(fmt(a.created_at))}
             ${a.updated_at ? `<br>Updated: ${esc(fmt(a.updated_at))}` : ""}
           </p>
@@ -147,16 +105,7 @@ function announcementCard(a) {
           <div id="editBox-${a.id}"></div>
         </div>
 
-        <div
-          class="ann-action-wrap"
-          style="
-            display:flex;
-            flex-wrap:wrap;
-            gap:10px;
-            width:100%;
-            margin-top:2px;
-          "
-        >
+        <div class="admin-render-actions">
           <button data-action="toggle_active" data-id="${a.id}" type="button">
             ${a.is_active ? "Hide" : "Make Active"}
           </button>
@@ -196,7 +145,6 @@ async function loadAnnouncements() {
   }
 
   setMsg("");
-
   annList.innerHTML = data.map(announcementCard).join("");
 
   annList.querySelectorAll("button[data-action]").forEach((btn) => {

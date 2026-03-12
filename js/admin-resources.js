@@ -57,26 +57,10 @@ function resourceCard(r) {
   const fileLink = r.file_url || "#";
 
   return `
-    <div class="card">
-      <div
-        style="
-          display:flex;
-          justify-content:space-between;
-          align-items:flex-start;
-          gap:14px;
-          flex-wrap:wrap;
-        "
-      >
-        <div style="flex:1; min-width:0;">
-          <div
-            style="
-              display:flex;
-              gap:8px;
-              align-items:center;
-              flex-wrap:wrap;
-              margin-bottom:8px;
-            "
-          >
+    <div class="card admin-render-card">
+      <div class="admin-render-top">
+        <div class="admin-render-body">
+          <div class="admin-render-meta">
             <span
               class="badge"
               style="
@@ -95,31 +79,18 @@ function resourceCard(r) {
             ${escRes(r.description || "No description")}
           </p>
 
-          <p class="muted" style="font-size:12px; margin:0 0 12px;">
+          <p class="muted admin-render-footnote">
             Uploaded: ${escRes(fmtResDate(r.created_at))}
           </p>
 
-          <div
-            style="
-              display:flex;
-              gap:10px;
-              flex-wrap:wrap;
-            "
-          >
+          <div class="admin-render-actions" style="margin-top:12px;">
             <a href="${fileLink}" target="_blank" rel="noopener">
               <button type="button">Open File</button>
             </a>
           </div>
         </div>
 
-        <div
-          style="
-            display:flex;
-            flex-wrap:wrap;
-            gap:10px;
-            width:100%;
-          "
-        >
+        <div class="admin-render-actions">
           <button data-res-action="toggle_active" data-id="${r.id}" type="button">
             ${r.is_active ? "Hide" : "Make Active"}
           </button>
