@@ -1,13 +1,27 @@
 const adminMsg = document.getElementById("adminMsg");
 const bookingsList = document.getElementById("bookingsList");
 const logoutBtn = document.getElementById("logoutBtn");
+const bookingSummaryBar = document.getElementById("bookingSummaryBar");
 
 const statusFilter = document.getElementById("statusFilter");
 const tierFilter = document.getElementById("tierFilter");
 const searchInput = document.getElementById("searchInput");
 const refreshBtn = document.getElementById("refreshBtn");
 
-function esc(s = "") {
+const heroRefreshBtn = document.getElementById("heroRefreshBtn");
+const jumpToBookingsBtn = document.getElementById("jumpToBookingsBtn");
+const jumpToAnnouncementsBtn = document.getElementById(
+  "jumpToAnnouncementsBtn",
+);
+const jumpToResourcesBtn = document.getElementById("jumpToResourcesBtn");
+
+const statTotalBookings = document.getElementById("statTotalBookings");
+const statPendingBookings = document.getElementById("statPendingBookings");
+const statApprovedBookings = document.getElementById("statApprovedBookings");
+const statVipBookings = document.getElementById("statVipBookings");
+const statPaidDeposits = document.getElementById("statPaidDeposits");
+
+function escAdmin(s = "") {
   return String(s).replace(
     /[&<>"']/g,
     (m) =>
@@ -30,6 +44,7 @@ async function getSessionOrRedirect() {
       "login.html?next=" + encodeURIComponent("admin.html");
     return null;
   }
+
   return data.session;
 }
 
@@ -44,45 +59,99 @@ async function isAdmin(uid) {
     console.error("Admin check error:", error);
     return false;
   }
+
   return !!data;
 }
 
 function normalizeStatus(s) {
   const t = String(s || "").toLowerCase();
+
   if (
     t === "needs_docs" ||
     t === "request_docs" ||
     t === "needs_more_info" ||
     t === "needs_info" ||
     t === "need_more_info"
-  )
+  ) {
     return "need_more_info";
+  }
+
   return t || "unknown";
 }
 
-function badge(status) {
+function getStatusMeta(status) {
   const t = normalizeStatus(status);
+
   const map = {
-    pending: "Pending",
-    approved: "Approved",
-    declined: "Declined",
-    need_more_info: "Needs Info",
-    info_submitted: "Info Submitted",
+    pending: {
+      label: "Pending",
+      bg: "rgba(245, 158, 11, 0.13)",
+      color: "#b45309",
+      border: "rgba(245, 158, 11, 0.22)",
+    },
+    approved: {
+      label: "Approved",
+      bg: "rgba(34, 197, 94, 0.12)",
+      color: "#166534",
+      border: "rgba(34, 197, 94, 0.24)",
+    },
+    declined: {
+      label: "Declined",
+      bg: "rgba(239, 68, 68, 0.12)",
+      color: "#b91c1c",
+      border: "rgba(239, 68, 68, 0.24)",
+    },
+    need_more_info: {
+      label: "Needs Info",
+      bg: "rgba(245, 158, 11, 0.13)",
+      color: "#b45309",
+      border: "rgba(245, 158, 11, 0.24)",
+    },
+    info_submitted: {
+      label: "Info Submitted",
+      bg: "rgba(59, 130, 246, 0.12)",
+      color: "#1d4ed8",
+      border: "rgba(59, 130, 246, 0.24)",
+    },
+    unknown: {
+      label: "Unknown",
+      bg: "rgba(15, 23, 42, 0.08)",
+      color: "#334155",
+      border: "rgba(15, 23, 42, 0.15)",
+    },
   };
-  return `<span class="badge">${esc(map[t] || t)}</span>`;
+
+  return map[t] || map.unknown;
+}
+
+function statusBadge(status) {
+  const meta = getStatusMeta(status);
+
+  return `
+    <span
+      class="badge"
+      style="
+        background:${meta.bg};
+        color:${meta.color};
+        border:1px solid ${meta.border};
+      "
+    >
+      ${escAdmin(meta.label)}
+    </span>
+  `;
 }
 
 function tierLabel(tier) {
-  const t = String(tier || "").toLowerCase();
-  return t === "vip" ? "VIP" : "Regular";
+  return String(tier || "").toLowerCase() === "vip" ? "VIP" : "Regular";
 }
 
 function setRowBusy(bookingId, busy) {
   const card = document.querySelector(`[data-booking-card="${bookingId}"]`);
   if (!card) return;
-  card
-    .querySelectorAll("button[data-action]")
-    .forEach((b) => (b.disabled = busy));
+
+  card.querySelectorAll("button[data-action]").forEach((b) => {
+    b.disabled = busy;
+  });
 }
 
 const STATUS_MAP = {
@@ -94,13 +163,16 @@ const STATUS_MAP = {
 function fmtBytes(n) {
   const x = Number(n || 0);
   if (!x) return "-";
+
   const units = ["B", "KB", "MB", "GB"];
   let i = 0;
   let v = x;
+
   while (v >= 1024 && i < units.length - 1) {
     v /= 1024;
     i++;
   }
+
   return `${v.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
 }
 
@@ -133,6 +205,7 @@ function parseDetails(detailsText = "") {
     .filter(Boolean)
     .map((line) => {
       const idx = line.indexOf(":");
+
       if (idx === -1) {
         return { label: "Detail", value: line };
       }
@@ -153,7 +226,7 @@ function renderDetailsGrid(detailsText = "") {
   if (!pairs.length) {
     return `
       <div class="req" style="margin-top:10px;">
-        <h3>Submitted Details</h3>
+        <h3 class="booking-section-title">Submitted Details</h3>
         <p class="muted" style="margin:0;">No details submitted.</p>
       </div>
     `;
@@ -161,32 +234,14 @@ function renderDetailsGrid(detailsText = "") {
 
   return `
     <div class="req" style="margin-top:10px;">
-      <h3>Submitted Details</h3>
-      <div
-        style="
-          display:grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap:10px;
-          margin-top:8px;
-        "
-      >
+      <h3 class="booking-section-title">Submitted Details</h3>
+      <div class="booking-details-grid">
         ${pairs
           .map(
             (item) => `
-          <div
-            style="
-              padding:10px 12px;
-              border-radius:12px;
-              background:#fff;
-              border:1px solid rgba(2,6,23,0.08);
-            "
-          >
-            <div class="muted" style="font-size:12px; margin-bottom:4px;">
-              ${esc(item.label)}
-            </div>
-            <div style="font-weight:700; word-break:break-word;">
-              ${esc(item.value)}
-            </div>
+          <div class="booking-box">
+            <div class="muted booking-box-label">${escAdmin(item.label)}</div>
+            <div class="booking-box-value">${escAdmin(item.value)}</div>
           </div>
         `,
           )
@@ -196,7 +251,6 @@ function renderDetailsGrid(detailsText = "") {
   `;
 }
 
-// ---------- FIX FOR VIEW DOCS ----------
 function normalizeStoragePath(path = "") {
   let p = String(path || "").trim();
   if (!p) return "";
@@ -277,7 +331,6 @@ async function createWorkingSignedUrl(filePath, booking = {}, file = {}) {
   };
 }
 
-// ---------- Email helper ----------
 async function sendBookingStatusEmail({
   to,
   ticket,
@@ -331,7 +384,9 @@ async function sendBookingStatusEmail({
     extraHtml = `
       <div style="margin-top:12px; padding:12px; background:#fff7ed; border:1px solid #fed7aa; border-radius:10px;">
         <div style="font-weight:700; margin-bottom:6px;">Admin message</div>
-        <div style="white-space:pre-wrap;">${esc(needMoreInfoMessage || "")}</div>
+        <div style="white-space:pre-wrap;">${escAdmin(
+          needMoreInfoMessage || "",
+        )}</div>
       </div>
       <p style="margin-top:12px">
         Please provide the requested details so the application can continue.
@@ -350,6 +405,65 @@ async function sendBookingStatusEmail({
   });
 
   await sendFn({ to, subject, html });
+}
+
+function updateTopAnalytics(rows = []) {
+  const total = rows.length;
+  const pending = rows.filter(
+    (r) => normalizeStatus(r.status) === "pending",
+  ).length;
+  const approved = rows.filter(
+    (r) => normalizeStatus(r.status) === "approved",
+  ).length;
+  const vip = rows.filter(
+    (r) => String(r.tier || "").toLowerCase() === "vip",
+  ).length;
+  const paidDeposits = rows.filter(
+    (r) =>
+      String(r.tier || "").toLowerCase() === "vip" && Boolean(r.deposit_paid),
+  ).length;
+
+  if (statTotalBookings) statTotalBookings.textContent = String(total);
+  if (statPendingBookings) statPendingBookings.textContent = String(pending);
+  if (statApprovedBookings) statApprovedBookings.textContent = String(approved);
+  if (statVipBookings) statVipBookings.textContent = String(vip);
+  if (statPaidDeposits) statPaidDeposits.textContent = String(paidDeposits);
+}
+
+function renderBookingSummary(rows = []) {
+  if (!bookingSummaryBar) return;
+
+  if (!rows.length) {
+    bookingSummaryBar.style.display = "none";
+    bookingSummaryBar.innerHTML = "";
+    return;
+  }
+
+  const counts = {
+    total: rows.length,
+    vip: rows.filter((r) => String(r.tier || "").toLowerCase() === "vip")
+      .length,
+    pending: rows.filter((r) => normalizeStatus(r.status) === "pending").length,
+    approved: rows.filter((r) => normalizeStatus(r.status) === "approved")
+      .length,
+    needsInfo: rows.filter(
+      (r) => normalizeStatus(r.status) === "need_more_info",
+    ).length,
+    paidDeposits: rows.filter(
+      (r) =>
+        String(r.tier || "").toLowerCase() === "vip" && Boolean(r.deposit_paid),
+    ).length,
+  };
+
+  bookingSummaryBar.style.display = "flex";
+  bookingSummaryBar.innerHTML = `
+    <span class="booking-summary-chip">Total: ${counts.total}</span>
+    <span class="booking-summary-chip">VIP: ${counts.vip}</span>
+    <span class="booking-summary-chip">Pending: ${counts.pending}</span>
+    <span class="booking-summary-chip">Approved: ${counts.approved}</span>
+    <span class="booking-summary-chip">Needs Info: ${counts.needsInfo}</span>
+    <span class="booking-summary-chip">Paid Deposits: ${counts.paidDeposits}</span>
+  `;
 }
 
 async function fetchBookings() {
@@ -427,6 +541,8 @@ async function fetchBookings() {
     if (fallback.error) {
       adminMsg.textContent = `Error: ${fallback.error.message}`;
       console.error(fallback.error);
+      updateTopAnalytics([]);
+      renderBookingSummary([]);
       return;
     }
 
@@ -434,6 +550,7 @@ async function fetchBookings() {
       ...b,
       services: null,
     }));
+
     return renderBookings(withStub);
   }
 
@@ -442,11 +559,14 @@ async function fetchBookings() {
 
 function renderBookings(rows) {
   const sorted = [...rows].sort((a, b) => {
-    const av = a.tier === "vip" ? 0 : 1;
-    const bv = b.tier === "vip" ? 0 : 1;
+    const av = String(a.tier || "").toLowerCase() === "vip" ? 0 : 1;
+    const bv = String(b.tier || "").toLowerCase() === "vip" ? 0 : 1;
     if (av !== bv) return av - bv;
     return new Date(b.created_at) - new Date(a.created_at);
   });
+
+  updateTopAnalytics(sorted);
+  renderBookingSummary(sorted);
 
   if (!sorted.length) {
     adminMsg.textContent = "No bookings found (for this filter).";
@@ -459,54 +579,70 @@ function renderBookings(rows) {
   bookingsList.innerHTML = sorted
     .map((b) => {
       const serviceName =
-        b.services?.name || "(Service ID: " + esc(b.service_id || "-") + ")";
+        b.services?.name || `(Service ID: ${escAdmin(b.service_id || "-")})`;
       const servicePrice = b.services?.price ?? null;
       const serviceProcessingTime = b.services?.processing_time ?? "";
       const created = fmtDate(b.created_at);
       const updated = fmtDate(b.updated_at);
+      const isVip = String(b.tier || "").toLowerCase() === "vip";
+      const depositState = b.deposit_paid ? "Paid" : "Unpaid";
 
-      const dep =
-        b.tier === "vip"
-          ? `<div class="muted" style="margin-top:8px;">
-              <strong>Deposit:</strong> ${b.deposit_paid ? "PAID" : "NOT PAID"} (${b.deposit_required_percent || 30}%)
-              ${b.deposit_reference ? `<br/><strong>Ref:</strong> ${esc(b.deposit_reference)}` : ""}
-            </div>`
-          : "";
+      const dep = isVip
+        ? `
+            <div class="req" style="margin-top:10px;">
+              <h3 class="booking-section-title">VIP Deposit</h3>
+              <p style="margin:0;">
+                <strong>Status:</strong>
+                <span style="color:${b.deposit_paid ? "#15803d" : "#b45309"}; font-weight:800;">
+                  ${depositState}
+                </span><br/>
+                <strong>Required:</strong> ${escAdmin(String(b.deposit_required_percent || 30))}%${
+                  b.deposit_reference
+                    ? `<br/><strong>Reference:</strong> ${escAdmin(
+                        b.deposit_reference,
+                      )}`
+                    : ""
+                }
+              </p>
+            </div>
+          `
+        : "";
 
       const notes = b.admin_notes
-        ? `<div class="muted" style="margin-top:8px;"><strong>Admin notes:</strong> ${esc(b.admin_notes)}</div>`
+        ? `<div class="muted" style="margin-top:10px;"><strong>Admin notes:</strong> ${escAdmin(b.admin_notes)}</div>`
         : "";
 
       const emailLine = b.email
-        ? `<strong>Email:</strong> ${esc(b.email)}<br/>`
+        ? `<strong>Email:</strong> ${escAdmin(b.email)}<br/>`
         : "";
 
       const needInfoMsg =
         b.need_more_info_message &&
         normalizeStatus(b.status) === "need_more_info"
-          ? `<div class="card" style="margin-top:10px; background:#fff6e5;">
+          ? `
+            <div class="card" style="margin-top:10px; background:#fff8eb; border:1px solid rgba(245,158,11,0.2);">
               <strong>Needs Info Message:</strong>
-              <div class="muted" style="margin-top:6px; white-space:pre-wrap;">${esc(b.need_more_info_message)}</div>
-            </div>`
+              <div class="muted" style="margin-top:6px; white-space:pre-wrap;">${escAdmin(
+                b.need_more_info_message,
+              )}</div>
+            </div>
+          `
           : "";
 
       const serviceMeta = `
-        <div
-          style="
-            margin-top:10px;
-            display:grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap:12px;
-          "
-        >
+        <div class="booking-service-grid">
           <div class="req" style="margin-top:0;">
-            <h3>Service Fee</h3>
-            <p style="margin:0; font-weight:900; color:#1e5bff;">${esc(formatPrice(servicePrice))}</p>
+            <h3 class="booking-section-title">Service Fee</h3>
+            <p style="margin:0; font-weight:900; color:#1e5bff;">${escAdmin(
+              formatPrice(servicePrice),
+            )}</p>
           </div>
 
           <div class="req" style="margin-top:0;">
-            <h3>Processing Time</h3>
-            <p style="margin:0; font-weight:700;">${esc(formatProcessingTime(serviceProcessingTime))}</p>
+            <h3 class="booking-section-title">Processing Time</h3>
+            <p style="margin:0; font-weight:700;">${escAdmin(
+              formatProcessingTime(serviceProcessingTime),
+            )}</p>
           </div>
         </div>
       `;
@@ -514,21 +650,28 @@ function renderBookings(rows) {
       const visibleDetails = renderDetailsGrid(b.details || "");
 
       return `
-        <div class="card" data-booking-card="${b.id}">
-          <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-            <div>
-              <h2 style="margin:0;">${esc(serviceName)}</h2>
-              <div class="muted" style="margin-top:4px;">
-                <strong>Ticket:</strong> ${esc(b.ticket)}<br/>
-                <strong>Tier:</strong> ${esc(tierLabel(b.tier))}<br/>
+        <div class="card booking-card ${isVip ? "vip-booking" : ""}" data-booking-card="${b.id}">
+          <div class="booking-card-top">
+            <div class="booking-card-head">
+              ${
+                isVip
+                  ? `<div class="booking-flag" style="margin-bottom:10px;">★ VIP Booking</div>`
+                  : ""
+              }
+              <h2>${escAdmin(serviceName)}</h2>
+
+              <div class="muted" style="margin-top:6px; line-height:1.75;">
+                <strong>Ticket:</strong> ${escAdmin(b.ticket || "-")}<br/>
+                <strong>Tier:</strong> ${escAdmin(tierLabel(b.tier))}<br/>
                 ${emailLine}
-                <strong>Phone:</strong> ${esc(b.phone || "-")}<br/>
-                <strong>Status:</strong> ${badge(b.status)}
+                <strong>Phone:</strong> ${escAdmin(b.phone || "-")}<br/>
+                <strong>Status:</strong> ${statusBadge(b.status)}
               </div>
             </div>
-            <div class="muted" style="text-align:right;">
-              <div><strong>Created:</strong> ${esc(created)}</div>
-              <div><strong>Updated:</strong> ${esc(updated)}</div>
+
+            <div class="muted" style="text-align:right; min-width:180px;">
+              <div><strong>Created:</strong> ${escAdmin(created)}</div>
+              <div style="margin-top:4px;"><strong>Updated:</strong> ${escAdmin(updated)}</div>
             </div>
           </div>
 
@@ -537,23 +680,33 @@ function renderBookings(rows) {
           ${needInfoMsg}
           ${visibleDetails}
 
-          <details style="margin-top:10px;">
+          <details style="margin-top:12px;">
             <summary><strong>Raw details text</strong></summary>
-            <pre style="white-space:pre-wrap; background:#f6f7fb; padding:10px; border-radius:10px; margin-top:10px;">${esc(b.details || "")}</pre>
+            <pre style="white-space:pre-wrap; background:#f6f7fb; padding:10px; border-radius:10px; margin-top:10px;">${escAdmin(
+              b.details || "",
+            )}</pre>
           </details>
 
           ${notes}
 
-          <div class="actions" style="margin-top:12px; display:flex; flex-wrap:wrap; gap:10px;">
+          <div class="booking-card-actions" style="margin-top:14px;">
             <button data-action="approve" data-id="${b.id}">Approve</button>
             <button data-action="needs_info" data-id="${b.id}">Needs Info</button>
             <button data-action="decline" data-id="${b.id}">Decline</button>
             <button data-action="docs" data-id="${b.id}">View Docs</button>
             <button data-action="note" data-id="${b.id}">Add Note</button>
+            <button
+              data-action="delete"
+              data-id="${b.id}"
+              type="button"
+              style="background:#7f1d1d; border-color:#7f1d1d;"
+            >
+              Delete Booking
+            </button>
           </div>
 
-          <div class="muted" id="rowMsg-${b.id}" style="margin-top:10px;"></div>
-          <div id="docs-${b.id}" style="margin-top:10px;"></div>
+          <div class="muted booking-row-msg" id="rowMsg-${b.id}"></div>
+          <div id="docs-${b.id}" class="booking-docs-wrap"></div>
         </div>
       `;
     })
@@ -566,9 +719,71 @@ function renderBookings(rows) {
   });
 }
 
+async function deleteBookingFlow(bookingId, bookingRow, rowMsg) {
+  const confirmed = confirm(
+    `Delete booking ${bookingRow.ticket || ""} permanently?\n\nThis will try to remove linked documents and file records too.`,
+  );
+  if (!confirmed) return;
+
+  rowMsg.textContent = "Deleting booking...";
+
+  let fileRows = [];
+
+  const filesResult = await window.supabaseClient
+    .from("booking_files")
+    .select("id,file_path,file_name")
+    .eq("booking_id", bookingId);
+
+  if (!filesResult.error && Array.isArray(filesResult.data)) {
+    fileRows = filesResult.data;
+  }
+
+  if (fileRows.length) {
+    const storagePaths = [];
+
+    for (const f of fileRows) {
+      const candidates = buildPathCandidates(f.file_path, bookingRow, f);
+      if (candidates.length) storagePaths.push(candidates[0]);
+    }
+
+    if (storagePaths.length) {
+      const { error: storageErr } = await window.supabaseClient.storage
+        .from("booking-docs")
+        .remove(storagePaths);
+
+      if (storageErr) {
+        console.warn("Storage delete warning:", storageErr);
+      }
+    }
+
+    const { error: filesDeleteErr } = await window.supabaseClient
+      .from("booking_files")
+      .delete()
+      .eq("booking_id", bookingId);
+
+    if (filesDeleteErr) {
+      console.warn("booking_files delete warning:", filesDeleteErr);
+    }
+  }
+
+  const { error: bookingDeleteErr } = await window.supabaseClient
+    .from("bookings")
+    .delete()
+    .eq("id", bookingId);
+
+  if (bookingDeleteErr) {
+    rowMsg.textContent = `Error: ${bookingDeleteErr.message}`;
+    return;
+  }
+
+  rowMsg.textContent = "✅ Booking deleted.";
+  await fetchBookings();
+}
+
 async function handleAction(action, bookingId) {
   const rowMsg = document.getElementById(`rowMsg-${bookingId}`);
   const docsBox = document.getElementById(`docs-${bookingId}`);
+
   rowMsg.textContent = "";
   docsBox.innerHTML = "";
 
@@ -586,7 +801,9 @@ async function handleAction(action, bookingId) {
           .maybeSingle();
 
       if (bookingErr || !bookingRow) {
-        rowMsg.textContent = `Docs error: ${bookingErr?.message || "Booking not found"}`;
+        rowMsg.textContent = `Docs error: ${
+          bookingErr?.message || "Booking not found"
+        }`;
         return;
       }
 
@@ -613,6 +830,7 @@ async function handleAction(action, bookingId) {
           rowMsg.textContent = `Docs error: ${fallback.error.message}`;
           return;
         }
+
         files = fallback.data || [];
       }
 
@@ -627,31 +845,44 @@ async function handleAction(action, bookingId) {
         const result = await createWorkingSignedUrl(f.file_path, bookingRow, f);
 
         const meta = [
-          f.mime_type ? esc(f.mime_type) : null,
-          f.size_bytes ? esc(fmtBytes(f.size_bytes)) : null,
-          f.created_at ? esc(fmtDate(f.created_at)) : null,
-          f.uploaded_by ? esc(String(f.uploaded_by)) : null,
+          f.mime_type ? escAdmin(f.mime_type) : null,
+          f.size_bytes ? escAdmin(fmtBytes(f.size_bytes)) : null,
+          f.created_at ? escAdmin(fmtDate(f.created_at)) : null,
+          f.uploaded_by ? escAdmin(String(f.uploaded_by)) : null,
         ]
           .filter(Boolean)
           .join(" • ");
 
         if (!result.signedUrl) {
-          items.push(
-            `<li>
-              <div><strong>${esc(f.file_name)}</strong></div>
+          items.push(`
+            <li>
+              <div><strong>${escAdmin(f.file_name)}</strong></div>
               <div class="muted">${meta || ""}</div>
-              <div class="muted">(cannot open: ${esc(result.error?.message || "Object not found")})</div>
-              <div class="muted" style="font-size:12px;">Saved path: ${esc(f.file_path || "")}</div>
-              <div class="muted" style="font-size:12px;">Tried: ${esc((result.tried || []).join(" | "))}</div>
-            </li>`,
-          );
+              <div class="muted">(cannot open: ${escAdmin(
+                result.error?.message || "Object not found",
+              )})</div>
+              <div class="muted" style="font-size:12px;">Saved path: ${escAdmin(
+                f.file_path || "",
+              )}</div>
+              <div class="muted" style="font-size:12px;">Tried: ${escAdmin(
+                (result.tried || []).join(" | "),
+              )}</div>
+            </li>
+          `);
         } else {
-          items.push(
-            `<li>
-              <div><a href="${result.signedUrl}" target="_blank" rel="noopener"><strong>${esc(f.file_name)}</strong></a></div>
+          items.push(`
+            <li>
+              <div class="booking-doc-actions">
+                <a href="${result.signedUrl}" target="_blank" rel="noopener"><strong>${escAdmin(
+                  f.file_name,
+                )}</strong></a>
+                <a href="${result.signedUrl}" target="_blank" rel="noopener">
+                  <button type="button">Preview</button>
+                </a>
+              </div>
               <div class="muted">${meta || ""}</div>
-            </li>`,
-          );
+            </li>
+          `);
         }
       }
 
@@ -659,8 +890,8 @@ async function handleAction(action, bookingId) {
       docsBox.innerHTML = `
         <div class="card" style="background:#f6f7fb;">
           <strong>Documents</strong>
-          <ul style="margin-top:8px;">${items.join("")}</ul>
-          <div class="muted">Links expire in ~10 minutes.</div>
+          <ul class="booking-doc-list">${items.join("")}</ul>
+          <div class="muted">Links expire in about 10 minutes.</div>
         </div>
       `;
       return;
@@ -671,19 +902,24 @@ async function handleAction(action, bookingId) {
       if (note === null) return;
 
       rowMsg.textContent = "Saving note...";
+
       const { error } = await window.supabaseClient
         .from("bookings")
         .update({ admin_notes: note })
         .eq("id", bookingId);
 
       rowMsg.textContent = error ? `Error: ${error.message}` : "✅ Note saved.";
+
+      if (!error) {
+        await fetchBookings();
+      }
       return;
     }
 
     const { data: bookingRow, error: bookingRowErr } =
       await window.supabaseClient
         .from("bookings")
-        .select("id,ticket,email,phone")
+        .select("id,ticket,email,phone,user_id")
         .eq("id", bookingId)
         .maybeSingle();
 
@@ -697,19 +933,27 @@ async function handleAction(action, bookingId) {
       return;
     }
 
+    if (action === "delete") {
+      await deleteBookingFlow(bookingId, bookingRow, rowMsg);
+      return;
+    }
+
     if (action === "needs_info") {
       const msg = prompt(
         "What information/documents are missing? (This will be shown to the student)",
       );
+
       if (msg === null) return;
 
       const clean = msg.trim();
+
       if (!clean) {
         rowMsg.textContent = "Please type a message (cannot be empty).";
         return;
       }
 
       rowMsg.textContent = "Updating status + message...";
+
       const { error } = await window.supabaseClient
         .from("bookings")
         .update({
@@ -731,6 +975,7 @@ async function handleAction(action, bookingId) {
           status: "need_more_info",
           needMoreInfoMessage: clean,
         });
+
         rowMsg.textContent = "✅ Updated (Needs Info) + email sent.";
       } catch (e) {
         console.warn("Needs info email failed:", e);
@@ -744,6 +989,7 @@ async function handleAction(action, bookingId) {
     const nextStatus = STATUS_MAP[action] || action;
 
     rowMsg.textContent = "Updating status...";
+
     const { error } = await window.supabaseClient
       .from("bookings")
       .update({
@@ -764,6 +1010,7 @@ async function handleAction(action, bookingId) {
         phone: bookingRow.phone,
         status: nextStatus,
       });
+
       rowMsg.textContent = "✅ Updated + email sent.";
     } catch (e) {
       console.warn("Status email failed:", e);
@@ -776,12 +1023,30 @@ async function handleAction(action, bookingId) {
   }
 }
 
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 logoutBtn.addEventListener("click", async () => {
   await window.supabaseClient.auth.signOut();
   window.location.href = "index.html";
 });
 
 refreshBtn.addEventListener("click", fetchBookings);
+heroRefreshBtn?.addEventListener("click", fetchBookings);
+
+jumpToBookingsBtn?.addEventListener("click", () =>
+  scrollToSection("bookingsSection"),
+);
+jumpToAnnouncementsBtn?.addEventListener("click", () =>
+  scrollToSection("announcementsSection"),
+);
+jumpToResourcesBtn?.addEventListener("click", () =>
+  scrollToSection("resourcesSection"),
+);
+
 statusFilter.addEventListener("change", fetchBookings);
 tierFilter.addEventListener("change", fetchBookings);
 
@@ -799,6 +1064,8 @@ searchInput.addEventListener("input", () => {
   if (!ok) {
     adminMsg.textContent = "❌ Access denied. You are not an admin.";
     bookingsList.innerHTML = "";
+    updateTopAnalytics([]);
+    renderBookingSummary([]);
     return;
   }
 

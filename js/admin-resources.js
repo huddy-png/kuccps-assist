@@ -6,6 +6,7 @@ const resFile = document.getElementById("resFile");
 const resActive = document.getElementById("resActive");
 const resUploadBtn = document.getElementById("resUploadBtn");
 const resList = document.getElementById("resList");
+const resSelectedMeta = document.getElementById("resSelectedMeta");
 
 function escRes(s = "") {
   return String(s).replace(
@@ -35,12 +36,45 @@ function safeResFileName(name = "") {
     .replace(/_+/g, "_");
 }
 
+function fmtResBytes(n) {
+  const x = Number(n || 0);
+  if (!x) return "-";
+
+  const units = ["B", "KB", "MB", "GB"];
+  let i = 0;
+  let v = x;
+
+  while (v >= 1024 && i < units.length - 1) {
+    v /= 1024;
+    i++;
+  }
+
+  return `${v.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
+}
+
+function getFileTypeLabel(url = "", title = "") {
+  const src = `${url} ${title}`.toLowerCase();
+  if (src.includes(".pdf")) return "PDF";
+  if (
+    src.includes(".jpg") ||
+    src.includes(".jpeg") ||
+    src.includes(".png") ||
+    src.includes(".webp")
+  ) {
+    return "Image";
+  }
+  if (src.includes(".doc") || src.includes(".docx")) return "Word";
+  return "File";
+}
+
 let resBusy = false;
 
 function setResBusy(state) {
   resBusy = state;
+
   if (resUploadBtn) resUploadBtn.disabled = state;
   if (resRefreshBtn) resRefreshBtn.disabled = state;
+
   resList
     ?.querySelectorAll("button[data-res-action]")
     .forEach((b) => (b.disabled = state));
@@ -52,12 +86,28 @@ function setResMsg(text, type = "info") {
     type === "error" ? "#b91c1c" : type === "success" ? "#166534" : "";
 }
 
+function updateSelectedFileMeta() {
+  const file = resFile?.files?.[0] || null;
+
+  if (!resSelectedMeta) return;
+
+  if (!file) {
+    resSelectedMeta.textContent = "";
+    return;
+  }
+
+  resSelectedMeta.textContent = `Selected: ${file.name} • ${fmtResBytes(
+    file.size,
+  )}`;
+}
+
 function resourceCard(r) {
   const activeLabel = r.is_active ? "Active" : "Hidden";
   const fileLink = r.file_url || "#";
+  const typeLabel = getFileTypeLabel(r.file_url, r.title);
 
   return `
-    <div class="card admin-render-card">
+    <div class="card admin-render-card" style="padding:18px;">
       <div class="admin-render-top">
         <div class="admin-render-body">
           <div class="admin-render-meta">
@@ -71,6 +121,17 @@ function resourceCard(r) {
             >
               ${activeLabel}
             </span>
+
+            <span
+              class="badge"
+              style="
+                background:rgba(30,91,255,0.08);
+                color:#1e40af;
+                border:1px solid rgba(30,91,255,0.12);
+              "
+            >
+              ${escRes(typeLabel)}
+            </span>
           </div>
 
           <h3 style="margin:0 0 8px;">${escRes(r.title)}</h3>
@@ -83,9 +144,13 @@ function resourceCard(r) {
             Uploaded: ${escRes(fmtResDate(r.created_at))}
           </p>
 
-          <div class="admin-render-actions" style="margin-top:12px;">
+          <div class="resource-link-row">
             <a href="${fileLink}" target="_blank" rel="noopener">
               <button type="button">Open File</button>
+            </a>
+
+            <a href="${fileLink}" target="_blank" rel="noopener">
+              <button type="button">Preview</button>
             </a>
           </div>
         </div>
@@ -95,7 +160,12 @@ function resourceCard(r) {
             ${r.is_active ? "Hide" : "Make Active"}
           </button>
 
-          <button data-res-action="delete" data-id="${r.id}" type="button">
+          <button
+            data-res-action="delete"
+            data-id="${r.id}"
+            type="button"
+            style="background:#7f1d1d; border-color:#7f1d1d;"
+          >
             Delete
           </button>
         </div>
@@ -220,7 +290,7 @@ resUploadBtn?.addEventListener("click", async () => {
 
   try {
     setResBusy(true);
-    setResMsg("Uploading resource...");
+    setResMsg(`Uploading resource: ${file.name}...`);
 
     const safeName = safeResFileName(file.name);
     const path = `${Date.now()}_${safeName}`;
@@ -256,6 +326,7 @@ resUploadBtn?.addEventListener("click", async () => {
     resDescription.value = "";
     resFile.value = "";
     resActive.checked = true;
+    updateSelectedFileMeta();
 
     setResMsg("✅ Resource uploaded.", "success");
     await loadResources();
@@ -267,5 +338,6 @@ resUploadBtn?.addEventListener("click", async () => {
   }
 });
 
+resFile?.addEventListener("change", updateSelectedFileMeta);
 resRefreshBtn?.addEventListener("click", loadResources);
 loadResources();

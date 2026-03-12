@@ -29,6 +29,7 @@ let tesBusy = false;
 function setTesBusy(state) {
   tesBusy = state;
   tesRefreshBtn.disabled = state;
+
   tesList
     .querySelectorAll("button[data-tes-action]")
     .forEach((b) => (b.disabled = state));
@@ -38,6 +39,18 @@ function setTesMsg(text, type = "info") {
   tesMsg.textContent = text || "";
   tesMsg.style.color =
     type === "error" ? "#b91c1c" : type === "success" ? "#166534" : "";
+}
+
+function approvalBadge(t) {
+  return t.is_approved
+    ? `<span class="badge" style="background:rgba(34,197,94,0.12); color:#166534; border:1px solid rgba(34,197,94,0.25);">Approved</span>`
+    : `<span class="badge" style="background:rgba(245,158,11,0.12); color:#b45309; border:1px solid rgba(245,158,11,0.25);">Pending</span>`;
+}
+
+function activeBadge(t) {
+  return t.is_active
+    ? `<span class="badge" style="background:rgba(59,130,246,0.10); color:#1d4ed8; border:1px solid rgba(59,130,246,0.22);">Active</span>`
+    : `<span class="badge" style="background:rgba(2,6,23,0.06); color:#334155; border:1px solid rgba(2,6,23,0.08);">Hidden</span>`;
 }
 
 async function loadTestimonials() {
@@ -65,21 +78,21 @@ async function loadTestimonials() {
   tesList.innerHTML = data
     .map((t) => {
       return `
-        <div class="card">
-          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-            <div style="min-width:240px; flex:1;">
-              <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-                <span class="badge">${t.is_approved ? "Approved" : "Pending"}</span>
-                <span style="padding:4px 8px;border-radius:999px;background:rgba(2,6,23,0.06);font-size:12px;">
-                  ${t.is_active ? "Active" : "Hidden"}
-                </span>
+        <div class="card admin-render-card" style="padding:18px;">
+          <div class="admin-render-top">
+            <div class="admin-render-body">
+              <div class="admin-render-meta">
+                ${approvalBadge(t)}
+                ${activeBadge(t)}
               </div>
 
-              <h2 style="margin:10px 0 0; font-size:16px;">${escTes(t.name)}</h2>
+              <h2 style="margin:0; font-size:16px;">${escTes(t.name)}</h2>
 
               ${
                 t.service_name
-                  ? `<p class="muted" style="margin:6px 0 0;"><strong>Service:</strong> ${escTes(t.service_name)}</p>`
+                  ? `<p class="muted" style="margin:6px 0 0;"><strong>Service:</strong> ${escTes(
+                      t.service_name,
+                    )}</p>`
                   : ""
               }
 
@@ -87,12 +100,12 @@ async function loadTestimonials() {
                 ${escTes(t.message)}
               </p>
 
-              <p class="muted" style="margin-top:10px; font-size:12px;">
+              <p class="muted admin-render-footnote">
                 Submitted: ${escTes(fmtTes(t.created_at))}
               </p>
             </div>
 
-            <div class="actions" style="align-items:flex-start; display:flex; flex-direction:column; gap:8px; min-width:180px;">
+            <div class="tes-actions-col">
               <button data-tes-action="toggle_approve" data-id="${t.id}">
                 ${t.is_approved ? "Unapprove" : "Approve"}
               </button>
@@ -101,7 +114,11 @@ async function loadTestimonials() {
                 ${t.is_active ? "Hide" : "Make Active"}
               </button>
 
-              <button data-tes-action="delete" data-id="${t.id}">
+              <button
+                data-tes-action="delete"
+                data-id="${t.id}"
+                style="background:#7f1d1d; border-color:#7f1d1d;"
+              >
                 Delete
               </button>
             </div>

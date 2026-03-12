@@ -7,7 +7,7 @@ const annActive = document.getElementById("annActive");
 const annCreateBtn = document.getElementById("annCreateBtn");
 const annList = document.getElementById("annList");
 
-function esc(s = "") {
+function escAnn(s = "") {
   return String(s).replace(
     /[&<>"']/g,
     (m) =>
@@ -21,7 +21,7 @@ function esc(s = "") {
   );
 }
 
-function fmt(ts) {
+function fmtAnn(ts) {
   try {
     return new Date(ts).toLocaleString();
   } catch {
@@ -29,18 +29,20 @@ function fmt(ts) {
   }
 }
 
-let busy = false;
+let annBusy = false;
+let annEditingId = null;
 
-function setBusy(state) {
-  busy = state;
+function setAnnBusy(state) {
+  annBusy = state;
   annCreateBtn.disabled = state;
   annRefreshBtn.disabled = state;
+
   annList.querySelectorAll("button[data-action]").forEach((b) => {
     b.disabled = state;
   });
 }
 
-function setMsg(text, type = "info") {
+function setAnnMsg(text, type = "info") {
   annMsg.textContent = text || "";
   annMsg.style.color =
     type === "error" ? "#b91c1c" : type === "success" ? "#166534" : "";
@@ -49,17 +51,19 @@ function setMsg(text, type = "info") {
 function buildEditForm(a) {
   return `
     <div class="card admin-edit-box" style="border:1px dashed rgba(2,6,23,0.18); background:#fff;">
-      <h3 style="margin:0 0 8px;">Editing: ${esc(a.title)}</h3>
+      <h3 style="margin:0 0 8px;">Editing: ${escAnn(a.title)}</h3>
 
       <div style="display:grid; gap:10px;">
         <div>
           <label class="muted" style="font-size:12px;">Title</label>
-          <input id="editTitle-${a.id}" value="${esc(a.title)}" />
+          <input id="editTitle-${a.id}" value="${escAnn(a.title)}" />
         </div>
 
         <div>
           <label class="muted" style="font-size:12px;">Message</label>
-          <textarea id="editContent-${a.id}" rows="4">${esc(a.content)}</textarea>
+          <textarea id="editContent-${a.id}" rows="4">${escAnn(
+            a.content,
+          )}</textarea>
         </div>
 
         <div class="admin-render-actions" style="margin-top:4px;">
@@ -76,11 +80,16 @@ function announcementCard(a) {
   const bg = a.is_highlight ? "rgba(30, 91, 255, 0.06)" : "#fff";
 
   return `
-    <div class="card admin-render-card" style="background:${bg}; border-color:rgba(2,6,23,0.10);">
+    <div class="card admin-render-card" style="background:${bg}; border-color:rgba(2,6,23,0.10); padding:18px;">
       <div class="admin-render-top">
         <div class="admin-render-body">
           <div class="admin-render-meta">
-            ${a.is_highlight ? `<span class="badge">Highlighted</span>` : ""}
+            ${
+              a.is_highlight
+                ? `<span class="badge" style="background:rgba(30,91,255,0.12); color:#1e40af; border:1px solid rgba(30,91,255,0.22);">Highlighted</span>`
+                : `<span class="badge" style="background:rgba(2,6,23,0.05); color:#475569; border:1px solid rgba(2,6,23,0.08);">Normal</span>`
+            }
+
             <span
               class="badge"
               style="
@@ -93,13 +102,13 @@ function announcementCard(a) {
             </span>
           </div>
 
-          <h3 style="margin:0 0 8px;">${esc(a.title)}</h3>
+          <h3 style="margin:0 0 8px;">${escAnn(a.title)}</h3>
 
-          <div class="admin-render-text">${esc(a.content)}</div>
+          <div class="admin-render-text">${escAnn(a.content)}</div>
 
           <p class="muted admin-render-footnote">
-            Created: ${esc(fmt(a.created_at))}
-            ${a.updated_at ? `<br>Updated: ${esc(fmt(a.updated_at))}` : ""}
+            Created: ${escAnn(fmtAnn(a.created_at))}
+            ${a.updated_at ? `<br>Updated: ${escAnn(fmtAnn(a.updated_at))}` : ""}
           </p>
 
           <div id="editBox-${a.id}"></div>
@@ -115,7 +124,14 @@ function announcementCard(a) {
           </button>
 
           <button data-action="edit" data-id="${a.id}" type="button">Edit</button>
-          <button data-action="delete" data-id="${a.id}" type="button">Delete</button>
+          <button
+            data-action="delete"
+            data-id="${a.id}"
+            type="button"
+            style="background:#7f1d1d; border-color:#7f1d1d;"
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -123,7 +139,7 @@ function announcementCard(a) {
 }
 
 async function loadAnnouncements() {
-  setMsg("Loading announcements...");
+  setAnnMsg("Loading announcements...");
   annList.innerHTML = "";
 
   const { data, error } = await window.supabaseClient
@@ -135,16 +151,16 @@ async function loadAnnouncements() {
 
   if (error) {
     console.error(error);
-    setMsg(`Error: ${error.message}`, "error");
+    setAnnMsg(`Error: ${error.message}`, "error");
     return;
   }
 
   if (!data || data.length === 0) {
-    setMsg("No announcements yet.");
+    setAnnMsg("No announcements yet.");
     return;
   }
 
-  setMsg("");
+  setAnnMsg("");
   annList.innerHTML = data.map(announcementCard).join("");
 
   annList.querySelectorAll("button[data-action]").forEach((btn) => {
@@ -155,11 +171,11 @@ async function loadAnnouncements() {
 }
 
 async function handleAnnAction(action, id) {
-  if (busy) return;
+  if (annBusy) return;
 
   try {
-    setBusy(true);
-    setMsg("");
+    setAnnBusy(true);
+    setAnnMsg("");
 
     const { data: row, error: rErr } = await window.supabaseClient
       .from("announcements")
@@ -169,12 +185,12 @@ async function handleAnnAction(action, id) {
 
     if (rErr) throw rErr;
     if (!row) {
-      setMsg("Announcement not found.", "error");
+      setAnnMsg("Announcement not found.", "error");
       return;
     }
 
     if (action === "toggle_active") {
-      setMsg("Saving...");
+      setAnnMsg("Saving...");
       const { error } = await window.supabaseClient
         .from("announcements")
         .update({ is_active: !row.is_active })
@@ -182,13 +198,13 @@ async function handleAnnAction(action, id) {
 
       if (error) throw error;
 
-      setMsg("✅ Saved.", "success");
+      setAnnMsg("✅ Saved.", "success");
       await loadAnnouncements();
       return;
     }
 
     if (action === "toggle_highlight") {
-      setMsg("Saving...");
+      setAnnMsg("Saving...");
       const { error } = await window.supabaseClient
         .from("announcements")
         .update({ is_highlight: !row.is_highlight })
@@ -196,14 +212,20 @@ async function handleAnnAction(action, id) {
 
       if (error) throw error;
 
-      setMsg("✅ Saved.", "success");
+      setAnnMsg("✅ Saved.", "success");
       await loadAnnouncements();
       return;
     }
 
     if (action === "edit") {
+      if (annEditingId && annEditingId !== id) {
+        const oldBox = document.getElementById(`editBox-${annEditingId}`);
+        if (oldBox) oldBox.innerHTML = "";
+      }
+
       const box = document.getElementById(`editBox-${id}`);
       box.innerHTML = buildEditForm(row);
+      annEditingId = id;
 
       box.querySelectorAll("button[data-action]").forEach((b) => {
         b.addEventListener("click", () =>
@@ -211,14 +233,15 @@ async function handleAnnAction(action, id) {
         );
       });
 
-      setMsg("Editing...");
+      setAnnMsg("Editing...");
       return;
     }
 
     if (action === "cancel_edit") {
       const box = document.getElementById(`editBox-${id}`);
       box.innerHTML = "";
-      setMsg("");
+      annEditingId = null;
+      setAnnMsg("");
       return;
     }
 
@@ -230,11 +253,11 @@ async function handleAnnAction(action, id) {
       const c = (cEl?.value || "").trim();
 
       if (!t || !c) {
-        setMsg("Title and message cannot be empty.", "error");
+        setAnnMsg("Title and message cannot be empty.", "error");
         return;
       }
 
-      setMsg("Saving...");
+      setAnnMsg("Saving...");
       const { error } = await window.supabaseClient
         .from("announcements")
         .update({ title: t, content: c })
@@ -242,7 +265,8 @@ async function handleAnnAction(action, id) {
 
       if (error) throw error;
 
-      setMsg("✅ Updated.", "success");
+      annEditingId = null;
+      setAnnMsg("✅ Updated.", "success");
       await loadAnnouncements();
       return;
     }
@@ -251,7 +275,7 @@ async function handleAnnAction(action, id) {
       const ok = confirm("Delete this announcement permanently?");
       if (!ok) return;
 
-      setMsg("Deleting...");
+      setAnnMsg("Deleting...");
       const { error } = await window.supabaseClient
         .from("announcements")
         .delete()
@@ -259,31 +283,33 @@ async function handleAnnAction(action, id) {
 
       if (error) throw error;
 
-      setMsg("✅ Deleted.", "success");
+      if (annEditingId === id) annEditingId = null;
+
+      setAnnMsg("✅ Deleted.", "success");
       await loadAnnouncements();
     }
   } catch (e) {
     console.error(e);
-    setMsg(`Error: ${e.message}`, "error");
+    setAnnMsg(`Error: ${e.message}`, "error");
   } finally {
-    setBusy(false);
+    setAnnBusy(false);
   }
 }
 
 annCreateBtn.addEventListener("click", async () => {
-  if (busy) return;
+  if (annBusy) return;
 
   const title = (annTitle.value || "").trim();
   const content = (annContent.value || "").trim();
 
   if (!title || !content) {
-    setMsg("Please enter both a title and a message.", "error");
+    setAnnMsg("Please enter both a title and a message.", "error");
     return;
   }
 
   try {
-    setBusy(true);
-    setMsg("Posting...");
+    setAnnBusy(true);
+    setAnnMsg("Posting...");
 
     const payload = {
       title,
@@ -303,13 +329,13 @@ annCreateBtn.addEventListener("click", async () => {
     annHighlight.checked = false;
     annActive.checked = true;
 
-    setMsg("✅ Update posted.", "success");
+    setAnnMsg("✅ Update posted.", "success");
     await loadAnnouncements();
   } catch (e) {
     console.error(e);
-    setMsg(`Error: ${e.message}`, "error");
+    setAnnMsg(`Error: ${e.message}`, "error");
   } finally {
-    setBusy(false);
+    setAnnBusy(false);
   }
 });
 

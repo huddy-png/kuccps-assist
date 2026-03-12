@@ -5,40 +5,679 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard | KUCCPS Assist</title>
 
-    <link rel="stylesheet" href="css/style.css?v=20" />
+    <link rel="stylesheet" href="css/style.css?v=22" />
+
+    <style>
+      :root {
+        --admin-bg: #f5f7fb;
+        --admin-card: #ffffff;
+        --admin-text: #0f172a;
+        --admin-muted: #64748b;
+        --admin-line: rgba(15, 23, 42, 0.08);
+        --admin-blue: #1e5bff;
+        --admin-blue-soft: rgba(30, 91, 255, 0.1);
+        --admin-green: #15803d;
+        --admin-green-soft: rgba(34, 197, 94, 0.12);
+        --admin-amber: #b45309;
+        --admin-amber-soft: rgba(245, 158, 11, 0.13);
+        --admin-red: #b91c1c;
+        --admin-red-soft: rgba(239, 68, 68, 0.12);
+        --admin-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+        --admin-radius: 18px;
+      }
+
+      body {
+        background: var(--admin-bg);
+      }
+
+      .admin-page {
+        padding-top: 22px;
+        padding-bottom: 42px;
+      }
+
+      .admin-hero {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(247, 250, 255, 0.98)
+        );
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        border-radius: 24px;
+        box-shadow: var(--admin-shadow);
+        padding: 22px;
+      }
+
+      .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .admin-header-copy h1 {
+        margin: 0;
+        color: var(--admin-text);
+        font-size: clamp(1.7rem, 2vw, 2.3rem);
+      }
+
+      .admin-header-copy p {
+        margin: 8px 0 0;
+      }
+
+      .admin-welcome-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(30, 91, 255, 0.08);
+        color: var(--admin-blue);
+        border: 1px solid rgba(30, 91, 255, 0.12);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+
+      .admin-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+
+      .admin-top-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .admin-top-actions button,
+      .admin-top-actions a button {
+        min-width: 120px;
+      }
+
+      .admin-quick-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      .admin-quick-actions button {
+        background: var(--admin-blue);
+        border-color: var(--admin-blue);
+      }
+
+      .admin-status-line {
+        margin: 14px 0 0;
+      }
+
+      .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .analytics-card {
+        background: var(--admin-card);
+        border: 1px solid var(--admin-line);
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: var(--admin-shadow);
+      }
+
+      .analytics-card .analytics-label {
+        color: var(--admin-muted);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .analytics-card .analytics-value {
+        color: var(--admin-text);
+        font-size: 1.7rem;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      .analytics-card .analytics-note {
+        margin-top: 8px;
+        color: var(--admin-muted);
+        font-size: 12px;
+      }
+
+      .analytics-card.is-blue {
+        background: linear-gradient(
+          180deg,
+          rgba(30, 91, 255, 0.08),
+          rgba(255, 255, 255, 0.98)
+        );
+      }
+
+      .analytics-card.is-amber {
+        background: linear-gradient(
+          180deg,
+          rgba(245, 158, 11, 0.1),
+          rgba(255, 255, 255, 0.98)
+        );
+      }
+
+      .analytics-card.is-green {
+        background: linear-gradient(
+          180deg,
+          rgba(34, 197, 94, 0.1),
+          rgba(255, 255, 255, 0.98)
+        );
+      }
+
+      .analytics-card.is-vip {
+        background: linear-gradient(
+          180deg,
+          rgba(99, 102, 241, 0.1),
+          rgba(255, 255, 255, 0.98)
+        );
+      }
+
+      .analytics-card.is-paid {
+        background: linear-gradient(
+          180deg,
+          rgba(22, 163, 74, 0.1),
+          rgba(255, 255, 255, 0.98)
+        );
+      }
+
+      .admin-grid,
+      .admin-section {
+        margin-top: 18px;
+      }
+
+      .admin-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2.3fr) minmax(260px, 0.9fr);
+        gap: 18px;
+      }
+
+      .admin-panel,
+      .admin-tips-card {
+        background: var(--admin-card);
+        border: 1px solid var(--admin-line);
+        border-radius: 22px;
+        box-shadow: var(--admin-shadow);
+        overflow: hidden;
+      }
+
+      .admin-panel {
+        padding: 20px;
+      }
+
+      .admin-tips-card {
+        padding: 20px;
+      }
+
+      .admin-panel-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+
+      .admin-panel-head h2,
+      .admin-tips-card h3 {
+        margin: 0;
+        color: var(--admin-text);
+      }
+
+      .admin-actions-row,
+      .admin-inline-options,
+      .admin-render-actions,
+      .booking-card-actions,
+      .booking-doc-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .admin-form-grid,
+      .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .admin-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+
+      .admin-field-full {
+        grid-column: 1 / -1;
+      }
+
+      .admin-field label {
+        font-weight: 800;
+        font-size: 13px;
+        color: var(--admin-text);
+      }
+
+      .admin-field input,
+      .admin-field textarea,
+      .admin-field select {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(15, 23, 42, 0.1);
+        background: #fff;
+        padding: 12px 14px;
+      }
+
+      .admin-field textarea {
+        resize: vertical;
+      }
+
+      .admin-check {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+      }
+
+      .admin-check input {
+        width: auto;
+      }
+
+      .admin-list {
+        display: grid;
+        gap: 14px;
+        margin-top: 16px;
+      }
+
+      .admin-render-card {
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 18px;
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
+      }
+
+      .admin-render-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .admin-render-body {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .admin-render-meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .admin-render-text {
+        white-space: pre-wrap;
+        line-height: 1.7;
+        word-break: break-word;
+      }
+
+      .admin-render-footnote {
+        margin-top: 12px;
+        font-size: 12px;
+      }
+
+      .admin-help-text {
+        margin: 4px 0 0;
+        font-size: 12px;
+      }
+
+      .admin-edit-box {
+        margin-top: 12px;
+      }
+
+      .admin-bookings-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-top: 14px;
+      }
+
+      .booking-card {
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 22px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+        position: relative;
+      }
+
+      .booking-card.vip-booking {
+        border: 1px solid rgba(30, 91, 255, 0.18);
+        box-shadow: 0 12px 28px rgba(30, 91, 255, 0.1);
+      }
+
+      .booking-flag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 900;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(30, 91, 255, 0.1);
+        color: var(--admin-blue);
+      }
+
+      .booking-card-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .booking-card-head h2 {
+        margin: 0;
+        color: var(--admin-text);
+        font-size: 1.1rem;
+      }
+
+      .booking-service-grid,
+      .booking-details-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .booking-service-grid,
+      .booking-details-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .booking-box {
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: #fff;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .booking-box-label {
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+
+      .booking-box-value {
+        font-weight: 800;
+        word-break: break-word;
+        color: var(--admin-text);
+      }
+
+      .booking-section-title {
+        margin: 0 0 8px;
+        font-size: 14px;
+        color: var(--admin-text);
+      }
+
+      .booking-row-msg {
+        margin-top: 10px;
+      }
+
+      .booking-docs-wrap {
+        margin-top: 12px;
+      }
+
+      .booking-doc-list {
+        margin: 10px 0 0;
+        padding-left: 18px;
+      }
+
+      .booking-doc-list li {
+        margin-bottom: 12px;
+      }
+
+      .booking-summary-bar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 14px 0 4px;
+      }
+
+      .booking-summary-chip {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.05);
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--admin-text);
+      }
+
+      .resource-link-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 12px;
+      }
+
+      .tes-actions-col {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 180px;
+      }
+
+      .admin-footer {
+        margin-top: 28px;
+        text-align: center;
+      }
+
+      .muted {
+        color: var(--admin-muted);
+      }
+
+      .badge {
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      button {
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-weight: 800;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          opacity 0.15s ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+      }
+
+      button:disabled {
+        opacity: 0.65;
+        transform: none;
+        box-shadow: none;
+      }
+
+      @media (max-width: 1100px) {
+        .analytics-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .admin-bookings-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 980px) {
+        .admin-grid,
+        .admin-form-grid,
+        .filter-grid,
+        .booking-service-grid,
+        .booking-details-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .admin-grid {
+          gap: 16px;
+        }
+
+        .analytics-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 720px) {
+        .admin-page {
+          padding-top: 14px;
+        }
+
+        .admin-hero,
+        .admin-panel,
+        .admin-tips-card {
+          padding: 16px;
+          border-radius: 18px;
+        }
+
+        .admin-header,
+        .admin-render-top,
+        .booking-card-top {
+          flex-direction: column;
+        }
+
+        .admin-top-actions,
+        .admin-quick-actions,
+        .admin-actions-row,
+        .admin-render-actions,
+        .booking-card-actions {
+          width: 100%;
+        }
+
+        .admin-top-actions > *,
+        .admin-quick-actions > *,
+        .admin-actions-row > *,
+        .admin-render-actions > *,
+        .booking-card-actions > * {
+          width: 100%;
+        }
+
+        .tes-actions-col {
+          width: 100%;
+          min-width: 0;
+        }
+
+        .tes-actions-col button {
+          width: 100%;
+        }
+
+        .analytics-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .booking-card .muted[style*="text-align:right"] {
+          text-align: left !important;
+          min-width: 0 !important;
+        }
+      }
+    </style>
   </head>
 
   <body>
     <div class="container admin-page">
-      <div class="admin-header">
-        <div class="admin-header-copy">
-          <h1>Admin Dashboard</h1>
-          <p class="muted">
-            Manage homepage updates, resources, testimonials, questions and
-            bookings.
-          </p>
+      <section class="admin-hero">
+        <div class="admin-header">
+          <div class="admin-header-copy">
+            <div class="admin-welcome-pill">KUCCPS Assist Admin Control</div>
+            <h1>Admin Dashboard</h1>
+            <p class="muted">
+              Manage homepage updates, resources, testimonials, questions and
+              student bookings from one place.
+            </p>
 
-          <div class="admin-tags">
-            <span class="badge">Announcements</span>
-            <span class="badge">Resources</span>
-            <span class="badge">Testimonials</span>
-            <span class="badge">Questions</span>
-            <span class="badge">Bookings</span>
-            <span class="badge">Documents</span>
+            <div class="admin-tags">
+              <span class="badge">Announcements</span>
+              <span class="badge">Resources</span>
+              <span class="badge">Testimonials</span>
+              <span class="badge">Questions</span>
+              <span class="badge">Bookings</span>
+              <span class="badge">Documents</span>
+            </div>
+          </div>
+
+          <div class="admin-top-actions">
+            <a href="index.html"><button type="button">Home</button></a>
+            <button id="heroRefreshBtn" type="button">Refresh Dashboard</button>
+            <button id="logoutBtn" type="button">Logout</button>
           </div>
         </div>
 
-        <div class="actions admin-top-actions">
-          <a href="index.html"><button type="button">Home</button></a>
-          <button id="logoutBtn" type="button">Logout</button>
+        <div class="admin-quick-actions">
+          <button id="jumpToBookingsBtn" type="button">Go to Bookings</button>
+          <button id="jumpToAnnouncementsBtn" type="button">
+            Go to Announcements
+          </button>
+          <button id="jumpToResourcesBtn" type="button">Go to Resources</button>
         </div>
-      </div>
 
-      <p id="adminMsg" class="muted admin-status-line">
-        Checking admin access...
-      </p>
+        <p id="adminMsg" class="muted admin-status-line">
+          Checking admin access...
+        </p>
 
-      <section class="admin-grid">
+        <div id="analyticsGrid" class="analytics-grid">
+          <div class="analytics-card is-blue">
+            <div class="analytics-label">Total Bookings</div>
+            <div class="analytics-value" id="statTotalBookings">0</div>
+            <div class="analytics-note">
+              All visible bookings in current view
+            </div>
+          </div>
+
+          <div class="analytics-card is-amber">
+            <div class="analytics-label">Pending</div>
+            <div class="analytics-value" id="statPendingBookings">0</div>
+            <div class="analytics-note">Still awaiting action</div>
+          </div>
+
+          <div class="analytics-card is-green">
+            <div class="analytics-label">Approved</div>
+            <div class="analytics-value" id="statApprovedBookings">0</div>
+            <div class="analytics-note">Successfully reviewed</div>
+          </div>
+
+          <div class="analytics-card is-vip">
+            <div class="analytics-label">VIP Bookings</div>
+            <div class="analytics-value" id="statVipBookings">0</div>
+            <div class="analytics-note">Priority support queue</div>
+          </div>
+
+          <div class="analytics-card is-paid">
+            <div class="analytics-label">Paid Deposits</div>
+            <div class="analytics-value" id="statPaidDeposits">0</div>
+            <div class="analytics-note">VIP deposits marked paid</div>
+          </div>
+        </div>
+      </section>
+
+      <div
+        id="bookingSummaryBar"
+        class="booking-summary-bar"
+        style="display: none"
+      ></div>
+
+      <section class="admin-grid" id="announcementsSection">
         <div class="card admin-panel">
           <div class="admin-panel-head">
             <div>
@@ -98,11 +737,12 @@
             <li>Upload guides under <strong>Resources</strong>.</li>
             <li>Approve only genuine testimonials.</li>
             <li>Use <strong>Needs Info</strong> for missing documents.</li>
+            <li>VIP bookings automatically stay above regular ones.</li>
           </ul>
         </aside>
       </section>
 
-      <section class="admin-section">
+      <section class="admin-section" id="resourcesSection">
         <div class="card admin-panel">
           <div class="admin-panel-head">
             <div>
@@ -138,6 +778,10 @@
               <label for="resFile">Upload File</label>
               <input id="resFile" type="file" />
               <p class="muted admin-help-text">PDF recommended.</p>
+              <p
+                id="resSelectedMeta"
+                class="muted admin-help-text resource-upload-meta"
+              ></p>
             </div>
 
             <div class="admin-field admin-field-full admin-inline-options">
@@ -198,7 +842,7 @@
         </div>
       </section>
 
-      <section class="admin-section">
+      <section class="admin-section" id="bookingsSection">
         <div class="card admin-panel">
           <div class="admin-panel-head">
             <div>
@@ -249,12 +893,12 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="js/supabase.js?v=20"></script>
-    <script src="js/email.js?v=20"></script>
-    <script src="js/admin.js?v=20"></script>
-    <script src="js/admin-announcements.js?v=20"></script>
-    <script src="js/admin-resources.js?v=20"></script>
-    <script src="js/admin-testimonials.js?v=20"></script>
-    <script src="js/admin-questions.js?v=20"></script>
+    <script src="js/supabase.js?v=22"></script>
+    <script src="js/email.js?v=22"></script>
+    <script src="js/admin.js?v=22"></script>
+    <script src="js/admin-announcements.js?v=22"></script>
+    <script src="js/admin-resources.js?v=22"></script>
+    <script src="js/admin-testimonials.js?v=22"></script>
+    <script src="js/admin-questions.js?v=22"></script>
   </body>
 </html>
