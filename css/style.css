@@ -518,32 +518,44 @@ details summary {
   font-weight: 800;
 }
 
-/* ---------- Services page grid fix ---------- */
+/* ---------- Services ---------- */
 #servicesContent {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
+  display: block;
   margin-top: 16px;
-  align-items: stretch;
 }
 
 #servicesContent > * {
   min-width: 0;
 }
 
+.services-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 16px;
+}
+
 #servicesContent .card,
-#servicesContent .service-card {
+#servicesContent .service-card,
+.services-grid .card,
+.services-grid .service-card {
   height: 100%;
 }
 
-@media (max-width: 1100px) {
-  #servicesContent {
+@media (max-width: 1200px) {
+  .services-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .services-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 700px) {
-  #servicesContent {
+@media (max-width: 600px) {
+  .services-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -654,7 +666,70 @@ select:focus-visible {
   background: rgba(37, 99, 235, 0.2);
 }
 
+/* ---------- Admin helpers ---------- */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.admin-section {
+  margin-top: 20px;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.admin-actions-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.admin-actions-row button {
+  width: auto;
+}
+
+.admin-list {
+  margin-top: 16px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
 /* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 900px) {
   .container,
   .page-shell,
@@ -678,21 +753,86 @@ select:focus-visible {
     display: none;
   }
 
-  .actions > a,
-  .actions > button,
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* public page full-width action buttons */
+  .hero-actions > a,
+  .hero-actions > button,
   .form-actions > a,
   .form-actions > button,
-  .hero-actions > a,
-  .hero-actions > button {
+  .actions > a > button {
     width: 100%;
   }
 
-  button,
   .hero-btn {
     width: 100%;
   }
+}
 
-  .grid {
+@media (max-width: 768px) {
+  .admin-form-grid,
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-header .actions,
+  .admin-actions-row,
+  #annList .actions,
+  #resList .actions,
+  #tesList .actions,
+  #qList .actions,
+  #bookingsList .actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+  }
+
+  .admin-header .actions > a,
+  .admin-header .actions > button,
+  .admin-actions-row > a,
+  .admin-actions-row > button,
+  #annList .actions > a,
+  #annList .actions > button,
+  #resList .actions > a,
+  #resList .actions > button,
+  #tesList .actions > a,
+  #tesList .actions > button,
+  #qList .actions > a,
+  #qList .actions > button,
+  #bookingsList .actions > a,
+  #bookingsList .actions > button,
+  .ann-action-wrap > button,
+  #resList .card button[data-res-action] {
+    width: auto !important;
+    flex: 1 1 calc(50% - 8px);
+    min-width: 140px;
+  }
+
+  #annList .card > div:first-child,
+  #resList .card > div:first-child,
+  #tesList .card > div:first-child,
+  #qList .card > div:first-child,
+  #bookingsList .card > div:first-child {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  #annList .card,
+  #resList .card,
+  #tesList .card,
+  #qList .card,
+  #bookingsList .card {
+    overflow: hidden;
+  }
+
+  #annList [style*="grid-template-columns"],
+  #resList [style*="grid-template-columns"],
+  #tesList [style*="grid-template-columns"],
+  #qList [style*="grid-template-columns"],
+  #bookingsList [style*="grid-template-columns"] {
     grid-template-columns: 1fr !important;
   }
 }
@@ -772,140 +912,5 @@ select:focus-visible {
   .container {
     margin-top: 38px;
     margin-bottom: 38px;
-  }
-}
-/* Services grid layout */
-.services-grid {
-  display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-top: 14px;
-}
-
-/* Laptop */
-@media (max-width: 1200px) {
-  .services-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-/* Tablet */
-@media (max-width: 900px) {
-  .services-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-}
-#servicesContent {
-  display: block;
-  margin-top: 16px;
-}
-
-#servicesContent > * {
-  min-width: 0;
-}
-
-#servicesContent .card,
-#servicesContent .service-card {
-  height: 100%;
-}
-#servicesContent {
-  display: block;
-  margin-top: 16px;
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 16px;
-}
-
-@media (max-width: 900px) {
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-}
-/* ===== ADMIN MOBILE FIXES ===== */
-@media (max-width: 980px) {
-  .admin-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-@media (max-width: 768px) {
-  /* keep admin buttons from becoming giant blocks */
-  .admin-header .actions > a,
-  .admin-header .actions > button,
-  .admin-actions-row > a,
-  .admin-actions-row > button,
-  #annList .actions > a,
-  #annList .actions > button,
-  #resList .actions > a,
-  #resList .actions > button,
-  #tesList .actions > a,
-  #tesList .actions > button,
-  #qList .actions > a,
-  #qList .actions > button,
-  #bookingsList .actions > a,
-  #bookingsList .actions > button {
-    width: auto !important;
-    flex: 1 1 calc(50% - 8px);
-    min-width: 140px;
-  }
-
-  #annList .actions,
-  #resList .actions,
-  #tesList .actions,
-  #qList .actions,
-  #bookingsList .actions {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 10px !important;
-    align-items: stretch !important;
-  }
-
-  /* stop side-by-side mini grids inside injected cards */
-  #annList [style*="grid-template-columns"],
-  #resList [style*="grid-template-columns"],
-  #tesList [style*="grid-template-columns"],
-  #qList [style*="grid-template-columns"],
-  #bookingsList [style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
-  }
-
-  /* booking/service detail blocks rendered by JS */
-  #bookingsList .card,
-  #annList .card,
-  #resList .card,
-  #tesList .card,
-  #qList .card {
-    overflow: hidden;
-  }
-
-  /* prevent right-side timestamp blocks from squeezing content */
-  #bookingsList .card > div:first-child,
-  #annList .card > div:first-child,
-  #resList .card > div:first-child,
-  #tesList .card > div:first-child,
-  #qList .card > div:first-child {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-  }
-
-  /* admin tips should sit normally */
-  .req {
-    position: static !important;
-  }
-
-  /* search/filter area */
-  .filter-grid {
-    grid-template-columns: 1fr !important;
   }
 }
