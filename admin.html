@@ -3,33 +3,114 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin | KUCCPS Assist</title>
+
+    <title>Admin Dashboard | KUCCPS Assist</title>
+
     <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+      /* -------- ADMIN LAYOUT -------- */
+
+      .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .admin-header h1 {
+        margin: 0;
+      }
+
+      .admin-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+
+      .admin-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .admin-section {
+        margin-top: 20px;
+      }
+
+      .admin-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      .admin-actions-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .admin-actions-row button {
+        width: auto;
+      }
+
+      .admin-list {
+        margin-top: 16px;
+      }
+
+      /* -------- BOOKINGS FILTER GRID -------- */
+
+      .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+      }
+
+      /* -------- MOBILE -------- */
+
+      @media (max-width: 980px) {
+        .admin-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .admin-form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .admin-actions-row button {
+          flex: 1;
+        }
+      }
+    </style>
   </head>
 
   <body>
     <div class="container">
-      <div
-        class="topbar"
-        style="
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          gap: 12px;
-          flex-wrap: wrap;
-        "
-      >
-        <div style="min-width: 260px">
-          <h1 style="margin: 0">Admin Dashboard</h1>
+      <!-- HEADER -->
 
-          <p class="muted" style="margin: 6px 0 0; max-width: 650px">
-            Manage homepage updates, resources, testimonials, public questions,
-            and review student bookings.
+      <div class="admin-header">
+        <div>
+          <h1>Admin Dashboard</h1>
+
+          <p class="muted">
+            Manage homepage updates, resources, testimonials, questions and
+            bookings.
           </p>
 
-          <div
-            style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap"
-          >
+          <div class="admin-tags">
             <span class="badge">Announcements</span>
             <span class="badge">Resources</span>
             <span class="badge">Testimonials</span>
@@ -39,312 +120,170 @@
           </div>
         </div>
 
-        <div class="actions" style="align-items: center">
+        <div class="actions">
           <a href="index.html"><button type="button">Home</button></a>
-          <button id="logoutBtn" type="button">Logout</button>
+          <button id="logoutBtn">Logout</button>
         </div>
       </div>
 
-      <p class="muted" id="adminMsg" style="margin-top: 10px">
-        Checking admin access...
-      </p>
+      <p id="adminMsg" class="muted">Checking admin access...</p>
 
-      <section
-        style="
-          margin-top: 14px;
-          display: grid;
-          grid-template-columns: 1.35fr 0.65fr;
-          gap: 14px;
-        "
-      >
+      <!-- ANNOUNCEMENTS + TIPS -->
+
+      <section class="admin-grid">
         <div class="card">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 18px">Homepage Updates</h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Create, update, highlight, disable or delete announcements shown
-                on the homepage.
-              </p>
-            </div>
+          <h2>Homepage Updates</h2>
 
-            <div class="actions">
-              <button id="annRefreshBtn" type="button">Refresh Updates</button>
-            </div>
+          <p class="muted">
+            Create, highlight or disable announcements shown on the homepage.
+          </p>
+
+          <div class="admin-actions-row">
+            <button id="annRefreshBtn">Refresh Updates</button>
           </div>
 
-          <div id="annMsg" class="muted" style="margin-top: 10px">
-            Loading announcements...
-          </div>
+          <p id="annMsg" class="muted">Loading announcements...</p>
 
-          <div
-            style="
-              margin-top: 12px;
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 12px;
-              align-items: start;
-            "
-          >
+          <div class="admin-form-grid">
             <div>
               <label>Title</label>
-              <input id="annTitle" placeholder="e.g. KUCCPS Deadline Update" />
+              <input id="annTitle" placeholder="KUCCPS Deadline Update" />
             </div>
 
-            <div
-              style="
-                display: flex;
-                gap: 10px;
-                align-items: flex-end;
-                flex-wrap: wrap;
-              "
-            >
-              <label
-                style="
-                  display: flex;
-                  gap: 8px;
-                  align-items: center;
-                  margin: 0;
-                  font-weight: 800;
-                "
-              >
-                <input id="annHighlight" type="checkbox" />
-                Highlight
+            <div class="admin-actions-row">
+              <label style="display: flex; gap: 6px; align-items: center">
+                <input id="annHighlight" type="checkbox" /> Highlight
               </label>
 
-              <label
-                style="
-                  display: flex;
-                  gap: 8px;
-                  align-items: center;
-                  margin: 0;
-                  font-weight: 800;
-                "
-              >
-                <input id="annActive" type="checkbox" checked />
-                Active
+              <label style="display: flex; gap: 6px; align-items: center">
+                <input id="annActive" type="checkbox" checked /> Active
               </label>
 
-              <button id="annCreateBtn" type="button">Post Update</button>
+              <button id="annCreateBtn">Post Update</button>
             </div>
 
-            <div style="grid-column: 1 / -1">
+            <div style="grid-column: 1/-1">
               <label>Message</label>
+
               <textarea
                 id="annContent"
                 rows="3"
-                placeholder="Write the update that users will see on the homepage..."
+                placeholder="Write the announcement students will see"
               ></textarea>
             </div>
           </div>
 
-          <div id="annList" style="margin-top: 14px"></div>
+          <div id="annList" class="admin-list"></div>
         </div>
 
-        <div class="req" style="margin-top: 0">
+        <div class="req">
           <h3>Admin Tips</h3>
+
           <ul>
-            <li>Use <strong>Highlight</strong> for urgent deadlines.</li>
-            <li>Use <strong>Resources</strong> for guides and PDFs.</li>
-            <li>Approve only genuine testimonials and questions.</li>
-            <li>Ask for missing docs using <strong>Needs Info</strong>.</li>
+            <li>Use <strong>Highlight</strong> for urgent deadlines</li>
+            <li>Upload guides under <strong>Resources</strong></li>
+            <li>Approve only genuine testimonials</li>
+            <li>Use <strong>Needs Info</strong> for missing documents</li>
           </ul>
         </div>
       </section>
 
-      <section style="margin-top: 14px">
+      <!-- RESOURCES -->
+
+      <section class="admin-section">
         <div class="card">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 18px">Homepage Resources</h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Upload guides, PDFs and helpful documents for students to
-                download from the homepage.
-              </p>
-            </div>
+          <h2>Homepage Resources</h2>
 
-            <div class="actions">
-              <button id="resRefreshBtn" type="button">
-                Refresh Resources
-              </button>
-            </div>
+          <p class="muted">Upload PDFs and guides for students to download.</p>
+
+          <div class="admin-actions-row">
+            <button id="resRefreshBtn">Refresh Resources</button>
           </div>
 
-          <div id="resMsg" class="muted" style="margin-top: 10px">
-            Loading resources...
-          </div>
+          <p id="resMsg" class="muted">Loading resources...</p>
 
-          <div
-            style="
-              margin-top: 12px;
-              display: grid;
-              grid-template-columns: 1fr 1fr;
-              gap: 12px;
-            "
-          >
+          <div class="admin-form-grid">
             <div>
               <label>Title</label>
-              <input id="resTitle" placeholder="e.g. KUCCPS Revision Guide" />
+              <input id="resTitle" />
             </div>
 
             <div>
               <label>Description</label>
-              <input
-                id="resDescription"
-                placeholder="Short description for students"
-              />
+              <input id="resDescription" />
             </div>
 
-            <div style="grid-column: 1 / -1">
+            <div style="grid-column: 1/-1">
               <label>Upload File</label>
               <input id="resFile" type="file" />
-              <p class="muted" style="margin: 6px 0 0">
-                PDF recommended, but other document types can also be uploaded.
-              </p>
+
+              <p class="muted">PDF recommended</p>
             </div>
 
-            <div
-              style="
-                grid-column: 1 / -1;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                flex-wrap: wrap;
-              "
-            >
-              <label
-                style="
-                  display: flex;
-                  gap: 8px;
-                  align-items: center;
-                  margin: 0;
-                  font-weight: 800;
-                "
-              >
-                <input id="resActive" type="checkbox" checked />
-                Active
+            <div class="admin-actions-row" style="grid-column: 1/-1">
+              <label style="display: flex; gap: 6px">
+                <input id="resActive" type="checkbox" checked /> Active
               </label>
 
-              <button id="resUploadBtn" type="button">Upload Resource</button>
+              <button id="resUploadBtn">Upload Resource</button>
             </div>
           </div>
 
-          <div id="resList" style="margin-top: 14px"></div>
+          <div id="resList" class="admin-list"></div>
         </div>
       </section>
 
-      <section style="margin-top: 14px">
+      <!-- TESTIMONIALS -->
+
+      <section class="admin-section">
         <div class="card">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 18px">Testimonials</h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Review, approve, hide or delete testimonials submitted by
-                visitors.
-              </p>
-            </div>
+          <h2>Testimonials</h2>
 
-            <div class="actions">
-              <button id="tesRefreshBtn" type="button">
-                Refresh Testimonials
-              </button>
-            </div>
+          <p class="muted">
+            Approve or hide testimonials submitted by visitors.
+          </p>
+
+          <div class="admin-actions-row">
+            <button id="tesRefreshBtn">Refresh Testimonials</button>
           </div>
 
-          <div id="tesMsg" class="muted" style="margin-top: 10px">
-            Loading testimonials...
-          </div>
+          <p id="tesMsg" class="muted">Loading testimonials...</p>
 
-          <div id="tesList" style="margin-top: 14px"></div>
+          <div id="tesList" class="admin-list"></div>
         </div>
       </section>
 
-      <section style="margin-top: 14px">
+      <!-- QUESTIONS -->
+
+      <section class="admin-section">
         <div class="card">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 18px">Public Questions</h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Review, approve, hide or delete public questions and community
-                messages from visitors.
-              </p>
-            </div>
+          <h2>Public Questions</h2>
 
-            <div class="actions">
-              <button id="qRefreshBtn" type="button">Refresh Questions</button>
-            </div>
+          <p class="muted">Moderate public questions from visitors.</p>
+
+          <div class="admin-actions-row">
+            <button id="qRefreshBtn">Refresh Questions</button>
           </div>
 
-          <div id="qMsg" class="muted" style="margin-top: 10px">
-            Loading questions...
-          </div>
+          <p id="qMsg" class="muted">Loading questions...</p>
 
-          <div id="qList" style="margin-top: 14px"></div>
+          <div id="qList" class="admin-list"></div>
         </div>
       </section>
 
-      <section style="margin-top: 14px">
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              align-items: flex-start;
-              gap: 12px;
-              flex-wrap: wrap;
-            "
-          >
-            <div>
-              <h2 style="margin: 0; font-size: 18px">Bookings</h2>
-              <p class="muted" style="margin: 6px 0 0">
-                Filter bookings by status/tier or search using ticket/phone.
-              </p>
-            </div>
+      <!-- BOOKINGS -->
 
-            <div class="actions">
-              <button id="refreshBtn" type="button">Refresh</button>
-            </div>
+      <section class="admin-section">
+        <div class="card">
+          <h2>Bookings</h2>
+
+          <p class="muted">Filter bookings or search by ticket / phone.</p>
+
+          <div class="admin-actions-row">
+            <button id="refreshBtn">Refresh</button>
           </div>
 
-          <div
-            style="
-              margin-top: 12px;
-              display: grid;
-              grid-template-columns: repeat(4, minmax(0, 1fr));
-              gap: 12px;
-            "
-          >
+          <div class="filter-grid">
             <div>
               <label>Status</label>
               <select id="statusFilter">
@@ -360,57 +299,36 @@
             <div>
               <label>Tier</label>
               <select id="tierFilter">
-                <option value="all" selected>All</option>
+                <option value="all">All</option>
                 <option value="vip">VIP</option>
                 <option value="regular">Regular</option>
               </select>
             </div>
 
             <div style="grid-column: span 2">
-              <label>Search (ticket/phone)</label>
-              <input
-                id="searchInput"
-                placeholder="e.g. KAS-2026... or 07xx..."
-              />
+              <label>Search</label>
+              <input id="searchInput" placeholder="Ticket or phone" />
             </div>
           </div>
         </div>
 
-        <div id="bookingsList" class="grid" style="margin-top: 14px"></div>
+        <div id="bookingsList" class="grid" style="margin-top: 18px"></div>
       </section>
 
-      <footer style="margin-top: 18px">
-        <p class="muted" style="text-align: center">
-          Admin Dashboard — KUCCPS Assist
-        </p>
+      <footer style="margin-top: 28px; text-align: center" class="muted">
+        Admin Dashboard — KUCCPS Assist
       </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
     <script src="js/supabase.js"></script>
     <script src="js/email.js"></script>
+
     <script src="js/admin.js"></script>
     <script src="js/admin-announcements.js"></script>
     <script src="js/admin-resources.js"></script>
     <script src="js/admin-testimonials.js"></script>
     <script src="js/admin-questions.js"></script>
-
-    <style>
-      @media (max-width: 980px) {
-        section[style*="grid-template-columns: 1.35fr 0.65fr"] {
-          grid-template-columns: 1fr !important;
-        }
-      }
-
-      @media (max-width: 900px) {
-        section div[style*="grid-template-columns:repeat(4"] {
-          grid-template-columns: 1fr !important;
-        }
-
-        section div[style*="grid-column: span 2"] {
-          grid-column: 1 / -1 !important;
-        }
-      }
-    </style>
   </body>
 </html>
