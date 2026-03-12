@@ -1042,3 +1042,13 @@ select:focus-visible {
     margin-bottom: 38px;
   }
 }
+/* Admin list cards must not stretch */
+.admin-list .card,
+.admin-render-card,
+#annList .card,
+#resList .card,
+#tesList .card,
+#qList .card,
+#bookingsList .card {
+  height: auto !important;
+}
