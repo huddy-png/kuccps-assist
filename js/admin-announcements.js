@@ -1,5 +1,3 @@
-// js/admin-announcements.js
-
 const annRefreshBtn = document.getElementById("annRefreshBtn");
 const annMsg = document.getElementById("annMsg");
 const annTitle = document.getElementById("annTitle");
@@ -22,6 +20,7 @@ function esc(s = "") {
       })[m],
   );
 }
+
 function fmt(ts) {
   try {
     return new Date(ts).toLocaleString();
@@ -31,15 +30,16 @@ function fmt(ts) {
 }
 
 let busy = false;
+
 function setBusy(state) {
   busy = state;
   annCreateBtn.disabled = state;
   annRefreshBtn.disabled = state;
-  // disable action buttons too
   annList
     .querySelectorAll("button[data-action]")
     .forEach((b) => (b.disabled = state));
 }
+
 function setMsg(text, type = "info") {
   annMsg.textContent = text || "";
   annMsg.style.color =
@@ -48,20 +48,126 @@ function setMsg(text, type = "info") {
 
 function buildEditForm(a) {
   return `
-    <div class="card" style="margin-top:10px; border:1px dashed rgba(2,6,23,0.2); background:#fff;">
-      <h2 style="margin:0 0 8px; font-size:15px;">Editing: ${esc(a.title)}</h2>
+    <div
+      class="card"
+      style="
+        margin-top:12px;
+        border:1px dashed rgba(2,6,23,0.18);
+        background:#fff;
+      "
+    >
+      <h3 style="margin:0 0 8px;">Editing: ${esc(a.title)}</h3>
 
-      <label style="font-size:12px;" class="muted">Title</label>
-      <input id="editTitle-${a.id}" value="${esc(a.title)}" />
+      <div style="display:grid; gap:10px;">
+        <div>
+          <label class="muted" style="font-size:12px;">Title</label>
+          <input id="editTitle-${a.id}" value="${esc(a.title)}" />
+        </div>
 
-      <div style="margin-top:10px;">
-        <label style="font-size:12px;" class="muted">Message</label>
-        <textarea id="editContent-${a.id}" rows="4">${esc(a.content)}</textarea>
+        <div>
+          <label class="muted" style="font-size:12px;">Message</label>
+          <textarea id="editContent-${a.id}" rows="4">${esc(a.content)}</textarea>
+        </div>
+
+        <div
+          style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            margin-top:4px;
+          "
+        >
+          <button data-action="save_edit" data-id="${a.id}" type="button">Save</button>
+          <button data-action="cancel_edit" data-id="${a.id}" type="button">Cancel</button>
+        </div>
       </div>
+    </div>
+  `;
+}
 
-      <div class="actions" style="margin-top:10px;">
-        <button data-action="save_edit" data-id="${a.id}">Save</button>
-        <button data-action="cancel_edit" data-id="${a.id}">Cancel</button>
+function announcementCard(a) {
+  const activeLabel = a.is_active ? "Active" : "Hidden";
+  const bg = a.is_highlight ? "rgba(30, 91, 255, 0.06)" : "#fff";
+
+  return `
+    <div
+      class="card"
+      style="
+        background:${bg};
+        border-color:rgba(2,6,23,0.10);
+      "
+    >
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:flex-start;
+          gap:14px;
+          flex-wrap:wrap;
+        "
+      >
+        <div style="flex:1; min-width:0;">
+          <div
+            style="
+              display:flex;
+              gap:8px;
+              align-items:center;
+              flex-wrap:wrap;
+              margin-bottom:8px;
+            "
+          >
+            ${a.is_highlight ? `<span class="badge">Highlighted</span>` : ""}
+            <span
+              class="badge"
+              style="
+                background:rgba(2,6,23,0.06);
+                color:#334155;
+                border:1px solid rgba(2,6,23,0.08);
+              "
+            >
+              ${activeLabel}
+            </span>
+          </div>
+
+          <h3 style="margin:0 0 8px;">${esc(a.title)}</h3>
+
+          <div
+            style="
+              white-space:pre-wrap;
+              line-height:1.65;
+              word-break:break-word;
+            "
+          >${esc(a.content)}</div>
+
+          <p class="muted" style="margin-top:12px; font-size:12px;">
+            Created: ${esc(fmt(a.created_at))}
+            ${a.updated_at ? `<br>Updated: ${esc(fmt(a.updated_at))}` : ""}
+          </p>
+
+          <div id="editBox-${a.id}"></div>
+        </div>
+
+        <div
+          class="ann-action-wrap"
+          style="
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            width:100%;
+            margin-top:2px;
+          "
+        >
+          <button data-action="toggle_active" data-id="${a.id}" type="button">
+            ${a.is_active ? "Hide" : "Make Active"}
+          </button>
+
+          <button data-action="toggle_highlight" data-id="${a.id}" type="button">
+            ${a.is_highlight ? "Remove Highlight" : "Highlight"}
+          </button>
+
+          <button data-action="edit" data-id="${a.id}" type="button">Edit</button>
+          <button data-action="delete" data-id="${a.id}" type="button">Delete</button>
+        </div>
       </div>
     </div>
   `;
@@ -91,49 +197,7 @@ async function loadAnnouncements() {
 
   setMsg("");
 
-  annList.innerHTML = data
-    .map((a) => {
-      const bg = a.is_highlight ? "rgba(30, 91, 255, 0.06)" : "#fff";
-      const activeLabel = a.is_active ? "Active" : "Hidden";
-
-      return `
-      <div class="card" style="background:${bg}; border-color: rgba(2,6,23,0.10);">
-        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-          <div style="min-width:240px; flex:1;">
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              ${a.is_highlight ? `<span class="badge" style="padding:4px 8px;border-radius:999px;background:rgba(30,91,255,0.12);color:#1e5bff;font-weight:600;font-size:12px;">Highlighted</span>` : ""}
-              <span style="padding:4px 8px;border-radius:999px;background:rgba(2,6,23,0.06);font-size:12px;">
-                ${activeLabel}
-              </span>
-            </div>
-
-            <h2 style="margin:8px 0 0; font-size:16px;">${esc(a.title)}</h2>
-            <p style="margin:10px 0 0; white-space:pre-wrap; line-height:1.6;">${esc(a.content)}</p>
-
-            <p class="muted" style="margin-top:10px; font-size:12px;">
-              Created: ${esc(fmt(a.created_at))}${a.updated_at ? `<br/>Updated: ${esc(fmt(a.updated_at))}` : ""}
-            </p>
-
-            <div id="editBox-${a.id}"></div>
-          </div>
-
-          <div class="actions" style="align-items:flex-start; display:flex; flex-direction:column; gap:8px; min-width:180px;">
-            <button data-action="toggle_active" data-id="${a.id}">
-              ${a.is_active ? "Hide" : "Make Active"}
-            </button>
-
-            <button data-action="toggle_highlight" data-id="${a.id}">
-              ${a.is_highlight ? "Remove Highlight" : "Highlight"}
-            </button>
-
-            <button data-action="edit" data-id="${a.id}">Edit</button>
-            <button data-action="delete" data-id="${a.id}">Delete</button>
-          </div>
-        </div>
-      </div>
-    `;
-    })
-    .join("");
+  annList.innerHTML = data.map(announcementCard).join("");
 
   annList.querySelectorAll("button[data-action]").forEach((btn) => {
     btn.addEventListener("click", () =>
@@ -149,7 +213,6 @@ async function handleAnnAction(action, id) {
     setBusy(true);
     setMsg("");
 
-    // fetch current
     const { data: row, error: rErr } = await window.supabaseClient
       .from("announcements")
       .select("id,title,content,is_active,is_highlight")
@@ -168,7 +231,9 @@ async function handleAnnAction(action, id) {
         .from("announcements")
         .update({ is_active: !row.is_active })
         .eq("id", id);
+
       if (error) throw error;
+
       setMsg("✅ Saved.", "success");
       await loadAnnouncements();
       return;
@@ -180,7 +245,9 @@ async function handleAnnAction(action, id) {
         .from("announcements")
         .update({ is_highlight: !row.is_highlight })
         .eq("id", id);
+
       if (error) throw error;
+
       setMsg("✅ Saved.", "success");
       await loadAnnouncements();
       return;
@@ -196,7 +263,7 @@ async function handleAnnAction(action, id) {
         );
       });
 
-      setMsg("Editing…");
+      setMsg("Editing...");
       return;
     }
 
@@ -213,6 +280,7 @@ async function handleAnnAction(action, id) {
 
       const t = (tEl?.value || "").trim();
       const c = (cEl?.value || "").trim();
+
       if (!t || !c) {
         setMsg("Title and message cannot be empty.", "error");
         return;
@@ -240,11 +308,11 @@ async function handleAnnAction(action, id) {
         .from("announcements")
         .delete()
         .eq("id", id);
+
       if (error) throw error;
 
       setMsg("✅ Deleted.", "success");
       await loadAnnouncements();
-      return;
     }
   } catch (e) {
     console.error(e);
@@ -274,7 +342,6 @@ annCreateBtn.addEventListener("click", async () => {
       content,
       is_highlight: !!annHighlight.checked,
       is_active: !!annActive.checked,
-      // created_by will auto-fill if you set default auth.uid() in SQL
     };
 
     const { error } = await window.supabaseClient

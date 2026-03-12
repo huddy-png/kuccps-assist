@@ -52,6 +52,87 @@ function setResMsg(text, type = "info") {
     type === "error" ? "#b91c1c" : type === "success" ? "#166534" : "";
 }
 
+function resourceCard(r) {
+  const activeLabel = r.is_active ? "Active" : "Hidden";
+  const fileLink = r.file_url || "#";
+
+  return `
+    <div class="card">
+      <div
+        style="
+          display:flex;
+          justify-content:space-between;
+          align-items:flex-start;
+          gap:14px;
+          flex-wrap:wrap;
+        "
+      >
+        <div style="flex:1; min-width:0;">
+          <div
+            style="
+              display:flex;
+              gap:8px;
+              align-items:center;
+              flex-wrap:wrap;
+              margin-bottom:8px;
+            "
+          >
+            <span
+              class="badge"
+              style="
+                background:rgba(2,6,23,0.06);
+                color:#334155;
+                border:1px solid rgba(2,6,23,0.08);
+              "
+            >
+              ${activeLabel}
+            </span>
+          </div>
+
+          <h3 style="margin:0 0 8px;">${escRes(r.title)}</h3>
+
+          <p class="muted" style="margin:0 0 10px; word-break:break-word;">
+            ${escRes(r.description || "No description")}
+          </p>
+
+          <p class="muted" style="font-size:12px; margin:0 0 12px;">
+            Uploaded: ${escRes(fmtResDate(r.created_at))}
+          </p>
+
+          <div
+            style="
+              display:flex;
+              gap:10px;
+              flex-wrap:wrap;
+            "
+          >
+            <a href="${fileLink}" target="_blank" rel="noopener">
+              <button type="button">Open File</button>
+            </a>
+          </div>
+        </div>
+
+        <div
+          style="
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            width:100%;
+          "
+        >
+          <button data-res-action="toggle_active" data-id="${r.id}" type="button">
+            ${r.is_active ? "Hide" : "Make Active"}
+          </button>
+
+          <button data-res-action="delete" data-id="${r.id}" type="button">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 async function loadResources() {
   setResMsg("Loading resources...");
   resList.innerHTML = "";
@@ -73,52 +154,7 @@ async function loadResources() {
   }
 
   setResMsg("");
-
-  resList.innerHTML = data
-    .map((r) => {
-      const activeLabel = r.is_active ? "Active" : "Hidden";
-      const fileLink = r.file_url || "#";
-
-      return `
-        <div class="card">
-          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-            <div style="min-width:240px; flex:1;">
-              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                <span style="padding:4px 8px;border-radius:999px;background:rgba(2,6,23,0.06);font-size:12px;">
-                  ${activeLabel}
-                </span>
-              </div>
-
-              <h2 style="margin:8px 0 0; font-size:16px;">${escRes(r.title)}</h2>
-              <p class="muted" style="margin:8px 0 0;">
-                ${escRes(r.description || "No description")}
-              </p>
-
-              <p class="muted" style="margin-top:10px; font-size:12px;">
-                Uploaded: ${escRes(fmtResDate(r.created_at))}
-              </p>
-
-              <p style="margin-top:10px;">
-                <a href="${fileLink}" target="_blank" rel="noopener">
-                  <button type="button">Open File</button>
-                </a>
-              </p>
-            </div>
-
-            <div class="actions" style="align-items:flex-start; display:flex; flex-direction:column; gap:8px; min-width:180px;">
-              <button data-res-action="toggle_active" data-id="${r.id}">
-                ${r.is_active ? "Hide" : "Make Active"}
-              </button>
-
-              <button data-res-action="delete" data-id="${r.id}">
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    })
-    .join("");
+  resList.innerHTML = data.map(resourceCard).join("");
 
   resList.querySelectorAll("button[data-res-action]").forEach((btn) => {
     btn.addEventListener("click", () =>
@@ -185,7 +221,6 @@ async function handleResourceAction(action, id) {
 
       setResMsg("✅ Resource deleted.", "success");
       await loadResources();
-      return;
     }
   } catch (e) {
     console.error(e);
