@@ -1073,21 +1073,21 @@ searchInput.addEventListener("input", () => {
   fetchBookings();
 })();
 
-const scrollBtn = document.getElementById("scrollTopBtn");
+const adminScrollBtn = document.getElementById("adminScrollTopBtn");
 
-if (scrollBtn) {
-  const toggleScrollBtn = () => {
-    if (window.scrollY > 200) {
-      scrollBtn.classList.add("show");
+if (adminScrollBtn) {
+  const toggleAdminScrollBtn = () => {
+    if (window.scrollY > 150) {
+      adminScrollBtn.classList.add("show");
     } else {
-      scrollBtn.classList.remove("show");
+      adminScrollBtn.classList.remove("show");
     }
   };
 
-  window.addEventListener("scroll", toggleScrollBtn, { passive: true });
-  toggleScrollBtn();
+  window.addEventListener("scroll", toggleAdminScrollBtn, { passive: true });
+  toggleAdminScrollBtn();
 
-  scrollBtn.addEventListener("click", () => {
+  adminScrollBtn.addEventListener("click", () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
