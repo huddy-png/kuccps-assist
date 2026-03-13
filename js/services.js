@@ -196,24 +196,3 @@ async function loadServices() {
 }
 
 loadServices();
-const servicesScrollBtn = document.getElementById("servicesScrollTopBtn");
-
-if (servicesScrollBtn) {
-  const toggleServicesScrollBtn = () => {
-    if (window.scrollY > 150) {
-      servicesScrollBtn.classList.add("show");
-    } else {
-      servicesScrollBtn.classList.remove("show");
-    }
-  };
-
-  window.addEventListener("scroll", toggleServicesScrollBtn, { passive: true });
-  toggleServicesScrollBtn();
-
-  servicesScrollBtn.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  });
-}
