@@ -1072,18 +1072,19 @@ searchInput.addEventListener("input", () => {
   adminMsg.textContent = "✅ Admin access confirmed.";
   fetchBookings();
 })();
+
 const scrollBtn = document.getElementById("scrollTopBtn");
 
 if (scrollBtn) {
   const toggleScrollBtn = () => {
-    if (window.scrollY > 300) {
+    if (window.scrollY > 200) {
       scrollBtn.classList.add("show");
     } else {
       scrollBtn.classList.remove("show");
     }
   };
 
-  window.addEventListener("scroll", toggleScrollBtn);
+  window.addEventListener("scroll", toggleScrollBtn, { passive: true });
   toggleScrollBtn();
 
   scrollBtn.addEventListener("click", () => {

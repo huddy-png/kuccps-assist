@@ -1052,51 +1052,56 @@ select:focus-visible {
 #bookingsList .card {
   height: auto !important;
 }
+
 .scroll-top-btn {
   position: fixed !important;
-  right: 18px !important;
-  bottom: 18px !important;
+  right: 20px !important;
+  bottom: 120px !important;
   left: auto !important;
 
   width: 56px !important;
   height: 56px !important;
   display: flex !important;
-  align-items: center;
-  justify-content: center;
+  align-items: center !important;
+  justify-content: center !important;
 
   border: none !important;
   border-radius: 50% !important;
   background: linear-gradient(135deg, #2563eb, #1e40af) !important;
-  color: #fff !important;
+  color: #ffffff !important;
   font-size: 24px !important;
   font-weight: 800 !important;
   line-height: 1 !important;
   cursor: pointer !important;
 
+  padding: 0 !important;
+  margin: 0 !important;
+  min-width: 56px !important;
+  min-height: 56px !important;
+
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
   z-index: 99999 !important;
 
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(20px);
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(20px) !important;
   transition:
     opacity 0.3s ease,
     visibility 0.3s ease,
-    transform 0.3s ease;
+    transform 0.3s ease !important;
 
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
 
 .scroll-top-btn.show {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
 }
 
 .scroll-top-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+  transform: translateY(-4px) !important;
 }
